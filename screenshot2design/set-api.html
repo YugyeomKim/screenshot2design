@@ -1,0 +1,17 @@
+<div>
+  <ol>
+    <li>Go to the <a href="https://www.example.com" target="_blank">S2D Website</a> and enroll for the API Key.</li>
+    <li>Put the API Key below and you'll be able to run Screenshot2Design</li>
+  </ol>
+</div>
+<div>
+  <input id="api_key" type="text" placeholder="API Key"/>
+  <input id="api_save" type="button" value="Save"/>
+</div>
+
+<script>
+  const apiKeyEl = document.getElementById('api_key')
+  document.getElementById('api_save').onclick = () => {
+    parent.postMessage({ pluginMessage: { type: 'api_save', apiKey: apiKeyEl.value } }, '*')
+  }
+</script>

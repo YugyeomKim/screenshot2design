@@ -1,0 +1,14 @@
+{
+  "name": "screenshot2design",
+  "id": "1231170628021634246",
+  "api": "1.0.0",
+  "main": "code.js",
+  "capabilities": [],
+  "enableProposedApi": false,
+  "editorType": ["figma"],
+  "ui": { "setApi": "set-api.html" },
+  "menu": [
+    { "name": "Run", "command": "run" },
+    { "name": "Set API Key", "command": "set-api" }
+  ]
+}
