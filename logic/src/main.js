@@ -2,6 +2,8 @@
 
 const express = require('express')
 const cors = require('cors')
+const createError = require('http-errors')
+
 const authRouter = require('./routers/auth')
 const runRouter = require('./routers/run')
 
@@ -9,13 +11,24 @@ const app = express()
 
 const PORT = 3000
 const origin = 'null'
+const PayloadTooLargeError = createError.PayloadTooLarge
 
+app.use(express.json({ limit: '10MB' }))
 app.use(
   cors({
     origin,
     optionsSuccessStatus: 200,
   })
 )
+
+// @ts-ignore
+app.use((err, req, res, next) => {
+  if (err instanceof PayloadTooLargeError) {
+    res.status(413).send('Payload Too Large')
+  } else {
+    next(err)
+  }
+})
 
 app.use('/auth', authRouter)
 app.use('/run', runRouter)

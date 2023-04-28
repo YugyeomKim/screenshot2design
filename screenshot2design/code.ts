@@ -1,3 +1,14 @@
+/**
+ * TODO: Refactor codes in async manner
+ * > map the selection array to await getResultFromServer(), drawResult()
+ * > close the plugin when all the promises end
+ *
+ * get byte from figma api problem: One possibility is that plugin just get closed before every promises resolved.
+ *
+ * TODO:
+ * Image problem (naver example)
+ * multiple requests problem
+ */
 const SERVER = "http://localhost:3000";
 const IMAGE_NUM_LIMIT = 10;
 const IMAGE_SIZE_LIMIT = 10;
@@ -14,18 +25,19 @@ interface RunCounter {
 /**
  * Send raw image data and get JSON result for the design elements
  * @param {SceneNode} selection
- * @param {number} index
  * @returns {Promise<void | FetchResponse>}
  */
 async function getResultFromServer(
-  selection: SceneNode,
-  index: number
+  selection: SceneNode
 ): Promise<void | FetchResponse> {
   if (
     selection.type === "RECTANGLE" &&
     Array.isArray(selection.fills) &&
     selection.fills[0].type === "IMAGE"
   ) {
+    const start = Date.now();
+    console.log(`export start: ${Date.now() - start}`);
+
     const { imageHash } = selection.fills[0];
 
     if (!imageHash) {
@@ -42,25 +54,41 @@ async function getResultFromServer(
       throw new Error(message);
     }
 
-    console.log(image);
-    const { width, height } = await image.getSizeAsync();
-    const imageData = await image.getBytesAsync();
+    const imageBytes = await image.getBytesAsync();
 
-    // const { width, height } = await figma.createImage(imageData).getSizeAsync();
-    const reqBody = {
-      size: {
-        width,
-        height,
-      },
-      imageData,
-    };
-    console.log(reqBody);
+    /*
+    const imageBytes = await selection.exportAsync({
+      format: "JPG",
+      constraint: { type: "SCALE", value: 1 },
+    });
+    */
+
+    console.log(`export end: ${Date.now() - start}`);
+
+    if (!imageBytes) {
+      // If failed to export image.
+      const message = "Failed to export an image from your selection.";
+      throw new Error(message);
+    }
+
     // Get server response
+    const imageData = {
+      width: selection.width,
+      height: selection.height,
+      bytes: Array.from(imageBytes),
+    };
     try {
+      console.log(`Sever start: ${Date.now() - start}`);
+
       const runResponse = fetch(`${SERVER}/run`, {
         method: "POST",
-        body: JSON.stringify(reqBody),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(imageData),
       });
+
+      console.log(`Sent server response: ${Date.now() - start}`);
 
       return runResponse;
     } catch (error) {
@@ -76,15 +104,9 @@ async function getResultFromServer(
 
 /**
  * Get the JSON from the server response and draw it on the user screen
- * @param {undefined | void | FetchResponse} runResponse
+ * @param {undefined | FetchResponse} runResponse
  */
-async function drawResult(runResponse: undefined | void | FetchResponse) {
-  if (!runResponse) {
-    // If fills is not an IMAGE.
-    const message = "No server responses.";
-    throw new Error(message);
-  }
-
+async function drawResult(runResponse: FetchResponse) {
   const elements = await runResponse.json();
   console.log(elements);
 }
@@ -111,10 +133,14 @@ async function runPlugin(): Promise<RunCounter> {
     throw new Error(message);
   }
 
-  const serverResponsesArray = selection.map(getResultFromServer);
-  serverResponsesArray.forEach(async (promise) => {
+  for (const selected of selection) {
     try {
-      const runResponse = await promise;
+      const runResponse = await getResultFromServer(selected);
+      if (!runResponse) {
+        // If fills is not an IMAGE.
+        const message = "No server responses.";
+        throw new Error(message);
+      }
       await drawResult(runResponse);
       successRun += 1;
     } catch (error) {
@@ -123,7 +149,7 @@ async function runPlugin(): Promise<RunCounter> {
       console.log(error);
       figma.notify(message);
     }
-  });
+  }
 
   return { successRun, totalRun };
 }
