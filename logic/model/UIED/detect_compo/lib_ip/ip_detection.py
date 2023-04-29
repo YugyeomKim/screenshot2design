@@ -223,10 +223,7 @@ def rm_line_v_h(binary, show=False, max_line_thickness=C.THRESHOLD_LINE_THICKNES
         cv2.waitKey()
 
 
-def rm_line(binary,
-            max_line_thickness=C.THRESHOLD_LINE_THICKNESS,
-            min_line_length_ratio=C.THRESHOLD_LINE_MIN_LENGTH,
-            show=False, wait_key=0):
+def rm_line(binary, max_line_thickness=C.THRESHOLD_LINE_THICKNESS):
     def is_valid_line(line):
         line_length = 0
         line_gap = 0
@@ -249,8 +246,6 @@ def rm_line(binary,
     check_line = False
     check_gap = False
     for i, row in enumerate(binary):
-        # line_ratio = (sum(row) / 255) / width
-        # if line_ratio > 0.9:
         if is_valid_line(row):
             # new start: if it is checking a new line, mark this row as start
             if not check_line:
@@ -275,13 +270,6 @@ def rm_line(binary,
 
     if (check_line and (height - start_row) < max_line_thickness) or check_gap:
         binary[start_row: end_row] = 0
-
-    if show:
-        cv2.imshow('no-line binary', binary)
-        if wait_key is not None:
-            cv2.waitKey(wait_key)
-        if wait_key == 0:
-            cv2.destroyWindow('no-line binary')
 
 
 def rm_noise_compos(compos):
@@ -425,8 +413,6 @@ def component_detection(binary, min_obj_area,
         for j in range(i % 2, column, step_v):
             if binary[i, j] == 255 and mask[i, j] == 0:
                 # get connected area
-                # region = util.boundary_bfs_connected_area(binary, i, j, mask)
-
                 mask_copy = mask.copy()
                 ff = cv2.floodFill(binary, mask, (j, i), None, 0, 0, cv2.FLOODFILL_MASK_ONLY)
                 if ff[0] < min_obj_area: continue
@@ -491,8 +477,6 @@ def nested_components_detection(grey, org, grad_thresh,
     for x in range(0, row, step_h):
         for y in range(0, column, step_v):
             if mask[x, y] == 0:
-                # region = flood_fill_bfs(grey, x, y, mask)
-
                 # flood fill algorithm to get background (layout block)
                 mask_copy = mask.copy()
                 ff = cv2.floodFill(grey, mask, (y, x), None, grad_thresh, grad_thresh, cv2.FLOODFILL_MASK_ONLY)

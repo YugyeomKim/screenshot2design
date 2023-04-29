@@ -1,10 +1,10 @@
 import React from 'react';
 import GetDogFacts from './components/GetDogFacts'
 
-function App() {
+function Input() {
   return (
     <GetDogFacts></GetDogFacts>
   );
 }
 
-export default App;
+export default Input;

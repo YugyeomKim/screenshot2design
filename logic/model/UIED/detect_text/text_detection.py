@@ -3,8 +3,6 @@ from detect_text.Text import Text
 import numpy as np
 import cv2
 import json
-import time
-import os
 from os.path import join as pjoin
 
 
@@ -21,27 +19,13 @@ def save_detection_json(file_path, texts, img_shape):
     json.dump(output, f_out, indent=4)
 
 
-def visualize_texts(org_img, texts, shown_resize_height=None, show=False, write_path=None):
+def visualize_texts(org_img, write_path=None):
     img = org_img.copy()
-    for text in texts:
-        text.visualize_element(img, line=2)
 
-    img_resize = img
-    if shown_resize_height is not None:
-        img_resize = cv2.resize(img, (int(shown_resize_height * (img.shape[1]/img.shape[0])), shown_resize_height))
-
-    if show:
-        cv2.imshow('texts', img_resize)
-        cv2.waitKey(0)
-        cv2.destroyWindow('texts')
     if write_path is not None:
         cv2.imwrite(write_path, img)
 
-
 def text_sentences_recognition(texts):
-    '''
-    Merge separate words detected by Google ocr into a sentence
-    '''
     changed = True
     while changed:
         changed = False
@@ -64,9 +48,6 @@ def text_sentences_recognition(texts):
 
 
 def merge_intersected_texts(texts):
-    '''
-    Merge intersected texts (sentences or words)
-    '''
     changed = True
     while changed:
         changed = False
@@ -127,38 +108,19 @@ def text_filter_noise(texts):
     return valid_texts
 
 
-def text_detection(input_file='../data/input/30800.jpg', output_file='../data/output', show=False, method='google', paddle_model=None):
-    '''
-    :param method: google or paddle
-    :param paddle_model: the preload paddle model for paddle ocr
-    '''
-    # start = time.clock()
+def text_detection(input_file, output_file, method='google'):
     name = input_file.split('/')[-1][:-4]
     ocr_root = pjoin(output_file, 'ocr')
     img = cv2.imread(input_file)
 
     if method == 'google':
-        # print('*** Detect Text through Google OCR ***')
         ocr_result = ocr.ocr_detection_google(input_file)
         texts = text_cvt_orc_format(ocr_result)
         texts = merge_intersected_texts(texts)
         texts = text_filter_noise(texts)
         texts = text_sentences_recognition(texts)
-    elif method == 'paddle':
-        # The import of the paddle ocr can be separate to the beginning of the program if you decide to use this method
-        from paddleocr import PaddleOCR
-        # print('*** Detect Text through Paddle OCR ***')
-        if paddle_model is None:
-            paddle_model = PaddleOCR(use_angle_cls=True, lang="ch")
-        result = paddle_model.ocr(input_file, cls=True)
-        texts = text_cvt_orc_format_paddle(result)
     else:
         raise ValueError('Method has to be "google" or "paddle"')
 
-    visualize_texts(img, texts, shown_resize_height=800, show=show, write_path=pjoin(ocr_root, name+'.png'))
+    visualize_texts(img, write_path=pjoin(ocr_root, name+'.png'))
     save_detection_json(pjoin(ocr_root, name+'.json'), texts, img.shape)
-    # print("[Text Detection Completed in %.3f s] Input: %s Output: %s" % (time.clock() - start, input_file, pjoin(ocr_root, name+'.json')))
-
-
-# text_detection()
-

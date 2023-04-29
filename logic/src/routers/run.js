@@ -26,22 +26,21 @@ runRouter.post('/', (req, res) => {
     try {
       fs.writeFileSync(INPUT_PATH, imageBuf, 'binary')
     } catch (error) {
-      console.log(error)
+      req.log.info(error)
       res.status(500).send("Internal Server Error: Couldn't save the image.")
     }
-    console.log(
+    req.log.info(
       `${imageBuf.length} size (${image.width} X ${image.height}) file was saved.`
     )
 
     const modelProcess = spawn('python3', [MODEL_PATH, INPUT_PATH, OUTPUT_PATH])
 
     modelProcess.stdout.on('data', (result) => {
-      console.log(result.toString())
       res.status(200).json(result.toString())
     })
 
     modelProcess.stderr.on('data', (err) => {
-      console.log(err.toString())
+      req.log.info(err.toString())
       res.status(500).send('Model crashed.')
     })
   } else {

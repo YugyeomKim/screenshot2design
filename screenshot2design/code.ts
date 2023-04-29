@@ -1,14 +1,3 @@
-/**
- * TODO: Refactor codes in async manner
- * > map the selection array to await getResultFromServer(), drawResult()
- * > close the plugin when all the promises end
- *
- * get byte from figma api problem: One possibility is that plugin just get closed before every promises resolved.
- *
- * TODO:
- * Image problem (naver example)
- * multiple requests problem
- */
 const SERVER = "http://localhost:3000";
 const IMAGE_NUM_LIMIT = 10;
 const IMAGE_SIZE_LIMIT = 10;
@@ -17,30 +6,60 @@ interface KnownError {
   message: string;
 }
 
-interface RunCounter {
+interface ResultFrame {
+  results: FrameNode[];
   successRun: number;
   totalRun: number;
+}
+
+interface ImageInfo {
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+  imageHash: string;
+  name: string;
+}
+
+interface ServerResponse {
+  runResponsePromise: Promise<FetchResponse>;
+  imageInfo: ImageInfo;
+}
+
+interface Elements {
+  img_shape: [height: number, width: number, color: number];
+  compos: {
+    id: number;
+    class: "Compo" | "Text";
+    width: number;
+    height: number;
+    position: {
+      column_max: number;
+      row_max: number;
+      row_min: number;
+      column_min: number;
+    };
+    parent?: number;
+    text_content?: string;
+  }[];
 }
 
 /**
  * Send raw image data and get JSON result for the design elements
  * @param {SceneNode} selection
- * @returns {Promise<void | FetchResponse>}
+ * @returns {Promise<ServerResponse>}
  */
 async function getResultFromServer(
   selection: SceneNode
-): Promise<void | FetchResponse> {
+): Promise<ServerResponse> {
   if (
     selection.type === "RECTANGLE" &&
     Array.isArray(selection.fills) &&
     selection.fills[0].type === "IMAGE"
   ) {
-    const start = Date.now();
-    console.log(`export start: ${Date.now() - start}`);
-
     const { imageHash } = selection.fills[0];
 
-    if (!imageHash) {
+    if (typeof imageHash !== "string") {
       // If no imageHash is available.
       const message = "Please check if you selected images only.";
       throw new Error(message);
@@ -63,8 +82,6 @@ async function getResultFromServer(
     });
     */
 
-    console.log(`export end: ${Date.now() - start}`);
-
     if (!imageBytes) {
       // If failed to export image.
       const message = "Failed to export an image from your selection.";
@@ -72,15 +89,14 @@ async function getResultFromServer(
     }
 
     // Get server response
+    const { width, height, x, y, name } = selection;
     const imageData = {
-      width: selection.width,
-      height: selection.height,
+      width,
+      height,
       bytes: Array.from(imageBytes),
     };
     try {
-      console.log(`Sever start: ${Date.now() - start}`);
-
-      const runResponse = fetch(`${SERVER}/run`, {
+      const runResponsePromise = fetch(`${SERVER}/run`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -88,12 +104,14 @@ async function getResultFromServer(
         body: JSON.stringify(imageData),
       });
 
-      console.log(`Sent server response: ${Date.now() - start}`);
-
-      return runResponse;
+      return {
+        runResponsePromise,
+        imageInfo: { width, height, x, y, imageHash, name },
+      };
     } catch (error) {
       console.log(error);
-      return undefined;
+      const message = "No server responses.";
+      throw new Error(message);
     }
   } else {
     // If fills is not an IMAGE.
@@ -104,11 +122,77 @@ async function getResultFromServer(
 
 /**
  * Get the JSON from the server response and draw it on the user screen
- * @param {undefined | FetchResponse} runResponse
+ * @param {Elements} elements
+ * @param {ImageInfo} imageInfo
  */
-async function drawResult(runResponse: FetchResponse) {
-  const elements = await runResponse.json();
-  console.log(elements);
+function drawResult(elements: Elements, imageInfo: ImageInfo): FrameNode {
+  const { width, height, x, y, imageHash, name } = imageInfo;
+  const {
+    img_shape: [resizedHeight, resizedWidth, _],
+    compos,
+  } = elements;
+  const ratio = height / resizedHeight;
+
+  const frame = figma.createFrame();
+  frame.name = name;
+  frame.x = x + width + 30;
+  frame.y = y;
+  frame.resize(width, height);
+  frame.fills = [
+    {
+      type: "IMAGE",
+      imageHash,
+      scaleMode: "FILL",
+      opacity: 0.5,
+    },
+  ];
+
+  compos.map((compo) => {
+    if (compo.class === "Compo") {
+      const rectangle = figma.createRectangle();
+      rectangle.name = `${name} - ${compo.id}`;
+      rectangle.x = compo.position.column_min * ratio;
+      rectangle.y = compo.position.row_min * ratio;
+      rectangle.resize(compo.width * ratio, compo.height * ratio);
+      rectangle.fills = [
+        {
+          type: "SOLID",
+          color: {
+            r: 0 / 255,
+            g: 0 / 255,
+            b: 0 / 255,
+          },
+          opacity: 0.2,
+        },
+      ];
+      rectangle.strokes = [
+        {
+          type: "SOLID",
+          color: {
+            r: 0 / 255,
+            g: 0 / 255,
+            b: 0 / 255,
+          },
+        },
+      ];
+      frame.appendChild(rectangle);
+    } else if (compo.class === "Text") {
+      const text = figma.createText();
+      let textContents = "Placeholder";
+      if (compo.text_content) {
+        textContents = compo.text_content;
+      }
+      text.name = textContents;
+      text.x = compo.position.column_min * ratio;
+      text.y = compo.position.row_min * ratio;
+      text.resize(compo.width * ratio, compo.height * ratio);
+      text.fontSize = compo.height * ratio * (100 / 121);
+      text.characters = textContents;
+      frame.appendChild(text);
+    }
+  });
+
+  return frame;
 }
 
 /**
@@ -119,7 +203,9 @@ async function drawResult(runResponse: FetchResponse) {
  * 4. Call drawResult() to draw it on the User page/
  * (5. Move viewport)
  */
-async function runPlugin(): Promise<RunCounter> {
+async function runPlugin(): Promise<ResultFrame> {
+  const results = [];
+
   const { selection } = figma.currentPage;
   const totalRun = selection.length;
   let successRun = 0;
@@ -135,13 +221,17 @@ async function runPlugin(): Promise<RunCounter> {
 
   for (const selected of selection) {
     try {
-      const runResponse = await getResultFromServer(selected);
-      if (!runResponse) {
-        // If fills is not an IMAGE.
-        const message = "No server responses.";
-        throw new Error(message);
-      }
-      await drawResult(runResponse);
+      const { runResponsePromise, imageInfo } = await getResultFromServer(
+        selected
+      );
+      const runResponse = await runResponsePromise;
+      const elements = (await runResponse.json())
+        .replace(/'/g, '"')
+        .replace(/\(/g, "[")
+        .replace(/\)/g, "]");
+
+      const newFrame = drawResult(JSON.parse(elements), imageInfo);
+      results.push(newFrame);
       successRun += 1;
     } catch (error) {
       const err = error as KnownError;
@@ -151,7 +241,7 @@ async function runPlugin(): Promise<RunCounter> {
     }
   }
 
-  return { successRun, totalRun };
+  return { results, successRun, totalRun };
 }
 
 async function main() {
@@ -196,7 +286,12 @@ async function main() {
     if (authResponse.status === 200) {
       // Run plugin if the auth result is 200
       try {
-        const { successRun, totalRun } = await runPlugin();
+        await figma.loadFontAsync({ family: "Inter", style: "Regular" });
+
+        const { results, successRun, totalRun } = await runPlugin();
+        figma.currentPage.selection = results;
+        figma.viewport.scrollAndZoomIntoView(results);
+
         const message = `Completed ${successRun} images out of ${totalRun}.`;
         figma.closePlugin(message);
       } catch (error) {

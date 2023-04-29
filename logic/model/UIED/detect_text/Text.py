@@ -166,16 +166,3 @@ class Text:
         self.area = self.width * self.height
         self.word_width = self.width / len(self.content)
 
-    '''
-    *********************
-    *** Visualization ***
-    *********************
-    '''
-    def visualize_element(self, img, color=(0, 0, 255), line=1, show=False):
-        loc = self.location
-        cv2.rectangle(img, (loc['left'], loc['top']), (loc['right'], loc['bottom']), color, line)
-        if show:
-            # print(self.content)
-            cv2.imshow('text', img)
-            cv2.waitKey()
-            cv2.destroyWindow('text')

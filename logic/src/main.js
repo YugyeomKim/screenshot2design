@@ -3,6 +3,8 @@
 const express = require('express')
 const cors = require('cors')
 const createError = require('http-errors')
+// @ts-ignore
+const pino = require('pino-http')()
 
 const authRouter = require('./routers/auth')
 const runRouter = require('./routers/run')
@@ -20,6 +22,7 @@ app.use(
     optionsSuccessStatus: 200,
   })
 )
+app.use(pino)
 
 // @ts-ignore
 app.use((err, req, res, next) => {

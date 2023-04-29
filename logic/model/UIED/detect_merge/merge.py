@@ -3,26 +3,20 @@ import cv2
 import numpy as np
 from os.path import join as pjoin
 import os
-import time
 import shutil
 
 from detect_merge.Element import Element
 
 
-def show_elements(org_img, eles, show=False, win_name='element', wait_key=0, shown_resize=None, line=2):
+def show_elements(org_img, eles, shown_resize=None, line=2):
     color_map = {'Text':(0, 0, 255), 'Compo':(0, 255, 0), 'Block':(0, 255, 0), 'Text Content':(255, 0, 255)}
     img = org_img.copy()
     for ele in eles:
         color = color_map[ele.category]
-        ele.visualize_element(img, color, line)
     img_resize = img
     if shown_resize is not None:
         img_resize = cv2.resize(img, shown_resize)
-    # if show:
-        # cv2.imshow(win_name, img_resize)
-        # cv2.waitKey(wait_key)
-        # if wait_key == 0:
-        #     cv2.destroyWindow(win_name)
+
     return img_resize
 
 
@@ -190,7 +184,7 @@ def compos_clip_and_fill(clip_root, org, compos):
     cv2.imwrite(pjoin(clip_root, 'bkg.png'), bkg)
 
 
-def merge(img_path, compo_path, text_path, merge_root=None, is_paragraph=False, is_remove_bar=True, show=False, wait_key=0):
+def merge(img_path, compo_path, text_path, merge_root=None, is_paragraph=False, is_remove_bar=True):
     compo_json = json.load(open(compo_path, 'r'))
     text_json = json.load(open(text_path, 'r'))
 
@@ -214,7 +208,7 @@ def merge(img_path, compo_path, text_path, merge_root=None, is_paragraph=False, 
     # check the original detected elements
     img = cv2.imread(img_path)
     img_resize = cv2.resize(img, (compo_json['img_shape'][1], compo_json['img_shape'][0]))
-    show_elements(img_resize, texts + compos, show=show, win_name='all elements before merging', wait_key=wait_key)
+    show_elements(img_resize, texts + compos)
 
     # refine elements
     texts = refine_texts(texts, compo_json['img_shape'])
@@ -226,11 +220,11 @@ def merge(img_path, compo_path, text_path, merge_root=None, is_paragraph=False, 
         elements = merge_text_line_to_paragraph(elements, max_line_gap=7)
     reassign_ids(elements)
     check_containment(elements)
-    board = show_elements(img_resize, elements, show=show, win_name='elements after merging', wait_key=wait_key)
+    board = show_elements(img_resize, elements)
 
     # save all merged elements, clips and blank background
     name = img_path.replace('\\', '/').split('/')[-1][:-4]
     components = save_elements(pjoin(merge_root, name + '.json'), elements, img_resize.shape)
     cv2.imwrite(pjoin(merge_root, name + '.jpg'), board)
-    # print('[Merge Completed] Input: %s Output: %s' % (img_path, pjoin(merge_root, name + '.jpg')))
+    
     return board, components

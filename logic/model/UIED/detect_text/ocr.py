@@ -26,23 +26,7 @@ def ocr_detection_google(imgpath):
     url = 'https://vision.googleapis.com/v1/images:annotate'
     api_key = os.environ['GOOGLE_CLOUD_API_KEY']
     imgdata = Google_OCR_makeImageData(imgpath)
-
-    # project_id = 'vital-plating-384105'
-    # # gcloud auth print-access-token
-    # access_token = os.environ['GOOGLE_OCR_AUTH']
-    # headers = {
-    #     'Authorization': 'Bearer ' + access_token,
-    #     'x-goog-user-project': project_id,
-    #     'Content-Type': 'application/json; charset=utf-8'
-    # }
-
-    # response = requests.post(
-    #     url,
-    #     headers=headers,
-    #     json=imgdata
-    # )
-
-
+    
     response = requests.post(url,
                              json=imgdata,
                              params={'key': api_key},
@@ -51,7 +35,6 @@ def ocr_detection_google(imgpath):
     if 'responses' not in response.json():
         raise Exception(response.json())
     if response.json()['responses'] == [{}]:
-        # No Text
         return None
     else:
         return response.json()['responses'][0]['textAnnotations'][1:]
