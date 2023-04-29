@@ -25,6 +25,7 @@ authRouter.post('/enroll', async (req, res) => {
   const insertResult = await users.insertOne({
     apiKey,
     userInfo,
+    credit: 0,
     activated: false,
   })
 
@@ -35,6 +36,48 @@ authRouter.post('/enroll', async (req, res) => {
   } else {
     res.statusCode = 404
     res.send('Insertion to DB failed.')
+  }
+})
+
+authRouter.use('/credit', async (req, res) => {
+  const apiKey = req.headers.apikey
+  if (!apiKey) {
+    res.statusCode = 404
+    res.send('API Key missing.')
+  }
+
+  const users = await getUsersCollection()
+  if (!users) {
+    res.statusCode = 404
+    res.send('MongoDB connection failed.')
+  }
+
+  const user = await users.findOne({
+    apiKey,
+  })
+  if (!user) {
+    res.statusCode = 401
+    res.send('No user matches to the API Key.')
+  }
+
+  // @ts-ignore
+  const { credit } = user
+  const updateResult = await users.updateOne(
+    {
+      apiKey,
+    },
+    {
+      $set: { credit: credit + 1 },
+    }
+  )
+
+  const { acknowledged, matchedCount, upsertedId } = updateResult
+  if (acknowledged && matchedCount > 0) {
+    res.statusCode = 200
+    res.send(upsertedId)
+  } else {
+    res.statusCode = 400
+    res.send('Bad request.')
   }
 })
 

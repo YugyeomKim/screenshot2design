@@ -32,6 +32,7 @@ If I did something wrong with the license(Apache 2.0), please let me know.
 
 1. Refine position information by using more accurate numbers
 2. Clean up files
+3. gitignore **pycache**
 
 ### Webpage side
 
