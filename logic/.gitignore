@@ -1,3 +1,4 @@
 .env
 buffer/input
 buffer/output
+**/__pycache__/
