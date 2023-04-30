@@ -1,5 +1,6 @@
 // @ts-check
 
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const createError = require('http-errors')
@@ -12,16 +13,17 @@ const runRouter = require('./routers/run')
 const app = express()
 
 const PORT = 3000
-const origin = 'null'
+// const origin = process.env.ORIGIN
 const PayloadTooLargeError = createError.PayloadTooLarge
 
 app.use(express.json({ limit: '10MB' }))
-app.use(
-  cors({
-    origin,
-    optionsSuccessStatus: 200,
-  })
-)
+app.use(cors)
+// app.use(
+//   cors({
+//     origin,
+//     optionsSuccessStatus: 200,
+//   })
+// )
 app.use(pino)
 
 // @ts-ignore

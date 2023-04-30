@@ -37,4 +37,9 @@ If I did something wrong with the license(Apache 2.0), please let me know.
 ### Publish on EC2
 
 1. Set environment variables.
+
+- NODE_ENV=production
+- ORIGIN=
+
 2. Check buffer directory
+3. Set origin
