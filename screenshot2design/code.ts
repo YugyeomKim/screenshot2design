@@ -1,4 +1,4 @@
-const SERVER = "http://localhost:3000";
+const SERVER = "https://13.237.14.57:3000";
 const IMAGE_NUM_LIMIT = 10;
 const IMAGE_SIZE_LIMIT = 10;
 

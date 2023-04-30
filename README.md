@@ -25,16 +25,16 @@ If I did something wrong with the license(Apache 2.0), please let me know.
 
 ### Server side
 
-1. logging into log file, not console.log -> pino, pino-pretty
-2. server down alert -> UptimeRobot'
-3. Security -> helmet
-4. NODE_ENV=production
+1. server down alert -> UptimeRobot'
+2. Security -> helmet
 
 ### Model side
-
-1. Refine position information by using more accurate numbers
-2. Clean up files
 
 ### Webpage side
 
 1. We use the original image, even though you croped the image in Figma.
+
+### Publish on EC2
+
+1. Set environment variables.
+2. Check buffer directory

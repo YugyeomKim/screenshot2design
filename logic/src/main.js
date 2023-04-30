@@ -1,5 +1,8 @@
 // @ts-check
 
+require('dotenv').config()
+const https = require('https')
+const fs = require('fs')
 const express = require('express')
 const cors = require('cors')
 const createError = require('http-errors')
@@ -36,7 +39,24 @@ app.use((err, req, res, next) => {
 app.use('/auth', authRouter)
 app.use('/run', runRouter)
 
-app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`listening on ${PORT}`)
-})
+if (process.env.NODE_ENV === 'production') {
+  const { SSL_CERT_PATH, SSL_KEY_PATH } = process.env
+  if (!SSL_CERT_PATH || !SSL_KEY_PATH) {
+    throw new Error('No ssl certificate loaded.')
+  }
+
+  const sslOptions = {
+    cert: fs.readFileSync(SSL_CERT_PATH),
+    key: fs.readFileSync(SSL_KEY_PATH),
+  }
+
+  https.createServer(sslOptions, app).listen(PORT, () => {
+    // eslint-disable-next-line no-console
+    console.log(`listening on ${PORT}`)
+  })
+} else {
+  app.listen(PORT, () => {
+    // eslint-disable-next-line no-console
+    console.log(`listening on ${PORT}`)
+  })
+}
