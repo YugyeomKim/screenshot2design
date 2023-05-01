@@ -8,6 +8,7 @@ const { getUsersCollection } = require('../mongo')
 const authRouter = express.Router()
 
 authRouter.post('/enroll', async (req, res) => {
+  console.log('ho')
   const userInfo = req.body
   if (!userInfo) {
     res.statusCode = 404

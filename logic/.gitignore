@@ -2,5 +2,5 @@
 buffer/input
 buffer/output
 **/__pycache__/
-screenshot2design.pem
+__pycache__/
 logs
