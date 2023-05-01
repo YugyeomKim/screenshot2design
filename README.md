@@ -25,8 +25,9 @@ If I did something wrong with the license(Apache 2.0), please let me know.
 
 ### Server side
 
-1. server down alert -> UptimeRobot'
+1. server down alert -> UptimeRobot
 2. Security -> helmet
+3. set CORS policy
 
 ### Model side
 
@@ -39,7 +40,10 @@ If I did something wrong with the license(Apache 2.0), please let me know.
 1. Set environment variables.
 
 - NODE_ENV=production
-- ORIGIN=
 
-2. Check buffer directory
-3. Set origin
+2. Check buffer directory if input and output directory exist
+3. python envirionment setting
+
+- pyenv for python3.5
+- Opencv 3.4.2
+- Pandas
