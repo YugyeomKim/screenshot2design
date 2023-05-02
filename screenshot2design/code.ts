@@ -252,7 +252,7 @@ async function main() {
      * 2. Check the API Key and Store it into the Client Storage.
      */
     figma.showUI(__uiFiles__.setApi);
-    figma.ui.resize(300, 300);
+    figma.ui.resize(380, 150);
   } else {
     /**
      * For Run command,
