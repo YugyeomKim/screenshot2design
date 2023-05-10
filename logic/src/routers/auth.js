@@ -23,6 +23,7 @@ authRouter.post('/enroll', async (req, res) => {
   }
 
   const insertResult = await users.insertOne({
+    date: Date.now(),
     apiKey,
     userInfo,
     credit: 0,
