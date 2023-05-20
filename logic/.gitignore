@@ -1,6 +1,7 @@
 .env
 buffer/input
 buffer/output
+__pycache__/
 **/__pycache__/
 screenshot2design.pem
 logs

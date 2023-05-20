@@ -7,6 +7,18 @@ const { getUsersCollection } = require('../mongo')
 
 const authRouter = express.Router()
 
+function nowTime() {
+  const date = new Date()
+  const year = date.getFullYear()
+  const month = `0${date.getMonth() + 1}`
+  const day = `0${date.getDate()}`
+  const hour = `0${date.getHours()}`
+  const minute = `0${date.getMinutes()}`
+  const second = `0${date.getSeconds()}`
+  return `${year}-${month.slice(-2)}-${day.slice(-2)}
+   ${hour.slice(-2)}:${minute.slice(-2)}:${second.slice(-2)}`
+}
+
 authRouter.post('/enroll', async (req, res) => {
   const userInfo = req.body
   if (!userInfo) {
@@ -23,7 +35,7 @@ authRouter.post('/enroll', async (req, res) => {
   }
 
   const insertResult = await users.insertOne({
-    date: Date.now(),
+    date: nowTime(),
     apiKey,
     userInfo,
     credit: 0,
