@@ -1,7 +1,15 @@
+# node
 .env
-buffer/input
-buffer/output
+.vscode/
+node_modules/
+
+# model
+buffer/input/*
+buffer/output/*
 __pycache__/
-**/__pycache__/
+
+# development
 screenshot2design.pem
+
+# production
 logs
