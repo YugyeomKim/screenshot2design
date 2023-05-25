@@ -2,13 +2,15 @@
   "name": "Screenshot2Design",
   "id": "1237633393230609544",
   "api": "1.0.0",
-  "main": "code.js",
+  "main": "dist/code.js",
   "capabilities": [],
   "enableProposedApi": false,
   "editorType": ["figma"],
-  "ui": { "setApi": "set-api.html" },
-  "menu": [
-    { "name": "Run", "command": "run" },
-    { "name": "Set API Key", "command": "set-api" }
-  ]
+  "ui": {
+    "setApiKey": "views/set-apikey.html",
+    "beforeConvert": "views/before-convert.html",
+    "interConvert": "views/inter-convert.html",
+    "afterConvert": "views/after-convert.html"
+  },
+  "menu": [{ "name": "Convert", "command": "convert" }]
 }

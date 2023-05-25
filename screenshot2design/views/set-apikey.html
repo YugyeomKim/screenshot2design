@@ -1,0 +1,58 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css" />
+
+<div style="display: flex; flex-direction: column; justify-content: left;">
+  <input id="email" type="input" class="input__field" placeholder="email" style="width: 200">
+  <input id="companyName" type="input" class="input__field" placeholder="companyName" style="width: 200">
+  <input id="companySize" type="input" class="input__field" placeholder="companySize" style="width: 200">
+  <input id="role" type="input" class="input__field" placeholder="role" style="width: 200">
+  <input id="usage" type="input" class="input__field" placeholder="usage" style="width: 200">
+  <button id="enroll" class='button button--primary' style="margin-left: 5;">Submit</button>
+  <span id="api-key-created"></span>
+  <span>remember the key explanation</span>
+</div>
+
+<div style="display: flex; flex-direction: column; justify-content: left;">
+  <ol class="type type--large" style="width: 90%;">
+    <li>Copy and paste the API Key below.</li>
+    <li>Press Save and run Screenshot2Design</li>
+  </ol>
+</div>
+<div style="display: flex; flex-direction: row; justify-content: left; margin-left: 28;">
+  <div class="input input--with-icon">
+    <div class="icon icon--key"></div>
+    <input id="api-key" type="input" class="input__field" placeholder="API Key" style="width: 200">
+  </div>
+  <button id="set-api-key" class='button button--primary' style="margin-left: 5;">Save</button>
+</div>
+
+<script>
+  const emailEl = document.getElementById('email')
+  const companyNameEl = document.getElementById('companyName')
+  const companySizeEl = document.getElementById('companySize')
+  const roleEl = document.getElementById('role')
+  const usageEl = document.getElementById('usage')
+  
+  document.getElementById('enroll').onclick = () => {
+    const userInfo = { 
+      email: emailEl.value, 
+      companyName: companyNameEl.value, 
+      companySize: companySizeEl.value, 
+      role: roleEl.value, 
+      usage: usageEl.value 
+    }
+    parent.postMessage({ pluginMessage: { type: 'enroll', userInfo } }, '*')
+  }
+
+  const apiKeyCreatedEl = document.getElementById('api-key-created')
+  const apiKeyEl = document.getElementById('api-key')
+
+  onmessage = (event) => {
+    const { pluginMessage } = event.data
+    apiKeyCreatedEl.textContent = pluginMessage
+    apiKeyEl.value = pluginMessage
+  }
+
+  document.getElementById('set-api-key').onclick = () => {
+    parent.postMessage({ pluginMessage: { type: 'set-api-key', apiKey: apiKeyEl.value } }, '*')
+  }
+</script>

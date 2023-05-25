@@ -15,8 +15,9 @@ function nowTime() {
   const hour = `0${date.getHours()}`
   const minute = `0${date.getMinutes()}`
   const second = `0${date.getSeconds()}`
-  return `${year}-${month.slice(-2)}-${day.slice(-2)}
-   ${hour.slice(-2)}:${minute.slice(-2)}:${second.slice(-2)}`
+  return `${year}-${month.slice(-2)}-${day.slice(-2)} ${hour.slice(
+    -2
+  )}:${minute.slice(-2)}:${second.slice(-2)}`
 }
 
 authRouter.post('/enroll', async (req, res) => {

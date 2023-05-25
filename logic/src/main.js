@@ -8,6 +8,7 @@ const pino = require('pino-http')()
 
 const authRouter = require('./routers/auth')
 const runRouter = require('./routers/run')
+const dataRouter = require('./routers/data')
 
 const app = express()
 
@@ -16,10 +17,8 @@ const PayloadTooLargeError = createError.PayloadTooLarge
 
 app.use(express.json({ limit: '10MB' }))
 
-app.use(
-  cors()
-)
-app.use(['/auth', '/run', '/test'], pino)
+app.use(cors())
+app.use(['/auth', '/run', '/data', '/test'], pino)
 
 // @ts-ignore
 app.use((err, req, res, next) => {
@@ -32,6 +31,7 @@ app.use((err, req, res, next) => {
 
 app.use('/auth', authRouter)
 app.use('/run', runRouter)
+app.use('/data', dataRouter)
 app.use('/health-check', (req, res) => {
   res.status(200).send()
 })

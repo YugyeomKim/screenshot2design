@@ -1,0 +1,71 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css"
+/>
+
+<div style="display: flex; flex-direction: column; justify-content: left">
+  <div id="loading">loading image here</div>
+  <button id="Move-on">loading image here</button>
+  <div>Converting...</div>
+</div>
+<div style="display: flex; flex-direction: column; justify-content: left">
+  <ol class="type type--large" style="width: 90%">
+    <li>How do you use this plugin?</li>
+    <input
+      id="plugin-usage"
+      type="input"
+      class="input__field"
+      placeholder="Plugin Usage"
+      style="width: 200"
+    />
+    <li>How much does it take to do works above?</li>
+    <input
+      id="work-term"
+      type="input"
+      class="input__field"
+      placeholder="Work Term"
+      style="width: 200"
+    />
+  </ol>
+</div>
+
+<script>
+  let timeout = false;
+  let changed = false;
+  let finished = false;
+
+  const pluginUsageInputEl = document.getElementById("plugin-usage");
+  const workTermInputEl = document.getElementById("work-term");
+
+  const handleOnChange = (event) => {
+    changed = true;
+
+    pluginUsageInputEl.removeEventListener("change", handleOnChange);
+    workTermInputEl.removeEventListener("change", handleOnChange);
+  };
+
+  pluginUsageInputEl.addEventListener("change", handleOnChange);
+  workTermInputEl.addEventListener("change", handleOnChange);
+
+  const moveOn = () => {
+    parent.postMessage({ pluginMessage: { type: "convert" } }, "*");
+  };
+
+  setTimeout(() => {
+    timeout = true;
+    if (finished && !changed) {
+      // TODO: Move on
+    } else if (finished && changed) {
+      // TODO: Change loading to button
+    }
+  }, 3000);
+
+  onmessage = (event) => {
+    finished = true;
+    if (timeout && !changed) {
+      // TODO: Move on
+    } else if (timeout && changed) {
+      // TODO: Change loading to button
+    }
+  };
+</script>
