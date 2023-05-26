@@ -25,6 +25,8 @@ const MSG_COMPLETE_CONVERTING = (successRun: number, totalRun: number) =>
 const ERR_NOT_IMAGE = (nodeName: string) => `Not an image: ${nodeName}`;
 const ERR_IMAGE_LOAD_FAIL = (nodeName: string) =>
   `Failed to load the image: ${nodeName}`;
+const ERR_TOO_LARGE_IMAGE = (nodeName: string) =>
+  `File size too large: ${nodeName}`;
 
 const MSG_ClOSE = "Thank you.";
 
@@ -92,10 +94,11 @@ export {
   ERR_AUTH_UNKNOWN,
   ERR_EMPTY_SCREENSHOTS,
   ERR_TOO_MANY_SCREENSHOTS,
-  MSG_ClOSE,
   MSG_COMPLETE_CONVERTING,
   ERR_NOT_IMAGE,
   ERR_IMAGE_LOAD_FAIL,
+  ERR_TOO_LARGE_IMAGE,
+  MSG_ClOSE,
   Preference,
   Survey,
   Reason,

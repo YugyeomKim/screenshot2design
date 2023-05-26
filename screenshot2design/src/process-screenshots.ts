@@ -5,6 +5,7 @@ import {
   ERR_IMAGE_LOAD_FAIL,
   ERR_SERVER,
   Elements,
+  ERR_TOO_LARGE_IMAGE,
 } from "./common";
 
 /**
@@ -50,21 +51,31 @@ async function processScreenshots(selected: SceneNode): Promise<ProcessResult> {
     console.log(error);
   });
 
-  if (!runResponse || runResponse.status !== 200) {
+  if (!runResponse) {
     throw new Error(ERR_SERVER);
   }
 
-  const runResult = (await runResponse.json())
-    .replace(/'/g, '"')
-    .replace(/\(/g, "[")
-    .replace(/\)/g, "]");
+  switch (runResponse.status) {
+    case 200: {
+      const runResult = (await runResponse.json())
+        .replace(/'/g, '"')
+        .replace(/\(/g, "[")
+        .replace(/\)/g, "]");
 
-  const elements: Elements = JSON.parse(runResult);
+      const elements: Elements = JSON.parse(runResult);
 
-  return {
-    elements,
-    imageInfo: { width, height, x, y, imageHash, name },
-  };
+      return {
+        elements,
+        imageInfo: { width, height, x, y, imageHash, name },
+      };
+    }
+
+    case 401:
+      throw new Error(ERR_TOO_LARGE_IMAGE(selected.name));
+
+    default:
+      throw new Error(ERR_SERVER);
+  }
 }
 
 export default processScreenshots;
