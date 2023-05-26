@@ -20,7 +20,12 @@ dataRouter.post('/users', async (req, res) => {
    * @property {string} ExpectedTimeSave
    */
 
-  /** @type {{ apiKey: string, userData: Preference | Survey}} */
+  /**
+   * @typedef {Object.<string, string>} Reason
+   * @property {string} reason
+   */
+
+  /** @type {{ apiKey: string, userData: Preference | Survey | Reason}} */
   const { apiKey, userData } = req.body
   if (!apiKey || !userData) {
     res.statusCode = 404

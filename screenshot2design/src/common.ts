@@ -6,6 +6,7 @@ const IMAGE_SIZE_LIMIT = 10;
 // Toast messages
 const ERR_SERVER = "Server error. Sorry for the inconvenience.";
 
+const MSG_SETTING_API_KEY = "Setting API KEY";
 const ERR_EMPTY_FORM = "Plase fill in the entire form.";
 const MSG_APIKEY_CREATED =
   "API Key has been entered automatically. Save the key for converting.";
@@ -37,6 +38,10 @@ interface Preference {
 interface Survey {
   pluginUsage: string;
   expectedTimeSave: string;
+}
+
+interface Reason {
+  reason: string;
 }
 
 interface ProcessResult {
@@ -77,6 +82,7 @@ export {
   IMAGE_NUM_LIMIT,
   IMAGE_SIZE_LIMIT,
   ERR_SERVER,
+  MSG_SETTING_API_KEY,
   ERR_EMPTY_FORM,
   MSG_APIKEY_CREATED,
   ERR_EMPTY_APIKEY,
@@ -92,6 +98,7 @@ export {
   ERR_IMAGE_LOAD_FAIL,
   Preference,
   Survey,
+  Reason,
   ProcessResult,
   Elements,
   ImageInfo,

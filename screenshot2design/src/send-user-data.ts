@@ -1,6 +1,6 @@
-import { SERVER, Preference, Survey } from "./common";
+import { SERVER, Preference, Survey, Reason } from "./common";
 
-const sendUserData = async (userData: Preference | Survey) => {
+const sendUserData = async (userData: Preference | Survey | Reason) => {
   const apiKey: string = await figma.clientStorage.getAsync("apiKey");
 
   const userDataBody = {

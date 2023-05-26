@@ -2,6 +2,7 @@ import {
   SERVER,
   ERR_EMPTY_FORM,
   ERR_SERVER,
+  MSG_SETTING_API_KEY,
   MSG_APIKEY_CREATED,
   ERR_EMPTY_SCREENSHOTS,
   IMAGE_NUM_LIMIT,
@@ -22,7 +23,6 @@ import runConverting from "./run-converting";
  * 4. If it is valid, show before-convert view.
  */
 async function main() {
-  await figma.clientStorage.deleteAsync("apiKey");
   const apiKey: string = await figma.clientStorage.getAsync("apiKey");
 
   if (!apiKey) {
@@ -91,6 +91,8 @@ async function main() {
        * 2. if so, show before-convert view
        */
       case "set-api-key": {
+        figma.notify(MSG_SETTING_API_KEY);
+
         const { apiKey }: { apiKey: string } = msg;
         const authorized = await setApiKey(apiKey);
 
@@ -132,7 +134,6 @@ async function main() {
           figma.notify(ERR_TOO_MANY_SCREENSHOTS);
           return;
         }
-        console.log(totalRun);
 
         figma.showUI(__uiFiles__.interConvert);
         figma.ui.resize(380, 150);
