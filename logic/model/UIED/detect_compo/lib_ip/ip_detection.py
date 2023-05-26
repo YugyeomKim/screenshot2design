@@ -431,7 +431,7 @@ def component_detection(binary, min_obj_area,
                 #     continue
 
                 if test:
-                    print('Area:%d' % (len(region)))
+                    # print('Area:%d' % (len(region)))
                     draw.draw_boundary([component], binary.shape, show=True)
 
                 compos_all.append(component)
@@ -446,7 +446,7 @@ def component_detection(binary, min_obj_area,
                         compos_nonrec.append(component)
 
                 if show:
-                    print('Area:%d' % (len(region)))
+                    # print('Area:%d' % (len(region)))
                     draw.draw_boundary(compos_all, binary.shape, show=True)
 
     # draw.draw_boundary(compos_all, binary.shape, show=True)

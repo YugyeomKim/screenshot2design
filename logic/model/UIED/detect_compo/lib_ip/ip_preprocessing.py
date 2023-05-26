@@ -26,7 +26,7 @@ def read_img(path, resize_height=None, kernel_size=None):
 
     except Exception as e:
         print(e)
-        print("*** Img Reading Failed ***\n")
+        # print("*** Img Reading Failed ***\n")
         return None, None
 
 

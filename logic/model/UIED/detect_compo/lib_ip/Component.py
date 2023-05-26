@@ -140,7 +140,7 @@ class Component:
                     # if the abnm is too big, the shape should not be a rectangle
                     if abnm / len(border) > 0.1:
                         if test:
-                            print('abnms', abnm, abnm / len(border))
+                            # print('abnms', abnm, abnm / len(border))
                             draw.draw_boundary([self], self.image_shape, show=True)
                         self.rect_ = False
                         return False
@@ -157,17 +157,17 @@ class Component:
                 # if the surface is not changing to a pit and the gradient is zero, then count it as flat
                 if abs(depth) < 1 + adj_side * 0.015:
                     flat += 1
-                if test:
-                    print(depth, adj_side, flat)
+                # if test:
+                    # print(depth, adj_side, flat)
             # if the pit is too big, the shape should not be a rectangle
             if pit / len(border) > max_dent_ratio:
                 if test:
-                    print('pit', pit, pit / len(border))
+                    # print('pit', pit, pit / len(border))
                     draw.draw_boundary([self], self.image_shape, show=True)
                 self.rect_ = False
                 return False
         if test:
-            print(flat / parameter, '\n')
+            # print(flat / parameter, '\n')
             draw.draw_boundary([self], self.image_shape, show=True)
         # ignore text and irregular shape
         if self.height / self.image_shape[0] > 0.3:

@@ -18,7 +18,7 @@ const PayloadTooLargeError = createError.PayloadTooLarge
 app.use(express.json({ limit: '10MB' }))
 
 app.use(cors())
-app.use(['/auth', '/run', '/data', '/test'], pino)
+app.use(/\/((?!health-check).)*/, pino)
 
 // @ts-ignore
 app.use((err, req, res, next) => {

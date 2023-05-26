@@ -104,6 +104,7 @@ def text_filter_noise(texts):
     for text in texts:
         if len(text.content) <= 1 and text.content.lower() not in ['a', ',', '.', '!', '?', '$', '%', ':', '&', '+']:
             continue
+        text.content = text.content.replace("'", "").replace('"', '')
         valid_texts.append(text)
     return valid_texts
 

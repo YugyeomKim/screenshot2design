@@ -25,6 +25,7 @@ def Google_OCR_makeImageData(imgpath):
 def ocr_detection_google(imgpath):
     url = 'https://vision.googleapis.com/v1/images:annotate'
     api_key = os.environ['GOOGLE_CLOUD_API_KEY']
+
     imgdata = Google_OCR_makeImageData(imgpath)
     
     response = requests.post(url,

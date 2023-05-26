@@ -30,6 +30,11 @@ async function getUsersCollection() {
   return getCollection('users')
 }
 
+async function getStatCollection() {
+  return getCollection('stat')
+}
+
 module.exports = {
   getUsersCollection,
+  getStatCollection,
 }

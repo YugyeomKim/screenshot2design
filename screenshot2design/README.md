@@ -1,10 +1,7 @@
 # TODO
 
-1. Image problem (Server error)
-
-- duplicated header sending problem
-
-2. Error message review
-3. font size auto
-4. fix the view blinks by external css loading
-5. Fetching uint8array
+1. Error message review
+2. font size auto
+3. Fetching uint8array
+4. If user changed the ratio of the image
+5. fix the view blinks by external css loading
