@@ -1,12 +1,9 @@
 # TODO
 
-1. Implementation TODOs
-
-- set preference api
-
-2. Security -> helmet
-3. set CORS policy
-4. Test if data.js updating nested object works properly
+1. Security -> helmet
+2. set CORS policy
+3. Test if data.js updating nested object works properly
+4. ERR_HTTP_HEADERS_SENT
 
 ### Checklist for publishing
 

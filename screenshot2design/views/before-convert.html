@@ -1,37 +1,65 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css" />
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css"
+/>
 
-<div style="display: flex; flex-direction: column; justify-content: left;">
-  <ol class="type type--large" style="width: 90%;">
+<div style="display: flex; flex-direction: column; justify-content: left">
+  <ol class="type type--large" style="width: 90%">
     <li>Accuracy explanation comes here</li>
     <li>Accuracy explanation comes here</li>
     <li>Accuracy explanation comes here</li>
   </ol>
-  <button id="skip" class='button button--primary' style="margin-left: 5;">Skip and Convert</button>
+  <button id="skip" class="button button--primary" style="margin-left: 5">
+    Skip and Convert
+  </button>
 </div>
-<div style="display: flex; flex-direction: column; justify-content: left;">
-  <ol class="type type--large" style="width: 90%;">
-    <input id="ui-format" type="input" class="input__field" placeholder="Format" style="width: 200">
-    <input id="ui-pattern" type="input" class="input__field" placeholder="UI Pattern" style="width: 200">
-    <input id="ui-source" type="input" class="input__field" placeholder="Source" style="width: 200">
+<div style="display: flex; flex-direction: column; justify-content: left">
+  <ol class="type type--large" style="width: 90%">
+    <input
+      id="ui-format"
+      type="input"
+      class="input__field"
+      placeholder="Format"
+      style="width: 200"
+    />
+    <input
+      id="ui-pattern"
+      type="input"
+      class="input__field"
+      placeholder="UI Pattern"
+      style="width: 200"
+    />
+    <input
+      id="ui-source"
+      type="input"
+      class="input__field"
+      placeholder="Source"
+      style="width: 200"
+    />
   </ol>
-  <button id="convert" class='button button--primary' style="margin-left: 5;">Convert</button>
+  <button id="convert" class="button button--primary" style="margin-left: 5">
+    Convert
+  </button>
 </div>
 
 <script>
-  document.getElementById('skip').onclick = () => {
-    parent.postMessage({ pluginMessage: { type: 'convert' } }, '*')
-  }
+  document.getElementById("skip").onclick = () => {
+    parent.postMessage({ pluginMessage: { type: "convert" } }, "*");
+  };
 
-  const formatEl = document.getElementById('ui-format')
-  const patternEl = document.getElementById('ui-pattern')
-  const sourceEl = document.getElementById('ui-source')
-  document.getElementById('convert').onclick = () => {
-    const preference = {
+  const formatEl = document.getElementById("ui-format");
+  const patternEl = document.getElementById("ui-pattern");
+  const sourceEl = document.getElementById("ui-source");
+  document.getElementById("convert").onclick = () => {
+    const userData = {
       uiFormat: formatEl.value,
       uiPattern: patternEl.value,
       uiSource: sourceEl.value,
-    }
-    parent.postMessage({ pluginMessage: { type: 'convert' } }, '*')
-    parent.postMessage({ pluginMessage: { type: 'preference', preference } }, '*')
-  }
+    };
+    parent.postMessage(
+      { pluginMessage: { type: "send-user-data", userData } },
+      "*"
+    );
+    parent.postMessage({ pluginMessage: { type: "convert" } }, "*");
+  };
 </script>

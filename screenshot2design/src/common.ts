@@ -25,6 +25,8 @@ const ERR_NOT_IMAGE = (nodeName: string) => `Not an image: ${nodeName}`;
 const ERR_IMAGE_LOAD_FAIL = (nodeName: string) =>
   `Failed to load the image: ${nodeName}`;
 
+const MSG_ClOSE = "Thank you.";
+
 // Interfaces
 interface Preference {
   uiFormat: string;
@@ -84,6 +86,7 @@ export {
   ERR_AUTH_UNKNOWN,
   ERR_EMPTY_SCREENSHOTS,
   ERR_TOO_MANY_SCREENSHOTS,
+  MSG_ClOSE,
   MSG_COMPLETE_CONVERTING,
   ERR_NOT_IMAGE,
   ERR_IMAGE_LOAD_FAIL,

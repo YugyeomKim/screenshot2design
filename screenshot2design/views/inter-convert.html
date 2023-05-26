@@ -5,8 +5,7 @@
 
 <div style="display: flex; flex-direction: column; justify-content: left">
   <div id="loading">loading image here</div>
-  <button id="Move-on">loading image here</button>
-  <div>Converting...</div>
+  <button id="move-on" style="display: none">loading image here</button>
 </div>
 <div style="display: flex; flex-direction: column; justify-content: left">
   <ol class="type type--large" style="width: 90%">
@@ -31,41 +30,62 @@
 
 <script>
   let timeout = false;
-  let changed = false;
+  let surveying = false;
   let finished = false;
 
   const pluginUsageInputEl = document.getElementById("plugin-usage");
   const workTermInputEl = document.getElementById("work-term");
 
-  const handleOnChange = (event) => {
-    changed = true;
+  const loadingEl = document.getElementById("loading");
+  const moveOnButtonEl = document.getElementById("move-on");
 
-    pluginUsageInputEl.removeEventListener("change", handleOnChange);
-    workTermInputEl.removeEventListener("change", handleOnChange);
+  const handleOnChange = (event) => {
+    surveying = true;
+
+    pluginUsageInputEl.removeEventListener("click", handleOnChange);
+    workTermInputEl.removeEventListener("click", handleOnChange);
   };
 
-  pluginUsageInputEl.addEventListener("change", handleOnChange);
-  workTermInputEl.addEventListener("change", handleOnChange);
+  pluginUsageInputEl.addEventListener("click", handleOnChange);
+  workTermInputEl.addEventListener("click", handleOnChange);
 
   const moveOn = () => {
-    parent.postMessage({ pluginMessage: { type: "convert" } }, "*");
+    parent.postMessage({ pluginMessage: { type: "complete-converting" } }, "*");
+  };
+
+  const revealButton = () => {
+    loadingEl.style.display = "none";
+    moveOnButtonEl.style.display = "block";
   };
 
   setTimeout(() => {
     timeout = true;
-    if (finished && !changed) {
-      // TODO: Move on
-    } else if (finished && changed) {
-      // TODO: Change loading to button
+    if (finished && !surveying) {
+      moveOn();
+    } else if (finished && surveying) {
+      revealButton();
     }
   }, 3000);
 
   onmessage = (event) => {
     finished = true;
-    if (timeout && !changed) {
-      // TODO: Move on
-    } else if (timeout && changed) {
-      // TODO: Change loading to button
+    if (timeout && !surveying) {
+      moveOn();
+    } else if (timeout && surveying) {
+      revealButton();
     }
+  };
+
+  moveOnButtonEl.onclick = () => {
+    const userData = {
+      pluginUsage: pluginUsageInputEl.value,
+      workTerm: workTermInputEl.value,
+    };
+
+    parent.postMessage(
+      { pluginMessage: { type: "send-user-data", userData } },
+      "*"
+    );
+    parent.postMessage({ pluginMessage: { type: "complete-converting" } }, "*");
   };
 </script>

@@ -8,7 +8,7 @@ const sendUserData = async (userData: Preference | Survey) => {
     userData,
   };
 
-  fetch(`${SERVER}/data/users`, {
+  await fetch(`${SERVER}/data/users`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -16,10 +16,10 @@ const sendUserData = async (userData: Preference | Survey) => {
     body: JSON.stringify(userDataBody),
   })
     .then((fetchResponse) => {
-      console.log(`Set Preference Status: ${fetchResponse.status}`);
+      console.log(`Set user data status: ${fetchResponse.status}`);
     })
     .catch((error) => {
-      console.log(`Set Preference Error: ${error}`);
+      console.log(`Set user data Error: ${error.message}`);
     });
 };
 

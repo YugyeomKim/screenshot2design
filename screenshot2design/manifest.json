@@ -10,7 +10,8 @@
     "setApiKey": "views/set-apikey.html",
     "beforeConvert": "views/before-convert.html",
     "interConvert": "views/inter-convert.html",
-    "afterConvert": "views/after-convert.html"
+    "afterConvert": "views/after-convert.html",
+    "cancel": "views/cancel.html"
   },
   "menu": [{ "name": "Convert", "command": "convert" }]
 }

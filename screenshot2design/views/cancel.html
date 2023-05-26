@@ -1,0 +1,15 @@
+<div>Explanation comes here</div>
+<input id="reason" type="text" placeholder="Reason?" />
+<button id="submit">Submit</button>
+
+<script>
+  const reasonInputEl = document.getElementById("reason");
+
+  document.getElementById("submit").onclick = () => {
+    const userData = { reason: reasonInputEl.value };
+    parent.postMessage(
+      { pluginMessage: { type: "submit-and-close", userData } },
+      "*"
+    );
+  };
+</script>

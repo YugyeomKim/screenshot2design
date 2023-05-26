@@ -7,6 +7,7 @@ import {
   IMAGE_NUM_LIMIT,
   ERR_TOO_MANY_SCREENSHOTS,
   MSG_COMPLETE_CONVERTING,
+  MSG_ClOSE,
 } from "./common";
 import setApiKey from "./set-apikey";
 import checkApikey from "./check-apikey";
@@ -21,13 +22,14 @@ import runConverting from "./run-converting";
  * 4. If it is valid, show before-convert view.
  */
 async function main() {
+  await figma.clientStorage.deleteAsync("apiKey");
   const apiKey: string = await figma.clientStorage.getAsync("apiKey");
 
   if (!apiKey) {
     figma.showUI(__uiFiles__.setApiKey);
     figma.ui.resize(380, 150);
   } else {
-    const authorized = checkApikey(apiKey);
+    const authorized = await checkApikey(apiKey);
 
     if (!authorized) {
       figma.showUI(__uiFiles__.setApiKey);
@@ -38,7 +40,12 @@ async function main() {
     }
   }
 
+  let successRun = 0;
+  let totalRun = 0;
+
   figma.ui.onmessage = async (msg) => {
+    const resultFrames: FrameNode[] = [];
+
     switch (msg.type) {
       /**
        * Enrollment
@@ -95,11 +102,11 @@ async function main() {
       }
 
       /**
-       * Send preference information to server
+       * Send user data information to server
        */
-      case "preference": {
-        const { preference } = msg;
-        sendUserData(preference);
+      case "send-user-data": {
+        const { userData } = msg;
+        sendUserData(userData);
         return;
       }
 
@@ -110,12 +117,11 @@ async function main() {
        * 3. Draw the design on canvas
        * 4. Move viewport
        * 5. show after-convert view
-       * TODO: control inter-convert view
        */
       case "convert": {
         const { selection } = figma.currentPage;
 
-        const totalRun = selection.length;
+        totalRun = selection.length;
 
         if (selection.length === 0) {
           figma.notify(ERR_EMPTY_SCREENSHOTS);
@@ -126,6 +132,7 @@ async function main() {
           figma.notify(ERR_TOO_MANY_SCREENSHOTS);
           return;
         }
+        console.log(totalRun);
 
         figma.showUI(__uiFiles__.interConvert);
         figma.ui.resize(380, 150);
@@ -134,19 +141,21 @@ async function main() {
 
         const convertingResults = await runConverting(selection);
 
-        let successRun = 0;
-        const resultFrames = [];
         for (const result of convertingResults) {
           if (result.status === "fulfilled") {
             resultFrames.push(result.value);
             successRun += 1;
           } else {
-            // TODO: error handling
+            console.log(result.reason);
           }
         }
 
-        figma.ui.postMessage("Comp");
+        figma.ui.postMessage("converting-finished");
 
+        return;
+      }
+
+      case "complete-converting": {
         figma.currentPage.selection = resultFrames;
         figma.viewport.scrollAndZoomIntoView(resultFrames);
 
@@ -158,10 +167,24 @@ async function main() {
       }
 
       /**
-       * close the plugin.
-       * TODO: ask reason for exiting
+       * Show cancel view when the user clicked Cancel button.
        */
       case "cancel": {
+        figma.showUI(__uiFiles__.cancel);
+        figma.ui.resize(380, 150);
+
+        return;
+      }
+
+      /**
+       * Submit the reason and close plugin.
+       */
+      case "submit-and-close": {
+        figma.ui.hide();
+        figma.notify(MSG_ClOSE);
+
+        await sendUserData(msg.userData);
+
         figma.closePlugin();
       }
     }
