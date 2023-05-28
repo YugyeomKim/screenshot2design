@@ -42,10 +42,9 @@ async function main() {
 
   let successRun = 0;
   let totalRun = 0;
+  const resultFrames: FrameNode[] = [];
 
   figma.ui.onmessage = async (msg) => {
-    const resultFrames: FrameNode[] = [];
-
     switch (msg.type) {
       /**
        * Enrollment
