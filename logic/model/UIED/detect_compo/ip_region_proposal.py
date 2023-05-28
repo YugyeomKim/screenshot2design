@@ -8,6 +8,10 @@ import detect_compo.lib_ip.Component as Compo
 from config.CONFIG_UIED import Config
 C = Config()
 
+def debug(output, file_path='model/UIED/logs'):
+    f = open(file_path, 'a')
+    f.write(str(output) + '\n')
+    f.close()
 
 def nesting_inspection(org, grey, compos, ffl_block):
     '''
@@ -61,4 +65,4 @@ def compo_detection(input_img_path, output_root, uied_params, resize_by_height=8
 
     # *** Step 7 *** save detection result
     Compo.compos_update(uicompos, org.shape)
-    file.save_corners_json(pjoin(ip_root, name + '.json'), uicompos)
+    file.save_corners_json(pjoin(ip_root, name + '.json'), uicompos, org.shape)

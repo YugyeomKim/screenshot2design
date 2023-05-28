@@ -3,8 +3,7 @@ import json
 from os.path import join as pjoin
 import cv2
 
-def save_corners_json(file_path, compos):
-    img_shape = compos[0].image_shape
+def save_corners_json(file_path, compos, img_shape):
     output = {'img_shape': img_shape, 'compos': []}
     f_out = open(file_path, 'w')
 
