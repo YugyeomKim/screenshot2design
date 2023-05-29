@@ -1,32 +1,157 @@
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css"
-/>
+<html>
+  <body
+    style="
+      background-color: #4b4747;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: white;
+    "
+  >
+    <div
+      id="loading"
+      style="
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 230;
+        margin-top: 30;
+      "
+    >
+      <div style="font-size: 22; font-weight: 700">Converting file...</div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        style="
+          margin: auto;
+          background: none;
+          display: block;
+          shape-rendering: auto;
+        "
+        width="40px"
+        height="40px"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="xMidYMid"
+      >
+        <g transform="translate(50 50)">
+          <g>
+            <animateTransform
+              attributeName="transform"
+              type="rotate"
+              values="0;45"
+              keyTimes="0;1"
+              dur="0.5102040816326531s"
+              repeatCount="indefinite"
+            ></animateTransform>
+            <path
+              d="M29.491524206117255 -5.5 L37.491524206117255 -5.5 L37.491524206117255 5.5 L29.491524206117255 5.5 A30 30 0 0 1 24.742744050198738 16.964569457146712 L24.742744050198738 16.964569457146712 L30.399598299691117 22.621423706639092 L22.621423706639096 30.399598299691114 L16.964569457146716 24.742744050198734 A30 30 0 0 1 5.5 29.491524206117255 L5.5 29.491524206117255 L5.5 37.491524206117255 L-5.499999999999997 37.491524206117255 L-5.499999999999997 29.491524206117255 A30 30 0 0 1 -16.964569457146705 24.742744050198738 L-16.964569457146705 24.742744050198738 L-22.621423706639085 30.399598299691117 L-30.399598299691117 22.621423706639092 L-24.742744050198738 16.964569457146712 A30 30 0 0 1 -29.491524206117255 5.500000000000009 L-29.491524206117255 5.500000000000009 L-37.491524206117255 5.50000000000001 L-37.491524206117255 -5.500000000000001 L-29.491524206117255 -5.500000000000002 A30 30 0 0 1 -24.742744050198738 -16.964569457146705 L-24.742744050198738 -16.964569457146705 L-30.399598299691117 -22.621423706639085 L-22.621423706639092 -30.399598299691117 L-16.964569457146712 -24.742744050198738 A30 30 0 0 1 -5.500000000000011 -29.491524206117255 L-5.500000000000011 -29.491524206117255 L-5.500000000000012 -37.491524206117255 L5.499999999999998 -37.491524206117255 L5.5 -29.491524206117255 A30 30 0 0 1 16.964569457146702 -24.74274405019874 L16.964569457146702 -24.74274405019874 L22.62142370663908 -30.39959829969112 L30.399598299691117 -22.6214237066391 L24.742744050198738 -16.964569457146716 A30 30 0 0 1 29.491524206117255 -5.500000000000013 M0 -20A20 20 0 1 0 0 20 A20 20 0 1 0 0 -20"
+              fill="#f8f8f8"
+            ></path>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <button
+      id="move-on"
+      style="
+        display: none;
+        margin-top: 30;
+        width: 170;
+        background: #cfcece;
+        border-color: transparent;
+        border-radius: 10px;
+        font-size: 25;
+        font-weight: 600;
+        color: #4b4747;
+      "
+      onMouseOver="this.style.background='#bababa'"
+      onMouseOut="this.style.background='#d9d9d9'"
+    >
+      Move on
+    </button>
 
-<div style="display: flex; flex-direction: column; justify-content: left">
-  <div id="loading">loading image here</div>
-  <button id="move-on" style="display: none">loading image here</button>
-</div>
-<div style="display: flex; flex-direction: column; justify-content: left">
-  <ol class="type type--large" style="width: 90%">
-    <li>How do you use this plugin?</li>
-    <input
-      id="plugin-usage"
-      type="input"
-      class="input__field"
-      placeholder="Plugin Usage"
-      style="width: 200"
-    />
-    <li>How much does it take to do works above?</li>
-    <input
-      id="work-term"
-      type="input"
-      class="input__field"
-      placeholder="Work Term"
-      style="width: 200"
-    />
-  </ol>
-</div>
+    <div
+      style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 25;
+      "
+    >
+      <div style="font-size: 16; font-weight: 700">Quick Survey</div>
+      <div style="font-size: 12; font-weight: 200; margin-top: 5">
+        will automatically shut down when the convertion is done
+      </div>
+    </div>
+    <div
+      style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        height: 85;
+        width: 270;
+        margin-top: 25;
+      "
+    >
+      <select
+        id="plugin-usage"
+        style="
+          font-family: inter;
+          font-size: 12px;
+          font-weight: 200;
+          height: 32px;
+          width: 100%;
+          padding: 5px 10px 5px 10px;
+          border: 0.8px solid #ffffff;
+          border-radius: 5px;
+          outline-width: 0.8;
+          background: #4b4747;
+          color: #ffffff;
+          outline-color: #ffffff;
+          margin-top: 5;
+        "
+      >
+        <option value="N/A">What is the purpose of using this plugin?</option>
+        <option value="Ideation">Ideation</option>
+        <option value="Landing page">Landing page</option>
+        <option value="Template creation">Template creation</option>
+        <option value="Analytics design">Analytics design</option>
+        <option value="Design consulting">Design consulting</option>
+        <option value="Product demo">Product demo</option>
+        <option value="etc">etc</option>
+      </select>
+      <select
+        id="work-term"
+        style="
+          font-family: inter;
+          font-size: 12px;
+          font-weight: 200;
+          height: 32px;
+          width: 100%;
+          padding: 5px 10px 5px 10px;
+          border: 0.8px solid #ffffff;
+          border-radius: 5px;
+          outline-width: 0.8;
+          background: #4b4747;
+          color: #ffffff;
+          outline-color: #ffffff;
+          margin-top: 5;
+        "
+      >
+        <option value="N/A">If manually done, how long would it take?</option>
+        <option value="~1">less than hours</option>
+        <option value="1~2">1-2hrs / week</option>
+        <option value="2~5">2-5hrs / week</option>
+        <option value="5~10">5-10hrs / week</option>
+        <option value="10~20">10-20hrs / week</option>
+        <option value="20~">20hrs + / week</option>
+      </select>
+    </div>
+  </body>
+</html>
 
 <script>
   let timeout = false;

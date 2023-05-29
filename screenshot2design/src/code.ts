@@ -135,7 +135,7 @@ async function main() {
         }
 
         figma.showUI(__uiFiles__.interConvert);
-        figma.ui.resize(380, 150);
+        figma.ui.resize(500, 265);
 
         await figma.loadFontAsync({ family: "Inter", style: "Regular" });
 

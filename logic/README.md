@@ -14,6 +14,11 @@ Fields
 2. payload?
 
 metric: The name of field that we want to update
+
+- `heart-shake`
+- `heart-image-recommander`
+- `heart-layout-fixer`
+
 type: The way we want to update
 
 - `increment`: increment by 1
@@ -23,6 +28,11 @@ type: The way we want to update
 
 1. Security -> helmet
 2. set CORS policy
+
+- `auth/enroll`: null, http://localhost:3000, https://s2dlab.framer.website
+- `auth/credit`: https://s2dlab.framer.website
+- others: null
+
 3. improve status code
 4. Get components from python with double quoted properties json directly?
 

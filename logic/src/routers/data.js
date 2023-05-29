@@ -7,25 +7,7 @@ const { getUsersCollection, getStatCollection } = require('../mongo')
 const dataRouter = express.Router()
 
 dataRouter.post('/users', async (req, res) => {
-  /**
-   * @typedef {Object.<string, string>} Preference
-   * @property {string} UiFormat
-   * @property {string} UiPattern
-   * @property {string} UiSource
-   */
-
-  /**
-   * @typedef {Object.<string, string>} Survey
-   * @property {string} PluginUsage
-   * @property {string} ExpectedTimeSave
-   */
-
-  /**
-   * @typedef {Object.<string, string>} Reason
-   * @property {string} reason
-   */
-
-  /** @type {{ apiKey: string, userData: Preference | Survey | Reason}} */
+  /** @type {{ apiKey: string, userData: Object.<string, string>}} */
   const { apiKey, userData } = req.body
   if (!apiKey || !userData) {
     res.statusCode = 404
@@ -87,7 +69,7 @@ dataRouter.post('/stat/:metric', async (req, res) => {
         { metric },
         {
           $inc: {
-            metric: 1,
+            count: 1,
           },
         }
       )
@@ -99,7 +81,7 @@ dataRouter.post('/stat/:metric', async (req, res) => {
         { metric },
         {
           $inc: {
-            metric: -1,
+            count: -1,
           },
         }
       )
