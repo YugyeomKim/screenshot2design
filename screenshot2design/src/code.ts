@@ -27,16 +27,16 @@ async function main() {
 
   if (!apiKey) {
     figma.showUI(__uiFiles__.setApiKey);
-    figma.ui.resize(380, 150);
+    figma.ui.resize(525, 340);
   } else {
     const authorized = await checkApikey(apiKey);
 
     if (!authorized) {
       figma.showUI(__uiFiles__.setApiKey);
-      figma.ui.resize(380, 150);
+      figma.ui.resize(525, 340);
     } else {
       figma.showUI(__uiFiles__.beforeConvert);
-      figma.ui.resize(380, 150);
+      figma.ui.resize(320, 440);
     }
   }
 
@@ -97,7 +97,7 @@ async function main() {
 
         if (authorized) {
           figma.showUI(__uiFiles__.beforeConvert);
-          figma.ui.resize(380, 150);
+          figma.ui.resize(320, 440);
         }
         return;
       }
@@ -161,7 +161,7 @@ async function main() {
 
         figma.notify(MSG_COMPLETE_CONVERTING(successRun, totalRun));
         figma.showUI(__uiFiles__.afterConvert);
-        figma.ui.resize(380, 150);
+        figma.ui.resize(460, 250);
 
         return;
       }
@@ -171,7 +171,7 @@ async function main() {
        */
       case "cancel": {
         figma.showUI(__uiFiles__.cancel);
-        figma.ui.resize(380, 150);
+        figma.ui.resize(400, 115);
 
         return;
       }

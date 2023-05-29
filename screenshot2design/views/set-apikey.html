@@ -3,91 +3,87 @@
   href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css"
 />
 
-<div style="display: flex; flex-direction: column; justify-content: left">
-  <input
-    id="email"
-    type="input"
-    class="input__field"
-    placeholder="email"
-    style="width: 200"
-  />
-  <input
-    id="companyName"
-    type="input"
-    class="input__field"
-    placeholder="companyName"
-    style="width: 200"
-  />
-  <input
-    id="companySize"
-    type="input"
-    class="input__field"
-    placeholder="companySize"
-    style="width: 200"
-  />
-  <input
-    id="role"
-    type="input"
-    class="input__field"
-    placeholder="role"
-    style="width: 200"
-  />
-  <input
-    id="usage"
-    type="input"
-    class="input__field"
-    placeholder="usage"
-    style="width: 200"
-  />
-  <button id="enroll" class="button button--primary" style="margin-left: 5">
-    Submit
-  </button>
-  <span id="api-key-created"></span>
-  <span>remember the key explanation</span>
+<div style="display: flex; flex-direction: column; justify-content: left; height:150; margin-bottom:10">
+  <div style="margin-left: 20; margin-bottom: 10; margin-top:12">
+    <text style="font-family:inter; font-size: 12; color:#999999">Fill in the form to get API Key</text>
+  </div>
+  <div style="display: flex; flex-direction: row; justify-content: left; height:150; margin-bottom:8">
+    <div style="display: flex; flex-direction: column; justify-content: left; margin-left:20">
+      <input id="email" type="input" class="input__field" placeholder="✉️   Email" style="width: 200; margin-bottom:8">
+      <input id="company-name" type="input" class="input__field" placeholder="🪪   Company Name"
+        style="width: 200; margin-bottom:8">
+      <input id="company-size" type="input" class="input__field" placeholder="🏢   Company Size"
+        style="width: 200; margin-bottom:8">
+      <input id="role" type="input" class="input__field" placeholder="👤   Role" style="width: 200; margin-bottom:8">
+    </div>
+
+    <div style="display: flex; flex-direction: column; margin-left: 10">
+      <div>
+        <textarea id="usage" type="textarea" class="input__field" placeholder="🔧 Usage"
+          style="width: 280; height:108; font-family:inter; font-size: 12; color:#999999 "></textarea>
+      </div>
+      <div>
+        <div style="display: flex; flex-direction: row; margin-top: 7">
+          <div style="width: 200">
+            <select id="career-stage" class="select-menu" disabled>
+              <option style="font-style: #999999; color:#999999">💼 Career Stage</option>
+              <option value="2">less than a year</option>
+              <option value="3">1-3 year</option>
+              <option value="4">3-5 year</option>
+              <option value="5">5-10 year</option>
+              <option value="6">10+ year</option>
+              <option value="7">20+ year</option>
+            </select>
+          </div>
+          <div>
+            <button id="enroll" class='button button--primary' style="margin-left: 5;">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div>
+    <hr class="solid" style="border-color: #dfdfdf; border-top:0.5px">
+    <div style="margin-left: 20; margin-bottom: 8; margin-top:10">
+      <text style="font-family:inter; font-size: 12; color:#999999">Click Setup for registration</text>
+    </div>
+    <div style="display: flex; flex-direction: row; justify-content: left; margin-left: 20; margin-bottom:8">
+      <div class="input input--with-icon">
+        <div class="icon icon--key"></div>
+        <input id="api-key" type="input" class="input__field" placeholder="API Key" style="width: 415" />
+      </div>
+      <div>
+        <button id="set-api-key" class='button button--primary' style="margin-left: 5;"> Setup </button>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <hr class="solid" style="border-color: #dfdfdf; border-top:0.5px">
+    <div style="justify-content: right;">
+      <button id="cancel" class='button button--primary'
+        style="background-color: #5e5e5e; margin-left: 435; margin-top: 10"> Cancel
+      </button>
+    </div>
+  </div>
+
 </div>
 
-<div style="display: flex; flex-direction: column; justify-content: left">
-  <ol class="type type--large" style="width: 90%">
-    <li>Copy and paste the API Key below.</li>
-    <li>Press Save and run Screenshot2Design</li>
-  </ol>
-</div>
-<div
-  style="
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    margin-left: 28;
-  "
->
-  <div class="input input--with-icon">
-    <div class="icon icon--key"></div>
-    <input
-      id="api-key"
-      type="input"
-      class="input__field"
-      placeholder="API Key"
-      style="width: 200"
-    />
-  </div>
-  <button
-    id="set-api-key"
-    class="button button--primary"
-    style="margin-left: 5"
-  >
-    Save
-  </button>
-</div>
-<button id="cancel" class="button button--primary" style="margin-left: 5">
-  Cancel
-</button>
+
+<script src="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/iife/figma-plugin-ds.js"></script>
+<script>
+  selectMenu.init();
+</script>
 
 <script>
   const emailEl = document.getElementById("email");
-  const companyNameEl = document.getElementById("companyName");
-  const companySizeEl = document.getElementById("companySize");
+  const companyNameEl = document.getElementById("company-name");
+  const companySizeEl = document.getElementById("company-size");
   const roleEl = document.getElementById("role");
   const usageEl = document.getElementById("usage");
+  const careerStageEl = document.getElementById("career-stage");
 
   document.getElementById("enroll").onclick = () => {
     const userInfo = {
@@ -96,6 +92,7 @@
       companySize: companySizeEl.value,
       role: roleEl.value,
       usage: usageEl.value,
+      careerStage: careerStageEl.value
     };
     parent.postMessage({ pluginMessage: { type: "enroll", userInfo } }, "*");
   };
