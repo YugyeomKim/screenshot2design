@@ -37,7 +37,7 @@
         outline-color: #707070;
       "
     >
-      <option disabled selected>Cancellation Reason</option>
+      <option value="N/A" selected disabled>Cancellation Reason</option>
       <option>Just testing</option>
       <option>Don't need it now</option>
       <option>Difficulty using the plugin</option>
@@ -53,11 +53,6 @@
     <button id="submit" class="button button--primary">Submit</button>
   </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/iife/figma-plugin-ds.js"></script>
-<script>
-  selectMenu.init();
-</script>
 
 <script>
   const reasonInputEl = document.getElementById("reason");

@@ -54,13 +54,16 @@ async function main() {
        * 3. send apiKey to the view
        */
       case "enroll": {
-        const { email, companyName, companySize, role, usage } = msg.userInfo;
+        const { email, companyName, companySize, role, usage, careerStage } =
+          msg.userInfo;
 
-        if (!(email && companyName && companySize && role && usage)) {
+        if (
+          !(email && companyName && companySize && role && usage && careerStage)
+        ) {
           figma.notify(ERR_EMPTY_FORM);
           return;
         } else {
-          const userInfo = { email, companyName, companySize, role, usage };
+          const { userInfo } = msg;
 
           const response = await fetch(`${SERVER}/auth/enroll`, {
             method: "POST",
@@ -187,6 +190,11 @@ async function main() {
         await sendStatData(msg.statData);
 
         figma.closePlugin();
+      }
+
+      case "notify": {
+        figma.notify(msg.message);
+        return;
       }
     }
   };

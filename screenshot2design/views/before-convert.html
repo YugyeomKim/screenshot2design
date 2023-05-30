@@ -1,353 +1,735 @@
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css"
-/>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css"
+    />
+    <style>
+      input:checked + span {
+        background-color: #d3e8ff;
+      }
+    </style>
+  </head>
 
-<div style="display: flex; flex-direction: column; justify-content: left">
-  <div style="margin-left:20; margin-top:15; margin-bottom:5">
-    <text style="font-family:inter; font-size: 13; font-weight: 700">How to Use</text>
-  </div>
-  <div style="font-family:inter; font-size: 11; font-weight: 500; color:#181818; margin-left:20; margin-bottom:8">
-    <text>1. Copy and paste screenshots to the canvas</text>
-    <br /><text>2. Select screenshots and click either button below</text>
-    <br /><text>3. We support up to 15MB each and 10 images</text>
-  </div>
-</div>
-
-<hr class="solid" style="border-color: #dfdfdf; border-top:0.5px">
-
-<div style="display: flex; flex-direction: column; justify-content: left; margin-left:20">
-  <div style=" margin-top:5;">
-    <div style="margin-bottom:3">
-      <text style="font-family:inter; font-size: 11; font-weight: 500; color:#8f8f8f; ">Submission can
-        enhance result
-        quality!</text>
-    </div>
-    <div style="margin-bottom:3">
-      <text style="font-family:inter; font-size: 11; font-weight: 500; color:#8f8f8f">Click <span
-          style="color:#5e5e5e">Skip
-          Setting</span> to skip the process</text>
-    </div>
-  </div>
-
-  <div style="display: flex; flex-direction: column ">
-    <div style="width: 255px; ">
-      <div style="margin-top:10">
-        <select id="ui-format" class="select" style="font-family:inter; font-size:11px; font-weight: medium;  height: 32px; width:100%;
-    padding: 5px 10px 5px 10px; border: 0.8px solid #999999; border-radius:5px; outline-width: 1.1; outline-color: #999999;
-         background:#fff; color: #707070; outline-color: #707070">
-          <option value="1" style="font-style: #707070" disabled selected>Screenshot Format</option>
-          <option value="2">web</option>
-          <option value="3">app</option>
-          <option value="4">program</option>
-          <option value="5">detailed page (e-commerce)</option>
-          <option value="6">Etc.</option>
-        </select>
+  <body>
+    <div style="display: flex; flex-direction: column; justify-content: left">
+      <div style="margin-left: 20; margin-top: 15; margin-bottom: 5">
+        <text style="font-family: inter; font-size: 13; font-weight: 700"
+          >How to Use</text
+        >
+      </div>
+      <div
+        style="
+          font-family: inter;
+          font-size: 11;
+          font-weight: 500;
+          color: #181818;
+          margin-left: 20;
+          margin-bottom: 8;
+        "
+      >
+        <text>1. Copy and paste screenshots to the canvas</text>
+        <br /><text>2. Select screenshots and click either button below</text>
+        <br /><text>3. We support up to 15MB each and 10 images</text>
       </div>
     </div>
-  </div>
-  <div style="width: 255px">
-    <div style="margin-top: 5; margin-bottom:10">
-      <select id="ui-pattern" class="select" style="font-family:inter; font-size:11px; font-weight: medium;  height: 32px; width:100%;
-    padding: 5px 10px 5px 10px; border: 0.8px solid #999999; border-radius:5px; outline-width: 1.1; outline-color: #999999;
-         background:#fff; color: #707070; margin-top:5;">
-        <option value="1" style="font-style: #707070" disabled selected>Image Source</option>
-        <option value="2">self-made</option>
-        <option value="3">reference site</option>
-        <option value="4">SaaS website</option>
-        <option value="5">design template</option>
-        <option value="5">device screenshot</option>
-        <option value="6">Etc.</option>
-      </select>
-    </div>
-  </div>
 
+    <hr class="solid" style="border-color: #dfdfdf; border-top: 0.5px" />
 
-
-
-  <!-- 여기서부터 multi-select box-->
-  <div id="UI-pattern" class="container"
-    style="border-radius: 4px; border: 1.1px solid #999999; width: 255px; font-family:inter; font-size:11px; font-weight: medium;">
-    <div class=" text" style="margin-left:12px; margin-top:10px; margin-bottom:8px;color:#707070">UI Pattern</div>
-
-    <div style="text-align: center">
-      <div class="container">
-        <div id="UI-pattern-splash" style=" margin: 2px; margin-left:10;
-        background-color: #ffffff;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        font-weight:200;
-        overflow: hidden;
-        float: left;">
-          <label style="float: left; width: 50; height: 16; line-height: 1.0em">
-            <input type="checkbox" value="1" style=" position: absolute;
-            display: none;
-            color: #fff !important;"><span style="text-align: center;
-            padding: 3px 0;
-            display: block; color: #707070">splash</span>
-          </label>
+    <div
+      style="
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        margin-left: 20;
+      "
+    >
+      <div style="margin-top: 5">
+        <div style="margin-bottom: 3">
+          <text
+            style="
+              font-family: inter;
+              font-size: 11;
+              font-weight: 500;
+              color: #8f8f8f;
+            "
+            >Submission can enhance result quality!</text
+          >
         </div>
-
-        <div id="UI-pattern-login" style=" margin: 2px; margin-left:2;
-        background-color: #ffffff;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        font-weight:200;
-        overflow: hidden;
-        float: left;">
-          <label style="float: left; width: 40; height: 16; line-height: 1.0em">
-            <input type="checkbox" value="1" style=" position: absolute;
-            display: none;
-            color: #fff !important;"><span style="text-align: center;
-            padding: 3px 0;
-            display: block; color: #707070">login</span>
-          </label>
-        </div>
-
-        <div id="UI-pattern-signup" style=" margin: 2px; margin-left:2;
-        background-color: #ffffff;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        font-weight:200;
-        overflow: hidden;
-        float: left;">
-          <label style="float: left; width: 50; height: 16; line-height: 1.0em">
-            <input type="checkbox" value="1" style=" position: absolute;
-            display: none;
-            color: #fff !important;"><span style="text-align: center;
-            padding: 3px 0;
-            display: block; color: #707070">sign up</span>
-          </label>
-        </div>
-
-        <div id="UI-pattern-onboarding" style=" margin: 2px; margin-left:2;
-        background-color: #ffffff;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        font-weight:200;
-        overflow: hidden;
-        float: left;">
-          <label style="float: left; width: 70; height: 16; line-height: 1.0em">
-            <input type="checkbox" value="1" style=" position: absolute;
-            display: none;
-            color: #fff !important;"><span style="text-align: center;
-            padding: 3px 0;
-            display: block; color: #707070">onboarding</span>
-          </label>
-        </div>
-
-        <div id="UI-pattern-landingpage" style=" margin: 2px; margin-left:10;
-        background-color: #ffffff;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        font-weight:200;
-        overflow: hidden;
-        float: left;">
-          <label style="float: left; width: 90; height: 16; line-height: 1.0em">
-            <input type="checkbox" value="1" style=" position: absolute;
-            display: none;
-            color: #fff !important;"><span style="text-align: center;
-            padding: 3px 0;
-            display: block; color: #707070">landing page</span>
-          </label>
-        </div>
-
-        <div id="UI-pattern-home" style=" margin: 2px; margin-left:2;
-        background-color: #ffffff;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        font-weight:200;
-        overflow: hidden;
-        float: left;">
-          <label style="float: left; width: 40; height: 16; line-height: 1.0em">
-            <input type="checkbox" value="1" style=" position: absolute;
-            display: none;
-            color: #fff !important;"><span style="text-align: center;
-            padding: 3px 0;
-            display: block; color: #707070">home</span>
-          </label>
-        </div>
-
-        <div id="UI-pattern-search" style=" margin: 2px; margin-left:2;
-        background-color: #ffffff;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        font-weight:200;
-        overflow: hidden;
-        float: left;">
-          <label style="float: left; width: 60; height: 16; line-height: 1.0em">
-            <input type="checkbox" value="1" style=" position: absolute;
-            display: none;
-            color: #fff !important;"><span style="text-align: center;
-            padding: 3px 0;
-            display: block; color: #707070">search</span>
-          </label>
-        </div>
-
-        <div id="UI-pattern-notification" style=" margin: 2px; margin-left:10;
-        background-color: #ffffff;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        font-weight:200;
-        overflow: hidden;
-        float: left;">
-          <label style="float: left; width: 80; height: 16; line-height: 1.0em">
-            <input type="checkbox" value="1" style=" position: absolute;
-            display: none;
-            color: #fff !important;"><span style="text-align: center;
-            padding: 3px 0;
-            display: block; color: #707070">notification</span>
-          </label>
-        </div>
-
-        <div id="UI-pattern-selection" style=" margin: 2px; margin-left:2;
-        background-color: #ffffff;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        font-weight:200;
-        overflow: hidden;
-        float: left;">
-          <label style="float: left; width: 70; height: 16; line-height: 1.0em">
-            <input type="checkbox" value="1" style=" position: absolute;
-            display: none;
-            color: #fff !important;"><span style="text-align: center;
-            padding: 3px 0;
-            display: block; color: #707070">selection</span>
-          </label>
-        </div>
-
-        <div id="UI-pattern-cart" style=" margin: 2px; margin-left:2;
-        background-color: #ffffff;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        font-weight:200;
-        overflow: hidden;
-        float: left;">
-          <label style="float: left; width: 40; height: 16; line-height: 1.0em">
-            <input type="checkbox" value="1" style=" position: absolute;
-            display: none;
-            color: #fff !important;"><span style="text-align: center;
-            padding: 3px 0;
-            display: block; color: #707070">cart</span>
-          </label>
-        </div>
-
-        <div id="UI-pattern-purchase" style=" margin: 2px; margin-left:10;
-        background-color: #ffffff;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        font-weight:200;
-        overflow: hidden;
-        float: left;">
-          <label style="float: left; width: 70; height: 16; line-height: 1.0em">
-            <input type="checkbox" value="1" style=" position: absolute;
-            display: none;
-            color: #fff !important;"><span style="text-align: center;
-            padding: 3px 0;
-            display: block; color: #707070">purchase</span>
-          </label>
-        </div>
-
-        <div id="UI-pattern-review" style=" margin: 2px; margin-left:2;
-        background-color: #ffffff;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        font-weight:200;
-        overflow: hidden;
-        float: left;">
-          <label style="float: left; width: 50; height: 16; line-height: 1.0em">
-            <input type="checkbox" value="1" style=" position: absolute;
-            display: none;
-            color: #fff !important;"><span style="text-align: center;
-            padding: 3px 0;
-            display: block; color: #707070">review</span>
-          </label>
-        </div>
-
-        <div id="UI-pattern-password" style=" margin: 2px; margin-left:2;
-        background-color: #ffffff;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        font-weight:200;
-        overflow: hidden;
-        float: left;">
-          <label style="float: left; width: 70; height: 16; line-height: 1.0em">
-            <input type="checkbox" value="1" style=" position: absolute;
-            display: none;
-            color: #fff !important;"><span style="text-align: center;
-            padding: 3px 0;
-            display: block; color: #707070">password</span>
-          </label>
-        </div>
-
-        <div id="UI-pattern-detailedpage" style=" margin: 2px; margin-left:10; margin-bottom:10;
-        background-color: #ffffff;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        font-weight:200;
-        overflow: hidden;
-        float: left;">
-          <label style="float: left; width: 90; height: 16; line-height: 1.0em">
-            <input type="checkbox" value="1" style=" position: absolute;
-            display: none;
-            color: #fff !important;"><span style="text-align: center;
-            padding: 3px 0;
-            display: block; color: #707070">detailed page</span>
-          </label>
-        </div>
-
-        <div id="UI-pattern-settings" style=" margin: 2px; margin-left:2;margin-bottom:10;
-        background-color: #ffffff;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        font-weight:200;
-        overflow: hidden;
-        float: left;">
-          <label style="float: left; width: 60; height: 16; line-height: 1.0em">
-            <input type="checkbox" value="1" style=" position: absolute;
-            display: none;
-            color: #fff !important;"><span style="text-align: center;
-            padding: 3px 0;
-            display: block; color: #707070">settings</span>
-          </label>
-        </div>
-
-        <div id="UI-pattern-mypage" style=" margin: 2px; margin-left:2; margin-bottom:10;
-        background-color: #ffffff;
-        border-radius: 4px;
-        border: 1px solid #c2c2c2;
-        font-weight:200;
-        overflow: hidden;
-        float: left;">
-          <label style="float: left; width: 60; height: 16; line-height: 1.0em">
-            <input type="checkbox" value="1" style=" position: absolute;
-            display: none;
-            color: #fff !important;"><span style="text-align: center;
-            padding: 3px 0;
-            display: block; color: #707070">my page</span>
-          </label>
+        <div style="margin-bottom: 3">
+          <text
+            style="
+              font-family: inter;
+              font-size: 11;
+              font-weight: 500;
+              color: #8f8f8f;
+            "
+            >Click <span style="color: #5e5e5e">Skip Setting</span> to skip the
+            process</text
+          >
         </div>
       </div>
 
+      <div style="display: flex; flex-direction: column">
+        <div style="width: 255px">
+          <div style="margin-top: 10">
+            <select
+              id="ui-format"
+              class="select"
+              style="
+                font-family: inter;
+                font-size: 11px;
+                font-weight: medium;
+                height: 32px;
+                width: 100%;
+                padding: 5px 10px 5px 10px;
+                border: 0.8px solid #999999;
+                border-radius: 5px;
+                outline-width: 1.1;
+                outline-color: #999999;
+                background: #fff;
+                color: #707070;
+                outline-color: #707070;
+              "
+            >
+              <option value="N/A" selected disabled style="font-style: #707070">
+                Screenshot Format
+              </option>
+              <option>web</option>
+              <option>app</option>
+              <option>program</option>
+              <option>detailed page (e-commerce)</option>
+              <option>Etc.</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div style="width: 255px">
+        <div style="margin-top: 5; margin-bottom: 10">
+          <select
+            id="ui-source"
+            class="select"
+            style="
+              font-family: inter;
+              font-size: 11px;
+              font-weight: medium;
+              height: 32px;
+              width: 100%;
+              padding: 5px 10px 5px 10px;
+              border: 0.8px solid #999999;
+              border-radius: 5px;
+              outline-width: 1.1;
+              outline-color: #999999;
+              background: #fff;
+              color: #707070;
+              margin-top: 5;
+            "
+          >
+            <option value="N/A" disabled selected style="font-style: #707070">
+              Image Source
+            </option>
+            <option>self-made</option>
+            <option>reference site</option>
+            <option>SaaS website</option>
+            <option>design template</option>
+            <option>device screenshot</option>
+            <option>Etc.</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 여기서부터 multi-select box-->
+      <div
+        class="container"
+        style="
+          border-radius: 4px;
+          border: 1.1px solid #999999;
+          width: 255px;
+          font-family: inter;
+          font-size: 11px;
+          font-weight: medium;
+        "
+      >
+        <div
+          class="text"
+          style="
+            margin-left: 12px;
+            margin-top: 10px;
+            margin-bottom: 8px;
+            color: #707070;
+          "
+        >
+          UI Pattern
+        </div>
+
+        <div id="ui-pattern" style="text-align: center">
+          <div
+            style="
+              margin: 2px;
+              margin-left: 10;
+              background-color: #ffffff;
+              border-radius: 4px;
+              border: 1px solid #c2c2c2;
+              font-weight: 200;
+              overflow: hidden;
+              float: left;
+            "
+          >
+            <label style="float: left; width: 50; height: 16; line-height: 1em">
+              <input
+                type="checkbox"
+                value="splash"
+                style="
+                  position: relative;
+                  display: none;
+                  color: #fff !important;
+                "
+              /><span
+                style="
+                  text-align: center;
+                  padding: 3px 0;
+                  display: block;
+                  color: #707070;
+                "
+                >splash</span
+              >
+            </label>
+          </div>
+
+          <div
+            style="
+              margin: 2px;
+              margin-left: 2;
+              background-color: #ffffff;
+              border-radius: 4px;
+              border: 1px solid #c2c2c2;
+              font-weight: 200;
+              overflow: hidden;
+              float: left;
+            "
+          >
+            <label style="float: left; width: 40; height: 16; line-height: 1em">
+              <input
+                type="checkbox"
+                value="login"
+                style="
+                  position: relative;
+                  display: none;
+                  color: #fff !important;
+                "
+              /><span
+                style="
+                  text-align: center;
+                  padding: 3px 0;
+                  display: block;
+                  color: #707070;
+                "
+                >login</span
+              >
+            </label>
+          </div>
+
+          <div
+            style="
+              margin: 2px;
+              margin-left: 2;
+              background-color: #ffffff;
+              border-radius: 4px;
+              border: 1px solid #c2c2c2;
+              font-weight: 200;
+              overflow: hidden;
+              float: left;
+            "
+          >
+            <label style="float: left; width: 50; height: 16; line-height: 1em">
+              <input
+                type="checkbox"
+                value="sign up"
+                style="
+                  position: relative;
+                  display: none;
+                  color: #fff !important;
+                "
+              /><span
+                style="
+                  text-align: center;
+                  padding: 3px 0;
+                  display: block;
+                  color: #707070;
+                "
+                >sign up</span
+              >
+            </label>
+          </div>
+
+          <div
+            style="
+              margin: 2px;
+              margin-left: 2;
+              background-color: #ffffff;
+              border-radius: 4px;
+              border: 1px solid #c2c2c2;
+              font-weight: 200;
+              overflow: hidden;
+              float: left;
+            "
+          >
+            <label style="float: left; width: 70; height: 16; line-height: 1em">
+              <input
+                type="checkbox"
+                value="onboarding"
+                style="
+                  position: absolute;
+                  display: none;
+                  color: #fff !important;
+                "
+              /><span
+                style="
+                  text-align: center;
+                  padding: 3px 0;
+                  display: block;
+                  color: #707070;
+                "
+                >onboarding</span
+              >
+            </label>
+          </div>
+
+          <div
+            style="
+              margin: 2px;
+              margin-left: 10;
+              background-color: #ffffff;
+              border-radius: 4px;
+              border: 1px solid #c2c2c2;
+              font-weight: 200;
+              overflow: hidden;
+              float: left;
+            "
+          >
+            <label style="float: left; width: 90; height: 16; line-height: 1em">
+              <input
+                type="checkbox"
+                value="landing page"
+                style="
+                  position: absolute;
+                  display: none;
+                  color: #fff !important;
+                "
+              /><span
+                style="
+                  text-align: center;
+                  padding: 3px 0;
+                  display: block;
+                  color: #707070;
+                "
+                >landing page</span
+              >
+            </label>
+          </div>
+
+          <div
+            style="
+              margin: 2px;
+              margin-left: 2;
+              background-color: #ffffff;
+              border-radius: 4px;
+              border: 1px solid #c2c2c2;
+              font-weight: 200;
+              overflow: hidden;
+              float: left;
+            "
+          >
+            <label style="float: left; width: 40; height: 16; line-height: 1em">
+              <input
+                type="checkbox"
+                value="home"
+                style="
+                  position: absolute;
+                  display: none;
+                  color: #fff !important;
+                "
+              /><span
+                style="
+                  text-align: center;
+                  padding: 3px 0;
+                  display: block;
+                  color: #707070;
+                "
+                >home</span
+              >
+            </label>
+          </div>
+
+          <div
+            style="
+              margin: 2px;
+              margin-left: 2;
+              background-color: #ffffff;
+              border-radius: 4px;
+              border: 1px solid #c2c2c2;
+              font-weight: 200;
+              overflow: hidden;
+              float: left;
+            "
+          >
+            <label style="float: left; width: 60; height: 16; line-height: 1em">
+              <input
+                type="checkbox"
+                value="search"
+                style="
+                  position: absolute;
+                  display: none;
+                  color: #fff !important;
+                "
+              /><span
+                style="
+                  text-align: center;
+                  padding: 3px 0;
+                  display: block;
+                  color: #707070;
+                "
+                >search</span
+              >
+            </label>
+          </div>
+
+          <div
+            style="
+              margin: 2px;
+              margin-left: 10;
+              background-color: #ffffff;
+              border-radius: 4px;
+              border: 1px solid #c2c2c2;
+              font-weight: 200;
+              overflow: hidden;
+              float: left;
+            "
+          >
+            <label style="float: left; width: 80; height: 16; line-height: 1em">
+              <input
+                type="checkbox"
+                value="notification"
+                style="
+                  position: absolute;
+                  display: none;
+                  color: #fff !important;
+                "
+              /><span
+                style="
+                  text-align: center;
+                  padding: 3px 0;
+                  display: block;
+                  color: #707070;
+                "
+                >notification</span
+              >
+            </label>
+          </div>
+
+          <div
+            style="
+              margin: 2px;
+              margin-left: 2;
+              background-color: #ffffff;
+              border-radius: 4px;
+              border: 1px solid #c2c2c2;
+              font-weight: 200;
+              overflow: hidden;
+              float: left;
+            "
+          >
+            <label style="float: left; width: 70; height: 16; line-height: 1em">
+              <input
+                type="checkbox"
+                value="selection"
+                style="
+                  position: absolute;
+                  display: none;
+                  color: #fff !important;
+                "
+              /><span
+                style="
+                  text-align: center;
+                  padding: 3px 0;
+                  display: block;
+                  color: #707070;
+                "
+                >selection</span
+              >
+            </label>
+          </div>
+
+          <div
+            style="
+              margin: 2px;
+              margin-left: 2;
+              background-color: #ffffff;
+              border-radius: 4px;
+              border: 1px solid #c2c2c2;
+              font-weight: 200;
+              overflow: hidden;
+              float: left;
+            "
+          >
+            <label style="float: left; width: 40; height: 16; line-height: 1em">
+              <input
+                type="checkbox"
+                value="cart"
+                style="
+                  position: absolute;
+                  display: none;
+                  color: #fff !important;
+                "
+              /><span
+                style="
+                  text-align: center;
+                  padding: 3px 0;
+                  display: block;
+                  color: #707070;
+                "
+                >cart</span
+              >
+            </label>
+          </div>
+
+          <div
+            style="
+              margin: 2px;
+              margin-left: 10;
+              background-color: #ffffff;
+              border-radius: 4px;
+              border: 1px solid #c2c2c2;
+              font-weight: 200;
+              overflow: hidden;
+              float: left;
+            "
+          >
+            <label style="float: left; width: 70; height: 16; line-height: 1em">
+              <input
+                type="checkbox"
+                value="purchase"
+                style="
+                  position: absolute;
+                  display: none;
+                  color: #fff !important;
+                "
+              /><span
+                style="
+                  text-align: center;
+                  padding: 3px 0;
+                  display: block;
+                  color: #707070;
+                "
+                >purchase</span
+              >
+            </label>
+          </div>
+
+          <div
+            style="
+              margin: 2px;
+              margin-left: 2;
+              background-color: #ffffff;
+              border-radius: 4px;
+              border: 1px solid #c2c2c2;
+              font-weight: 200;
+              overflow: hidden;
+              float: left;
+            "
+          >
+            <label style="float: left; width: 50; height: 16; line-height: 1em">
+              <input
+                type="checkbox"
+                value="review"
+                style="
+                  position: absolute;
+                  display: none;
+                  color: #fff !important;
+                "
+              /><span
+                style="
+                  text-align: center;
+                  padding: 3px 0;
+                  display: block;
+                  color: #707070;
+                "
+                >review</span
+              >
+            </label>
+          </div>
+
+          <div
+            style="
+              margin: 2px;
+              margin-left: 2;
+              background-color: #ffffff;
+              border-radius: 4px;
+              border: 1px solid #c2c2c2;
+              font-weight: 200;
+              overflow: hidden;
+              float: left;
+            "
+          >
+            <label style="float: left; width: 70; height: 16; line-height: 1em">
+              <input
+                type="checkbox"
+                value="password"
+                style="
+                  position: absolute;
+                  display: none;
+                  color: #fff !important;
+                "
+              /><span
+                style="
+                  text-align: center;
+                  padding: 3px 0;
+                  display: block;
+                  color: #707070;
+                "
+                >password</span
+              >
+            </label>
+          </div>
+
+          <div
+            style="
+              margin: 2px;
+              margin-left: 10;
+              margin-bottom: 10;
+              background-color: #ffffff;
+              border-radius: 4px;
+              border: 1px solid #c2c2c2;
+              font-weight: 200;
+              overflow: hidden;
+              float: left;
+            "
+          >
+            <label style="float: left; width: 90; height: 16; line-height: 1em">
+              <input
+                type="checkbox"
+                value="detailed page"
+                style="
+                  position: absolute;
+                  display: none;
+                  color: #fff !important;
+                "
+              /><span
+                style="
+                  text-align: center;
+                  padding: 3px 0;
+                  display: block;
+                  color: #707070;
+                "
+                >detailed page</span
+              >
+            </label>
+          </div>
+
+          <div
+            style="
+              margin: 2px;
+              margin-left: 2;
+              margin-bottom: 10;
+              background-color: #ffffff;
+              border-radius: 4px;
+              border: 1px solid #c2c2c2;
+              font-weight: 200;
+              overflow: hidden;
+              float: left;
+            "
+          >
+            <label style="float: left; width: 60; height: 16; line-height: 1em">
+              <input
+                type="checkbox"
+                value="settings"
+                style="
+                  position: absolute;
+                  display: none;
+                  color: #fff !important;
+                "
+              /><span
+                style="
+                  text-align: center;
+                  padding: 3px 0;
+                  display: block;
+                  color: #707070;
+                "
+                >settings</span
+              >
+            </label>
+          </div>
+
+          <div
+            style="
+              margin: 2px;
+              margin-left: 2;
+              margin-bottom: 10;
+              background-color: #ffffff;
+              border-radius: 4px;
+              border: 1px solid #c2c2c2;
+              font-weight: 200;
+              overflow: hidden;
+              float: left;
+            "
+          >
+            <label style="float: left; width: 60; height: 16; line-height: 1em">
+              <input
+                type="checkbox"
+                value="my page"
+                style="
+                  position: absolute;
+                  display: none;
+                  color: #fff !important;
+                "
+              /><span
+                style="
+                  text-align: center;
+                  padding: 3px 0;
+                  display: block;
+                  color: #707070;
+                "
+                >my page</span
+              >
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</div><!-- end container -->
+    <!-- end container -->
 
-<div style="display: flex; flex-direction: row; justify-content: left; margin-top:8; margin-left: 20px">
-  <div style="width:132">
-    <button id="skip" class="button button--primary" style="background-color: #5e5e5e; margin-bottom:5">
-      Skip and Convert
-    </button>
-  </div>
-  <!--옵션 안 누르고 나가면 alert 뜨도록
-  multi-select background color conversion effect-->
-  <div style="width:100">
-    <button id="convert" class="button button--primary" style="margin-left: 5">
-      Convert
-    </button>
-  </div>
-</div>
-
+    <div
+      style="
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+        margin-top: 8;
+        margin-left: 20px;
+      "
+    >
+      <div style="width: 132">
+        <button
+          id="skip"
+          class="button button--primary"
+          style="background-color: #5e5e5e; margin-bottom: 5"
+        >
+          Skip and Convert
+        </button>
+      </div>
+      <!--옵션 안 누르고 나가면 alert 뜨도록
+    multi-select background color conversion effect-->
+      <div style="width: 100">
+        <button
+          id="convert"
+          class="button button--primary"
+          style="margin-left: 5"
+        >
+          Convert
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
 
 <script>
   document.getElementById("skip").onclick = () => {
@@ -355,14 +737,40 @@
   };
 
   const formatEl = document.getElementById("ui-format");
-  const patternEl = document.getElementById("ui-pattern");
   const sourceEl = document.getElementById("ui-source");
+  const patternEl = document.getElementById("ui-pattern");
+  const checkboxes = patternEl.querySelectorAll('input[type="checkbox"]');
   document.getElementById("convert").onclick = () => {
+    const uiFormat = formatEl.value;
+    const uiSource = sourceEl.value;
+
+    if (uiFormat === "N/A" || uiSource === "N/A") {
+      parent.postMessage(
+        {
+          pluginMessage: {
+            type: "notify",
+            message: "Please Select all the entire form.",
+          },
+        },
+        "*"
+      );
+
+      return;
+    }
+
+    const uiPattern = [];
+    checkboxes.forEach((checkbox) => {
+      if (checkbox.checked) {
+        uiPattern.push(checkbox.value);
+      }
+    });
+
     const userData = {
-      uiFormat: formatEl.value,
-      uiPattern: patternEl.value,
-      uiSource: sourceEl.value,
+      uiFormat,
+      uiSource,
+      uiPattern,
     };
+
     parent.postMessage(
       { pluginMessage: { type: "send-user-data", userData } },
       "*"

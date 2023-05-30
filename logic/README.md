@@ -23,6 +23,8 @@ type: The way we want to update
 
 - `increment`: increment by 1
 - `decrement`: decrement by 1
+- `subfield-increment`: increment subfield by 1
+- `subfield-decrement`: decrement subfield by 1
 
 # TODO
 
@@ -37,6 +39,8 @@ type: The way we want to update
 4. Get components from python with double quoted properties json directly?
 
 - How to read components not from stdout but json file?
+
+5. js new Date() inconsistency (UTC and lacal time)
 
 # Checklist for publishing
 

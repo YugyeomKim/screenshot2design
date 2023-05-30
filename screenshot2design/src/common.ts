@@ -33,8 +33,8 @@ const MSG_ClOSE = "Thank you.";
 // Interfaces
 interface Preference {
   uiFormat: string;
-  uiPattern: string;
   uiSource: string;
+  uiPattern: Array<string>;
 }
 
 interface Survey {

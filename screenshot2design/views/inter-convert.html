@@ -114,14 +114,16 @@
           margin-top: 5;
         "
       >
-        <option value="N/A">What is the purpose of using this plugin?</option>
-        <option value="Ideation">Ideation</option>
-        <option value="Landing page">Landing page</option>
-        <option value="Template creation">Template creation</option>
-        <option value="Analytics design">Analytics design</option>
-        <option value="Design consulting">Design consulting</option>
-        <option value="Product demo">Product demo</option>
-        <option value="etc">etc</option>
+        <option value="N/A" selected disabled>
+          What is the purpose of using this plugin?
+        </option>
+        <option>Ideation</option>
+        <option>Landing page</option>
+        <option>Template creation</option>
+        <option>Analytics design</option>
+        <option>Design consulting</option>
+        <option>Product demo</option>
+        <option>etc</option>
       </select>
       <select
         id="work-term"
@@ -141,7 +143,9 @@
           margin-top: 5;
         "
       >
-        <option value="N/A">If manually done, how long would it take?</option>
+        <option value="N/A" selected disabled>
+          If manually done, how long would it take?
+        </option>
         <option value="~1">less than hours</option>
         <option value="1~2">1-2hrs / week</option>
         <option value="2~5">2-5hrs / week</option>
@@ -202,9 +206,12 @@
   };
 
   moveOnButtonEl.onclick = () => {
+    const pluginUsage = pluginUsageInputEl.value;
+    const workTerm = workTermInputEl.value;
+
     const userData = {
-      pluginUsage: pluginUsageInputEl.value,
-      workTerm: workTermInputEl.value,
+      pluginUsage,
+      workTerm,
     };
 
     parent.postMessage(

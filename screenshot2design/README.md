@@ -4,4 +4,3 @@
 2. font size auto
 3. Fetching uint8array
 4. If user changed the ratio of the image
-5. fix the view blinks by external css loading
