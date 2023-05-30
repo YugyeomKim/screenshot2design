@@ -46,15 +46,13 @@ dataRouter.post('/users', async (req, res) => {
   }
 })
 
-dataRouter.post('/stat/:metric', async (req, res) => {
-  const { type } = req.body
-  const { metric } = req.params
+dataRouter.post('/stat', async (req, res) => {
+  const { type, payload } = req.body
 
   if (!type) {
     res.statusCode = 404
     res.send('Request data missing.')
   }
-
   const stat = await getStatCollection()
   if (!stat) {
     res.statusCode = 404
@@ -65,6 +63,8 @@ dataRouter.post('/stat/:metric', async (req, res) => {
   let updateResult
   switch (type) {
     case 'increment': {
+      const { metric } = payload
+
       updateResult = await stat.updateOne(
         { metric },
         {
@@ -77,11 +77,41 @@ dataRouter.post('/stat/:metric', async (req, res) => {
     }
 
     case 'decrement': {
+      const { metric } = payload
+
       updateResult = await stat.updateOne(
         { metric },
         {
           $inc: {
             count: -1,
+          },
+        }
+      )
+      break
+    }
+
+    case 'subfield-increment': {
+      const { metric, subfield } = payload
+
+      updateResult = await stat.updateOne(
+        { metric },
+        {
+          $inc: {
+            [subfield]: 1,
+          },
+        }
+      )
+      break
+    }
+
+    case 'subfield-decrement': {
+      const { metric, subfield } = payload
+
+      updateResult = await stat.updateOne(
+        { metric },
+        {
+          $inc: {
+            [subfield]: -1,
           },
         }
       )

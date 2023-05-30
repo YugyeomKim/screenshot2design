@@ -14,6 +14,7 @@ import setApiKey from "./set-apikey";
 import checkApikey from "./check-apikey";
 import sendUserData from "./send-user-data";
 import runConverting from "./run-converting";
+import sendStatData from "./send-stat-data";
 
 /**
  * For Convert command,
@@ -183,7 +184,7 @@ async function main() {
         figma.ui.hide();
         figma.notify(MSG_ClOSE);
 
-        await sendUserData(msg.userData);
+        await sendStatData(msg.statData);
 
         figma.closePlugin();
       }

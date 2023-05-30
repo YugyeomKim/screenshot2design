@@ -79,6 +79,11 @@ interface ImageInfo {
   name: string;
 }
 
+interface StatData {
+  type: String;
+  payload: Object;
+}
+
 export {
   SERVER,
   IMAGE_NUM_LIMIT,
@@ -105,4 +110,5 @@ export {
   ProcessResult,
   Elements,
   ImageInfo,
+  StatData,
 };
