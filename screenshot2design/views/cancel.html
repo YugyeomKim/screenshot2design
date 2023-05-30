@@ -1,73 +1,95 @@
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css"
-/>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css"
+    />
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-METCVR17RL"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-METCVR17RL");
 
-<div
-  style="
-    font-family: inter;
-    font-size: 12;
-    font-weight: medium;
-    color: #8f8f8f;
-    margin-left: 20;
-    margin-bottom: 12;
-    margin-top: 20;
-    width: 380px;
-  "
->
-  Is there any inconvenience during the process?
-  <br />Kindly report your cancellation reason to help us improve.
-</div>
-
-<div style="display: flex; flex-direction: row">
-  <div style="margin-left: 20; width: 225px">
-    <select
-      id="reason"
+      gtag("event", "CANCELLATION", {
+        event_category: "cancel",
+        event_label: "cancellation reason of attrition",
+      });
+    </script>
+  </head>
+  <body>
+    <div
       style="
         font-family: inter;
-        font-size: 12px;
+        font-size: 12;
         font-weight: medium;
-        height: 32px;
-        padding: 5px 10px 5px 10px;
-        border: 0.8px solid #707070;
-        border-radius: 5px;
-        outline-width: 0.8;
-        background: #fff;
-        color: #707070;
-        outline-color: #707070;
+        color: #8f8f8f;
+        margin-left: 20;
+        margin-bottom: 12;
+        margin-top: 20;
+        width: 380px;
       "
     >
-      <option value="N/A" selected disabled>Cancellation Reason</option>
-      <option>Just testing</option>
-      <option>Don't need it now</option>
-      <option>Difficulty using the plugin</option>
-      <option>Lack of desired features</option>
-      <option>Poor customer support</option>
-      <option>Security concerns</option>
-      <option>Too time-consuming</option>
-      <option>Unsatisfactory product quality</option>
-      <option>Found a better alternative</option>
-    </select>
-  </div>
-  <div>
-    <button id="submit" class="button button--primary">Submit</button>
-  </div>
-</div>
+      Is there any inconvenience during the process?
+      <br />Kindly report your cancellation reason to help us improve.
+    </div>
 
-<script>
-  const reasonInputEl = document.getElementById("reason");
+    <div style="display: flex; flex-direction: row">
+      <div style="margin-left: 20; width: 225px">
+        <select
+          id="reason"
+          style="
+            font-family: inter;
+            font-size: 12px;
+            font-weight: medium;
+            height: 32px;
+            padding: 5px 10px 5px 10px;
+            border: 0.8px solid #707070;
+            border-radius: 5px;
+            outline-width: 0.8;
+            background: #fff;
+            color: #707070;
+            outline-color: #707070;
+          "
+        >
+          <option value="N/A" selected disabled>Cancellation Reason</option>
+          <option>Just testing</option>
+          <option>Don't need it now</option>
+          <option>Difficulty using the plugin</option>
+          <option>Lack of desired features</option>
+          <option>Poor customer support</option>
+          <option>Security concerns</option>
+          <option>Too time-consuming</option>
+          <option>Unsatisfactory product quality</option>
+          <option>Found a better alternative</option>
+        </select>
+      </div>
+      <div>
+        <button id="submit" class="button button--primary">Submit</button>
+      </div>
+    </div>
 
-  document.getElementById("submit").onclick = () => {
-    const statData = {
-      type: "subfield-increment",
-      payload: {
-        metric: "reason",
-        subfield: reasonInputEl.value,
-      },
-    };
-    parent.postMessage(
-      { pluginMessage: { type: "submit-and-close", statData } },
-      "*"
-    );
-  };
-</script>
+    <script>
+      const reasonInputEl = document.getElementById("reason");
+
+      document.getElementById("submit").onclick = () => {
+        const statData = {
+          type: "subfield-increment",
+          payload: {
+            metric: "reason",
+            subfield: reasonInputEl.value,
+          },
+        };
+        parent.postMessage(
+          { pluginMessage: { type: "submit-and-close", statData } },
+          "*"
+        );
+      };
+    </script>
+  </body>
+</html>

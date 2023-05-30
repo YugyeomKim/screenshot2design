@@ -9,6 +9,23 @@
         background-color: #d3e8ff;
       }
     </style>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-METCVR17RL"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-METCVR17RL");
+
+      gtag("event", "BEFORE-CONVERT", {
+        event_category: "before convert",
+        event_label: "form to enhance result quality by usage form",
+      });
+    </script>
   </head>
 
   <body>
@@ -30,7 +47,7 @@
       >
         <text>1. Copy and paste screenshots to the canvas</text>
         <br /><text>2. Select screenshots and click either button below</text>
-        <br /><text>3. We support up to 15MB each and 10 images</text>
+        <br /><text>3. We support up to 10MB each and 10 images</text>
       </div>
     </div>
 
@@ -749,7 +766,7 @@
         {
           pluginMessage: {
             type: "notify",
-            message: "Please Select all the entire form.",
+            message: "Please complete the entire form.",
           },
         },
         "*"
