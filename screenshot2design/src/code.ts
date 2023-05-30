@@ -34,7 +34,7 @@ async function main() {
 
     if (!authorized) {
       figma.showUI(__uiFiles__.setApiKey);
-      figma.ui.resize(525, 340);
+      figma.ui.resize(525, 500);
     } else {
       figma.showUI(__uiFiles__.beforeConvert);
       figma.ui.resize(320, 440);
