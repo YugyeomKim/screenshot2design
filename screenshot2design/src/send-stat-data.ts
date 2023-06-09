@@ -9,10 +9,10 @@ const sendStatData = async (statData: StatData) => {
     body: JSON.stringify(statData),
   })
     .then((fetchResponse) => {
-      console.log(`Set user data status: ${fetchResponse.status}`);
+      console.log(`Set stat data status: ${fetchResponse.status}`);
     })
     .catch((error) => {
-      console.log(`Set user data Error: ${error.message}`);
+      console.log(`Set stat data Error: ${error.message}`);
     });
 };
 

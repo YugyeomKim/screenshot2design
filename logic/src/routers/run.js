@@ -5,13 +5,39 @@ const fs = require('fs')
 const path = require('path')
 const { spawn } = require('child_process')
 const { v1: uuidv1 } = require('uuid')
+const { getUsersCollection } = require('../mongo')
 
 const runRouter = express.Router()
 
-runRouter.post('/', (req, res) => {
-  const image = req.body
+runRouter.use('/', async (req, res, next) => {
+  const { apiKey } = req.body
 
-  if (!image.bytes) {
+  const users = await getUsersCollection()
+  if (!users) {
+    res.statusCode = 404
+    res.send('MongoDB connection failed.')
+  }
+
+  const updateResult = await users.findOneAndUpdate(
+    { apiKey },
+    { $inc: { runCount: 1 } }
+  )
+
+  const updatedDocument = updateResult.value
+  if (!updatedDocument) {
+    res.statusCode = 404
+    res.send('No user matches to the API Key.')
+  } else if (!updatedDocument.runCount) {
+    updatedDocument.runCount = 1
+  }
+
+  next()
+})
+
+runRouter.post('/', (req, res) => {
+  const { width, height, bytes } = req.body
+
+  if (!bytes) {
     res.statusCode = 404
     res.send('No Image.')
   } else {
@@ -25,7 +51,7 @@ runRouter.post('/', (req, res) => {
       __dirname,
       `../../buffer/output/${INSTANCE_ID}`
     )
-    const imageBuf = Buffer.from(image.bytes)
+    const imageBuf = Buffer.from(bytes)
 
     try {
       fs.writeFileSync(INPUT_PATH, imageBuf, 'binary')
@@ -35,7 +61,7 @@ runRouter.post('/', (req, res) => {
       res.end()
     }
     req.log.info(
-      `${imageBuf.length} size (${image.width} X ${image.height}) file was saved.`
+      `${imageBuf.length} size (${width} X ${height}) file was saved.`
     )
 
     const modelProcess = spawn('python3', [MODEL_PATH, INPUT_PATH, OUTPUT_PATH])

@@ -35,8 +35,10 @@ async function processScreenshots(selected: SceneNode): Promise<ProcessResult> {
 
   // TODO: check the image size
 
+  const apiKey: string = await figma.clientStorage.getAsync("apiKey");
   const { width, height, x, y, name } = selected;
   const imageData = {
+    apiKey,
     width,
     height,
     bytes: Array.from(imageBytes),
