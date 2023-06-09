@@ -7,15 +7,15 @@ const IMAGE_SIZE_LIMIT = 10;
 const ERR_SERVER = "Server error. Sorry for the inconvenience.";
 
 const MSG_SETTING_API_KEY = "Setting API KEY";
-const ERR_EMPTY_FORM = "Plase fill in the entire form.";
+const ERR_EMPTY_FORM = "Please fill in the entire form.";
 const MSG_APIKEY_CREATED =
   "API Key has been entered automatically. Save the key for converting.";
 
 const ERR_EMPTY_APIKEY = "API Key is empty.";
-const MSG_APIKEY_SAVED = "API Key was saved.";
-const ERR_WRONG_APIKEY = "Expired or wrong API Key. Set another API Key.";
+const MSG_APIKEY_SAVED = "API Key saved.";
+const ERR_WRONG_APIKEY = "Expired or wrong API Key. Please set again.";
 const ERR_CLIENTSTORAGE_FAILED =
-  "Couldn't save API Key. Please clear the browser cache and try it again.";
+  "Failed to save API Key. Please clear the browser cache and try it again.";
 const ERR_AUTH_UNKNOWN = "Unknown Authentication Error.";
 
 const ERR_EMPTY_SCREENSHOTS = "Please select one or more screenshots.";

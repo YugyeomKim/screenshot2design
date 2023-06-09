@@ -28,13 +28,13 @@ async function main() {
 
   if (!apiKey) {
     figma.showUI(__uiFiles__.setApiKey);
-    figma.ui.resize(525, 340);
+    figma.ui.resize(525, 500);
   } else {
     const authorized = await checkApikey(apiKey);
 
     if (!authorized) {
       figma.showUI(__uiFiles__.setApiKey);
-      figma.ui.resize(525, 340);
+      figma.ui.resize(525, 500);
     } else {
       figma.showUI(__uiFiles__.beforeConvert);
       figma.ui.resize(320, 440);
@@ -139,7 +139,7 @@ async function main() {
         }
 
         figma.showUI(__uiFiles__.interConvert);
-        figma.ui.resize(500, 265);
+        figma.ui.resize(500, 270);
 
         await figma.loadFontAsync({ family: "Inter", style: "Regular" });
 

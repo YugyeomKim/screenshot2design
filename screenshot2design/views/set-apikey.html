@@ -1,207 +1,291 @@
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css"
-/>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css"
+    />
 
-<div
-  style="
-    display: flex;
-    flex-direction: column;
-    justify-content: left;
-    height: 150;
-    margin-bottom: 10;
-  "
->
-  <div style="margin-left: 20; margin-bottom: 10; margin-top: 12">
-    <text style="font-family: inter; font-size: 12; color: #999999"
-      >Fill in the form to get API Key</text
-    >
-  </div>
-  <div
-    style="
-      display: flex;
-      flex-direction: row;
-      justify-content: left;
-      height: 150;
-      margin-bottom: 8;
-    "
-  >
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-METCVR17RL"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-METCVR17RL");
+
+      gtag("event", "SET_API_KEY", {
+        event_category: "API Key",
+        event_label: "Unique API Key for specific users",
+      });
+    </script>
+  </head>
+  <body>
     <div
       style="
         display: flex;
         flex-direction: column;
         justify-content: left;
-        margin-left: 20;
+        height: 150;
+        margin-bottom: 10;
       "
     >
-      <input
-        id="email"
-        type="input"
-        class="input__field"
-        placeholder="✉️   Email"
-        style="width: 200; margin-bottom: 8; border-color: #dfdfdf"
-      />
-      <input
-        id="company-name"
-        type="input"
-        class="input__field"
-        placeholder="🔖   Company Name"
-        style="width: 200; margin-bottom: 8; border-color: #dfdfdf"
-      />
-      <input
-        id="company-size"
-        type="input"
-        class="input__field"
-        placeholder="🏢   Company Size"
-        style="width: 200; margin-bottom: 8; border-color: #dfdfdf"
-      />
-      <input
-        id="role"
-        type="input"
-        class="input__field"
-        placeholder="👤   Role"
-        style="width: 200; margin-bottom: 8; border-color: #dfdfdf"
-      />
-    </div>
-
-    <div style="display: flex; flex-direction: column; margin-left: 10">
-      <div>
-        <textarea
-          id="usage"
-          type="textarea"
-          class="input__field"
-          placeholder="🔧 Usage"
-          style="
-            width: 280;
-            height: 108;
-            font-family: inter;
-            font-size: 12;
-            color: #999999;
-            border-color: #dfdfdf;
-          "
-        ></textarea>
+      <div style="margin-left: 20; margin-bottom: 10; margin-top: 12">
+        <text style="font-family: inter; font-size: 12; color: #999999"
+          >Fill in the form to get API Key</text
+        >
       </div>
+      <div
+        style="
+          display: flex;
+          flex-direction: row;
+          justify-content: left;
+          height: 150;
+          margin-bottom: 8;
+        "
+      >
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            justify-content: left;
+            margin-left: 20;
+          "
+        >
+          <input
+            id="email"
+            type="input"
+            class="input__field"
+            placeholder="✉️   Email"
+            style="width: 200; margin-bottom: 8; border-color: #dfdfdf"
+          />
+          <input
+            id="company-name"
+            type="input"
+            class="input__field"
+            placeholder="🔖   Company Name"
+            style="width: 200; margin-bottom: 8; border-color: #dfdfdf"
+          />
+          <input
+            id="company-size"
+            type="input"
+            class="input__field"
+            placeholder="🏢   Company Size"
+            style="width: 200; margin-bottom: 8; border-color: #dfdfdf"
+          />
+          <input
+            id="role"
+            type="input"
+            class="input__field"
+            placeholder="👤   Role"
+            style="width: 200; margin-bottom: 8; border-color: #dfdfdf"
+          />
+        </div>
+
+        <div style="display: flex; flex-direction: column; margin-left: 10">
+          <textarea
+            id="usage"
+            type="textarea"
+            class="input__field"
+            placeholder="🔧 Usage"
+            style="
+              width: 280;
+              height: 108;
+              font-family: inter;
+              font-size: 12;
+              color: #999999;
+              border-color: #dfdfdf;
+              margin-bottom: 8;
+            "
+          ></textarea>
+          <select
+            id="career-stage"
+            class="select-menu"
+            style="width: 280; border-color: #dfdfdf"
+          >
+            <option
+              value="N/A"
+              selected
+              style="font-style: #999999; color: #999999"
+            >
+              💼 Career Stage
+            </option>
+            <option value="~1">less than a year</option>
+            <option value="1~3">1-3 year</option>
+            <option value="3~5">3-5 year</option>
+            <option value="5~10">5-10 year</option>
+            <option value="10~">10+ year</option>
+            <option value="20~">20+ year</option>
+          </select>
+        </div>
+      </div>
+      <div
+        style="margin-left: 20; margin-top: 3; font-size: 12; color: #999999"
+      >
+        📌 Privacy Policy
+      </div>
+      <div
+        style="
+          background-color: #eaeaea;
+          border-radius: 5;
+          padding: 10;
+          margin-left: 20;
+          font-size: 12;
+          color: #999999;
+          width: 486;
+        "
+      >
+        I agree to information being used for the purposes of noticing product
+        launch. <br />The information will only be accessed by necessary staff.
+        I understand my data will be held securely and not be distributed to
+        third parties. I understand that when this information is no longer
+        required for this purpose, official procedure will be followed to
+        dispose of my data.
+        <div
+          class="checkbox"
+          style="margin-left: 380; margin-top: -10; margin-bottom: -10"
+        >
+          <input id="privacy-check" type="checkbox" class="checkbox__box" />
+          <label for="privacy-check" class="checkbox__label">I agree</label>
+        </div>
+      </div>
+      <button
+        id="enroll"
+        class="button button--primary"
+        style="margin-left: 435; margin-top: 5; width: 72"
+      >
+        Submit
+      </button>
+
       <div>
-        <div style="display: flex; flex-direction: row; margin-top: 7">
-          <div style="width: 200">
-            <select id="career-stage" class="select-menu">
-              <option value="N/A" style="font-style: #999999; color: #999999">
-                💼 Career Stage
-              </option>
-              <option value="~1">less than a year</option>
-              <option value="1~3">1-3 year</option>
-              <option value="3~5">3-5 year</option>
-              <option value="5~10">5-10 year</option>
-              <option value="10~">10+ year</option>
-              <option value="20~">20+ year</option>
-            </select>
+        <hr style="border-color: #dfdfdf; border-top: 0.5px" />
+        <div style="margin-left: 20; margin-bottom: 8; margin-top: 10">
+          <text style="font-family: inter; font-size: 12; color: #999999"
+            >Click Setup for registration</text
+          >
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: left;
+            margin-left: 20;
+            margin-bottom: 8;
+          "
+        >
+          <div class="input input--with-icon">
+            <div class="icon icon--key"></div>
+            <input
+              id="api-key"
+              type="input"
+              class="input__field"
+              placeholder="API Key"
+              style="width: 415"
+            />
           </div>
           <div>
             <button
-              id="enroll"
+              id="set-api-key"
               class="button button--primary"
               style="margin-left: 5"
             >
-              Submit
+              Setup
             </button>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div>
-    <hr style="border-color: #dfdfdf; border-top: 0.5px" />
-    <div style="margin-left: 20; margin-bottom: 8; margin-top: 10">
-      <text style="font-family: inter; font-size: 12; color: #999999"
-        >Click Setup for registration</text
-      >
-    </div>
-    <div
-      style="
-        display: flex;
-        flex-direction: row;
-        justify-content: left;
-        margin-left: 20;
-        margin-bottom: 8;
-      "
-    >
-      <div class="input input--with-icon">
-        <div class="icon icon--key"></div>
-        <input
-          id="api-key"
-          type="input"
-          class="input__field"
-          placeholder="API Key"
-          style="width: 415"
-        />
-      </div>
       <div>
-        <button
-          id="set-api-key"
-          class="button button--primary"
-          style="margin-left: 5"
-        >
-          Setup
-        </button>
+        <hr class="solid" style="border-color: #dfdfdf; border-top: 0.5px" />
+        <div style="justify-content: right">
+          <button
+            id="cancel"
+            class="button button--primary"
+            style="background-color: #5e5e5e; margin-left: 435; margin-top: 10"
+          >
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div>
-    <hr class="solid" style="border-color: #dfdfdf; border-top: 0.5px" />
-    <div style="justify-content: right">
-      <button
-        id="cancel"
-        class="button button--primary"
-        style="background-color: #5e5e5e; margin-left: 435; margin-top: 10"
-      >
-        Cancel
-      </button>
-    </div>
-  </div>
-</div>
+    <script src="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/iife/figma-plugin-ds.js"></script>
+    <script>
+      selectMenu.init();
+    </script>
 
-<script src="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/iife/figma-plugin-ds.js"></script>
-<script>
-  selectMenu.init();
-</script>
+    <script>
+      const emailEl = document.getElementById("email");
+      const companyNameEl = document.getElementById("company-name");
+      const companySizeEl = document.getElementById("company-size");
+      const roleEl = document.getElementById("role");
+      const usageEl = document.getElementById("usage");
+      const careerStageEl = document.getElementById("career-stage");
+      const privacyCheckEl = document.getElementById("privacy-check");
 
-<script>
-  const emailEl = document.getElementById("email");
-  const companyNameEl = document.getElementById("company-name");
-  const companySizeEl = document.getElementById("company-size");
-  const roleEl = document.getElementById("role");
-  const usageEl = document.getElementById("usage");
-  const careerStageEl = document.getElementById("career-stage");
+      document.getElementById("enroll").onclick = () => {
+        if (!privacyCheckEl.checked) {
+          parent.postMessage(
+            {
+              pluginMessage: {
+                type: "notify",
+                message: "Please agree with the privacy policy.",
+              },
+            },
+            "*"
+          );
 
-  document.getElementById("enroll").onclick = () => {
-    const userInfo = {
-      email: emailEl.value,
-      companyName: companyNameEl.value,
-      companySize: companySizeEl.value,
-      role: roleEl.value,
-      usage: usageEl.value,
-      careerStage: careerStageEl.value,
-    };
-    parent.postMessage({ pluginMessage: { type: "enroll", userInfo } }, "*");
-  };
+          return;
+        }
 
-  const apiKeyEl = document.getElementById("api-key");
+        if (careerStageEl.value === "N/A") {
+          parent.postMessage(
+            {
+              pluginMessage: {
+                type: "notify",
+                message: "Please fill in the entire form.",
+              },
+            },
+            "*"
+          );
 
-  onmessage = (event) => {
-    const { pluginMessage } = event.data;
-    apiKeyEl.value = pluginMessage;
-  };
+          return;
+        }
 
-  document.getElementById("set-api-key").onclick = () => {
-    parent.postMessage(
-      { pluginMessage: { type: "set-api-key", apiKey: apiKeyEl.value } },
-      "*"
-    );
-  };
+        const userInfo = {
+          email: emailEl.value,
+          companyName: companyNameEl.value,
+          companySize: companySizeEl.value,
+          role: roleEl.value,
+          usage: usageEl.value,
+          careerStage: careerStageEl.value,
+        };
+        parent.postMessage(
+          { pluginMessage: { type: "enroll", userInfo } },
+          "*"
+        );
+      };
 
-  document.getElementById("cancel").onclick = () => {
-    parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
-  };
-</script>
+      const apiKeyEl = document.getElementById("api-key");
+
+      onmessage = (event) => {
+        const { pluginMessage } = event.data;
+        apiKeyEl.value = pluginMessage;
+      };
+
+      document.getElementById("set-api-key").onclick = () => {
+        parent.postMessage(
+          { pluginMessage: { type: "set-api-key", apiKey: apiKeyEl.value } },
+          "*"
+        );
+      };
+
+      document.getElementById("cancel").onclick = () => {
+        parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
+      };
+    </script>
+  </body>
+</html>

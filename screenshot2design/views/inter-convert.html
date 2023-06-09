@@ -1,4 +1,23 @@
 <html>
+  <head>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-METCVR17RL"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-METCVR17RL");
+
+      gtag("event", "INTER-CONVERT", {
+        event_category: "inter convert",
+        event_label: "additional form for detailed usage",
+      });
+    </script>
+  </head>
   <body
     style="
       background-color: #4b4747;
@@ -154,70 +173,76 @@
         <option value="20~">20hrs + / week</option>
       </select>
     </div>
+
+    <script>
+      let timeout = false;
+      let surveying = false;
+      let finished = false;
+
+      const pluginUsageInputEl = document.getElementById("plugin-usage");
+      const workTermInputEl = document.getElementById("work-term");
+
+      const loadingEl = document.getElementById("loading");
+      const moveOnButtonEl = document.getElementById("move-on");
+
+      const handleOnChange = (event) => {
+        surveying = true;
+
+        pluginUsageInputEl.removeEventListener("click", handleOnChange);
+        workTermInputEl.removeEventListener("click", handleOnChange);
+      };
+
+      pluginUsageInputEl.addEventListener("click", handleOnChange);
+      workTermInputEl.addEventListener("click", handleOnChange);
+
+      const moveOn = () => {
+        parent.postMessage(
+          { pluginMessage: { type: "complete-converting" } },
+          "*"
+        );
+      };
+
+      const revealButton = () => {
+        loadingEl.style.display = "none";
+        moveOnButtonEl.style.display = "block";
+      };
+
+      setTimeout(() => {
+        timeout = true;
+        if (finished && !surveying) {
+          moveOn();
+        } else if (finished && surveying) {
+          revealButton();
+        }
+      }, 3000);
+
+      onmessage = (event) => {
+        finished = true;
+        if (timeout && !surveying) {
+          moveOn();
+        } else if (timeout && surveying) {
+          revealButton();
+        }
+      };
+
+      moveOnButtonEl.onclick = () => {
+        const pluginUsage = pluginUsageInputEl.value;
+        const workTerm = workTermInputEl.value;
+
+        const userData = {
+          pluginUsage,
+          workTerm,
+        };
+
+        parent.postMessage(
+          { pluginMessage: { type: "send-user-data", userData } },
+          "*"
+        );
+        parent.postMessage(
+          { pluginMessage: { type: "complete-converting" } },
+          "*"
+        );
+      };
+    </script>
   </body>
 </html>
-
-<script>
-  let timeout = false;
-  let surveying = false;
-  let finished = false;
-
-  const pluginUsageInputEl = document.getElementById("plugin-usage");
-  const workTermInputEl = document.getElementById("work-term");
-
-  const loadingEl = document.getElementById("loading");
-  const moveOnButtonEl = document.getElementById("move-on");
-
-  const handleOnChange = (event) => {
-    surveying = true;
-
-    pluginUsageInputEl.removeEventListener("click", handleOnChange);
-    workTermInputEl.removeEventListener("click", handleOnChange);
-  };
-
-  pluginUsageInputEl.addEventListener("click", handleOnChange);
-  workTermInputEl.addEventListener("click", handleOnChange);
-
-  const moveOn = () => {
-    parent.postMessage({ pluginMessage: { type: "complete-converting" } }, "*");
-  };
-
-  const revealButton = () => {
-    loadingEl.style.display = "none";
-    moveOnButtonEl.style.display = "block";
-  };
-
-  setTimeout(() => {
-    timeout = true;
-    if (finished && !surveying) {
-      moveOn();
-    } else if (finished && surveying) {
-      revealButton();
-    }
-  }, 3000);
-
-  onmessage = (event) => {
-    finished = true;
-    if (timeout && !surveying) {
-      moveOn();
-    } else if (timeout && surveying) {
-      revealButton();
-    }
-  };
-
-  moveOnButtonEl.onclick = () => {
-    const pluginUsage = pluginUsageInputEl.value;
-    const workTerm = workTermInputEl.value;
-
-    const userData = {
-      pluginUsage,
-      workTerm,
-    };
-
-    parent.postMessage(
-      { pluginMessage: { type: "send-user-data", userData } },
-      "*"
-    );
-    parent.postMessage({ pluginMessage: { type: "complete-converting" } }, "*");
-  };
-</script>
