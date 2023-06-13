@@ -165,7 +165,7 @@ async function main() {
 
         figma.notify(MSG_COMPLETE_CONVERTING(successRun, totalRun));
         figma.showUI(__uiFiles__.afterConvert);
-        figma.ui.resize(460, 250);
+        figma.ui.resize(460, 350);
 
         return;
       }
