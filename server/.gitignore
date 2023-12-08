@@ -1,0 +1,25 @@
+.env
+.vscode/
+
+.venv/
+
+*.pyc
+__pycache__/
+
+instance/
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+dist/
+build/
+*.egg-info/
+
+# model
+buffer/input/*
+buffer/output/*
+__pycache__/
+
+# logging
+logs
