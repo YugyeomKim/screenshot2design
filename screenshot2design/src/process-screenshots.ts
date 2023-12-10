@@ -1,12 +1,4 @@
-import {
-  SERVER,
-  ProcessResult,
-  ERR_NOT_IMAGE,
-  ERR_IMAGE_LOAD_FAIL,
-  ERR_SERVER,
-  Elements,
-  ERR_TOO_LARGE_IMAGE,
-} from "./common";
+import { Elements, ProcessResult, SERVER, TOAST_MESSAGES } from "./common";
 
 /**
  * Send raw image data and get JSON result for the design elements
@@ -20,7 +12,7 @@ async function processScreenshots(selected: SceneNode): Promise<ProcessResult> {
     !Array.isArray(selected.fills) ||
     selected.fills[0].type !== "IMAGE"
   ) {
-    throw new Error(ERR_NOT_IMAGE(selected.name));
+    throw new Error(TOAST_MESSAGES.ERR_NOT_IMAGE(selected.name));
   }
 
   const { imageHash }: { imageHash: string } = selected.fills[0];
@@ -28,7 +20,7 @@ async function processScreenshots(selected: SceneNode): Promise<ProcessResult> {
   const image = figma.getImageByHash(imageHash);
 
   if (!image) {
-    throw new Error(ERR_IMAGE_LOAD_FAIL(selected.name));
+    throw new Error(TOAST_MESSAGES.ERR_IMAGE_LOAD_FAIL(selected.name));
   }
 
   const imageBytes = await image.getBytesAsync();
@@ -43,6 +35,7 @@ async function processScreenshots(selected: SceneNode): Promise<ProcessResult> {
     height,
     bytes: Array.from(imageBytes),
   };
+
   const runResponse = await fetch(`${SERVER}/run`, {
     method: "POST",
     headers: {
@@ -54,7 +47,7 @@ async function processScreenshots(selected: SceneNode): Promise<ProcessResult> {
   });
 
   if (!runResponse) {
-    throw new Error(ERR_SERVER);
+    throw new Error(TOAST_MESSAGES.ERR_SERVER);
   }
 
   switch (runResponse.status) {
@@ -73,10 +66,10 @@ async function processScreenshots(selected: SceneNode): Promise<ProcessResult> {
     }
 
     case 401:
-      throw new Error(ERR_TOO_LARGE_IMAGE(selected.name));
+      throw new Error(TOAST_MESSAGES.ERR_TOO_LARGE_IMAGE(selected.name));
 
     default:
-      throw new Error(ERR_SERVER);
+      throw new Error(TOAST_MESSAGES.ERR_SERVER);
   }
 }
 

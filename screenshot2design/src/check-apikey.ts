@@ -1,9 +1,4 @@
-import {
-  SERVER,
-  ERR_SERVER,
-  ERR_WRONG_APIKEY,
-  ERR_AUTH_UNKNOWN,
-} from "./common";
+import { SERVER, TOAST_MESSAGES } from "./common";
 
 const checkApikey = async (apiKey: string) => {
   /** Request server for authorizing */
@@ -19,7 +14,7 @@ const checkApikey = async (apiKey: string) => {
   });
 
   if (!authResponse) {
-    figma.notify(ERR_SERVER);
+    figma.notify(TOAST_MESSAGES.ERR_SERVER);
     return false;
   }
 
@@ -32,11 +27,11 @@ const checkApikey = async (apiKey: string) => {
       return true;
 
     case 401:
-      figma.notify(ERR_WRONG_APIKEY);
+      figma.notify(TOAST_MESSAGES.ERR_WRONG_APIKEY);
       return false;
 
     default:
-      figma.notify(ERR_AUTH_UNKNOWN);
+      figma.notify(TOAST_MESSAGES.ERR_AUTH_UNKNOWN);
       return false;
   }
 };

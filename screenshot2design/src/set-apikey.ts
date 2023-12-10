@@ -1,15 +1,7 @@
-import {
-  SERVER,
-  ERR_SERVER,
-  ERR_EMPTY_APIKEY,
-  MSG_APIKEY_SAVED,
-  ERR_CLIENTSTORAGE_FAILED,
-  ERR_WRONG_APIKEY,
-  ERR_AUTH_UNKNOWN,
-} from "./common";
+import { SERVER, TOAST_MESSAGES } from "./common";
 
 /**
- * ### Activate API Key.
+ * Activate API Key.
  * Request server for authoriizing.
  * - 200: authorized. Save api key to the clientStorage and return true.
  * - 401: unauthorized. Notify message.
@@ -17,7 +9,7 @@ import {
 const setApiKey = async (apiKey: string) => {
   /** Activate API Key. */
   if (!apiKey) {
-    figma.notify(ERR_EMPTY_APIKEY);
+    figma.notify(TOAST_MESSAGES.ERR_EMPTY_APIKEY);
     return false;
   }
 
@@ -34,7 +26,7 @@ const setApiKey = async (apiKey: string) => {
   });
 
   if (!authResponse) {
-    figma.notify(ERR_SERVER);
+    figma.notify(TOAST_MESSAGES.ERR_SERVER);
     return false;
   }
 
@@ -47,12 +39,12 @@ const setApiKey = async (apiKey: string) => {
       const authorized = await figma.clientStorage
         .setAsync("apiKey", apiKey)
         .then(() => {
-          figma.notify(MSG_APIKEY_SAVED);
+          figma.notify(TOAST_MESSAGES.MSG_APIKEY_SAVED);
           return true;
         })
         .catch((error) => {
           console.log(error);
-          figma.notify(ERR_CLIENTSTORAGE_FAILED);
+          figma.notify(TOAST_MESSAGES.ERR_CLIENTSTORAGE_FAILED);
           return false;
         });
 
@@ -60,12 +52,12 @@ const setApiKey = async (apiKey: string) => {
     }
 
     case 401: {
-      figma.notify(ERR_WRONG_APIKEY);
+      figma.notify(TOAST_MESSAGES.ERR_WRONG_APIKEY);
       return false;
     }
 
     default: {
-      figma.notify(ERR_AUTH_UNKNOWN);
+      figma.notify(TOAST_MESSAGES.ERR_AUTH_UNKNOWN);
       return false;
     }
   }

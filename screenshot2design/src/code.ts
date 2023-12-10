@@ -1,20 +1,16 @@
-import {
-  SERVER,
-  ERR_EMPTY_FORM,
-  ERR_SERVER,
-  MSG_SETTING_API_KEY,
-  MSG_APIKEY_CREATED,
-  ERR_EMPTY_SCREENSHOTS,
-  IMAGE_NUM_LIMIT,
-  ERR_TOO_MANY_SCREENSHOTS,
-  MSG_COMPLETE_CONVERTING,
-  MSG_ClOSE,
-} from "./common";
-import setApiKey from "./set-apikey";
-import checkApikey from "./check-apikey";
-import sendUserData from "./send-user-data";
+import { IMAGE_NUM_LIMIT, SERVER, TOAST_MESSAGES } from "./common";
 import runConverting from "./run-converting";
 import sendStatData from "./send-stat-data";
+import sendUserData from "./send-user-data";
+
+type userData = {
+  email: string;
+  companyName: string;
+  companySize: string;
+  role: string;
+  usage: string;
+  careerStage: string;
+};
 
 /**
  * For Convert command,
@@ -24,22 +20,9 @@ import sendStatData from "./send-stat-data";
  * 4. If it is valid, show before-convert view.
  */
 async function main() {
-  const apiKey: string = await figma.clientStorage.getAsync("apiKey");
-
-  if (!apiKey) {
-    figma.showUI(__uiFiles__.setApiKey);
-    figma.ui.resize(525, 500);
-  } else {
-    const authorized = await checkApikey(apiKey);
-
-    if (!authorized) {
-      figma.showUI(__uiFiles__.setApiKey);
-      figma.ui.resize(525, 500);
-    } else {
-      figma.showUI(__uiFiles__.beforeConvert);
-      figma.ui.resize(320, 440);
-    }
-  }
+  figma.showUI(__uiFiles__.setApiKey, { width: 525, height: 420 });
+  const userData: userData = await figma.clientStorage.getAsync("userData");
+  figma.ui.postMessage(userData);
 
   let successRun = 0;
   let totalRun = 0;
@@ -49,60 +32,29 @@ async function main() {
     switch (msg.type) {
       /**
        * Enrollment
-       * 1. check if form filled
-       * 2. fetch userInfo and get apiKey
+       * 1. save userData to clientStorage
+       * 2. fetch userData and get apiKey
        * 3. send apiKey to the view
        */
       case "enroll": {
-        const { email, companyName, companySize, role, usage, careerStage } =
-          msg.userInfo;
+        const { userData } = msg;
+        await figma.clientStorage.setAsync("userData", userData);
 
-        if (
-          !(email && companyName && companySize && role && usage && careerStage)
-        ) {
-          figma.notify(ERR_EMPTY_FORM);
-          return;
-        } else {
-          const { userInfo } = msg;
+        const response = await fetch(`${SERVER}/auth`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }).catch((error) => {
+          console.error(error);
+        });
 
-          const response = await fetch(`${SERVER}/auth/enroll`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userInfo),
-          }).catch((error) => {
-            console.error(error);
-          });
-
-          if (!response || response.status !== 200) {
-            figma.notify(ERR_SERVER);
-            return;
-          }
-
-          const apiKey = await response.text();
-
-          figma.ui.postMessage(apiKey);
-          figma.notify(MSG_APIKEY_CREATED);
-          return;
+        if (!response || response.status > 299) {
+          figma.notify(TOAST_MESSAGES.ERR_SERVER);
         }
-      }
 
-      /**
-       * Set API Key
-       * 1. call setApiKey() to check if apiKey is valid
-       * 2. if so, show before-convert view
-       */
-      case "set-api-key": {
-        figma.notify(MSG_SETTING_API_KEY);
-
-        const { apiKey }: { apiKey: string } = msg;
-        const authorized = await setApiKey(apiKey);
-
-        if (authorized) {
-          figma.showUI(__uiFiles__.beforeConvert);
-          figma.ui.resize(320, 440);
-        }
+        figma.showUI(__uiFiles__.beforeConvert, { width: 320, height: 440 });
         return;
       }
 
@@ -129,12 +81,12 @@ async function main() {
         totalRun = selection.length;
 
         if (selection.length === 0) {
-          figma.notify(ERR_EMPTY_SCREENSHOTS);
+          figma.notify(TOAST_MESSAGES.ERR_EMPTY_SCREENSHOTS);
           return;
         }
 
         if (selection.length > IMAGE_NUM_LIMIT) {
-          figma.notify(ERR_TOO_MANY_SCREENSHOTS);
+          figma.notify(TOAST_MESSAGES.ERR_TOO_MANY_SCREENSHOTS);
           return;
         }
 
@@ -163,7 +115,9 @@ async function main() {
         figma.currentPage.selection = resultFrames;
         figma.viewport.scrollAndZoomIntoView(resultFrames);
 
-        figma.notify(MSG_COMPLETE_CONVERTING(successRun, totalRun));
+        figma.notify(
+          TOAST_MESSAGES.MSG_COMPLETE_CONVERTING(successRun, totalRun)
+        );
         figma.showUI(__uiFiles__.afterConvert);
         figma.ui.resize(460, 350);
 
@@ -185,7 +139,7 @@ async function main() {
        */
       case "submit-and-close": {
         figma.ui.hide();
-        figma.notify(MSG_ClOSE);
+        figma.notify(TOAST_MESSAGES.MSG_ClOSE);
 
         await sendStatData(msg.statData);
 
