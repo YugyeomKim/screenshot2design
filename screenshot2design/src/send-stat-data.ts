@@ -1,4 +1,9 @@
-import { SERVER, StatData } from "./common";
+import { SERVER } from "./common";
+
+interface StatData {
+  type: String;
+  payload: Object;
+}
 
 const sendStatData = async (statData: StatData) => {
   await fetch(`${SERVER}/data/stat`, {

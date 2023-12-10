@@ -43,10 +43,6 @@ interface Survey {
   expectedTimeSave: string;
 }
 
-interface Reason {
-  reason: string;
-}
-
 interface ProcessResult {
   elements: Elements;
   imageInfo: ImageInfo;
@@ -80,11 +76,6 @@ interface ImageInfo {
   name: string;
 }
 
-interface StatData {
-  type: String;
-  payload: Object;
-}
-
 export {
   Elements,
   IMAGE_NUM_LIMIT,
@@ -92,9 +83,7 @@ export {
   ImageInfo,
   Preference,
   ProcessResult,
-  Reason,
   SERVER,
-  StatData,
   Survey,
   TOAST_MESSAGES,
 };

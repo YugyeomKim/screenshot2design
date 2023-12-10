@@ -1,4 +1,9 @@
-import { Elements, ProcessResult, SERVER, TOAST_MESSAGES } from "./common";
+import { Elements, ImageInfo, SERVER, TOAST_MESSAGES } from "./common";
+
+interface ProcessResult {
+  elements: Elements;
+  imageInfo: ImageInfo;
+}
 
 /**
  * Send raw image data and get JSON result for the design elements
