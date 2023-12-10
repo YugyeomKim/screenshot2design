@@ -12,15 +12,8 @@ type userData = {
   careerStage: string;
 };
 
-/**
- * For Convert command,
- * 1. Get the API Key from client storage.
- * 2. If it exists, send the api key to server for checking.
- * 3. If it's not valid, show set-apikey view.
- * 4. If it is valid, show before-convert view.
- */
 async function main() {
-  figma.showUI(__uiFiles__.setApiKey, { width: 525, height: 420 });
+  figma.showUI(__uiFiles__.enroll, { width: 525, height: 420 });
   const userData: userData = await figma.clientStorage.getAsync("userData");
   figma.ui.postMessage(userData);
 
