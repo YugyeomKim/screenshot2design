@@ -157,46 +157,8 @@
         class="button button--primary"
         style="margin-left: 435; margin-top: 5; width: 72"
       >
-        Submit
+        Convert
       </button>
-
-      <div>
-        <hr style="border-color: #dfdfdf; border-top: 0.5px" />
-        <div style="margin-left: 20; margin-bottom: 8; margin-top: 10">
-          <text style="font-family: inter; font-size: 12; color: #999999"
-            >Click Setup for registration</text
-          >
-        </div>
-        <div
-          style="
-            display: flex;
-            flex-direction: row;
-            justify-content: left;
-            margin-left: 20;
-            margin-bottom: 8;
-          "
-        >
-          <div class="input input--with-icon">
-            <div class="icon icon--key"></div>
-            <input
-              id="api-key"
-              type="input"
-              class="input__field"
-              placeholder="API Key"
-              style="width: 415"
-            />
-          </div>
-          <div>
-            <button
-              id="set-api-key"
-              class="button button--primary"
-              style="margin-left: 5"
-            >
-              Setup
-            </button>
-          </div>
-        </div>
-      </div>
 
       <div>
         <hr class="solid" style="border-color: #dfdfdf; border-top: 0.5px" />
@@ -241,7 +203,32 @@
           return;
         }
 
-        if (careerStageEl.value === "N/A") {
+        const validateEmail = (email) => {
+          return email.match(
+            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          );
+        };
+        if (validateEmail(emailEl.value) === null) {
+          parent.postMessage(
+            {
+              pluginMessage: {
+                type: "notify",
+                message: "Please enter a valid email address.",
+              },
+            },
+            "*"
+          );
+
+          return;
+        }
+
+        if (
+          !companyNameEl.value ||
+          !companySizeEl.value ||
+          !roleEl.value ||
+          !usageEl.value ||
+          careerStageEl.value === "N/A"
+        ) {
           parent.postMessage(
             {
               pluginMessage: {
@@ -255,7 +242,7 @@
           return;
         }
 
-        const userInfo = {
+        const userData = {
           email: emailEl.value,
           companyName: companyNameEl.value,
           companySize: companySizeEl.value,
@@ -264,23 +251,20 @@
           careerStage: careerStageEl.value,
         };
         parent.postMessage(
-          { pluginMessage: { type: "enroll", userInfo } },
+          { pluginMessage: { type: "enroll", userData } },
           "*"
         );
       };
-
-      const apiKeyEl = document.getElementById("api-key");
 
       onmessage = (event) => {
         const { pluginMessage } = event.data;
-        apiKeyEl.value = pluginMessage;
-      };
-
-      document.getElementById("set-api-key").onclick = () => {
-        parent.postMessage(
-          { pluginMessage: { type: "set-api-key", apiKey: apiKeyEl.value } },
-          "*"
-        );
+        emailEl.value = pluginMessage.email;
+        companyNameEl.value = pluginMessage.companyName;
+        companySizeEl.value = pluginMessage.companySize;
+        roleEl.value = pluginMessage.role;
+        usageEl.value = pluginMessage.usage;
+        careerStageEl.value = pluginMessage.careerStage;
+        privacyCheckEl.checked = true;
       };
 
       document.getElementById("cancel").onclick = () => {
