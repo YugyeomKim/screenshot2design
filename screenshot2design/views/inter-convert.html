@@ -116,7 +116,7 @@
       "
     >
       <select
-        id="plugin-usage"
+        id="detailed-usage"
         style="
           font-family: inter;
           font-size: 12px;
@@ -179,7 +179,7 @@
       let surveying = false;
       let finished = false;
 
-      const pluginUsageInputEl = document.getElementById("plugin-usage");
+      const detailedUsageInputEl = document.getElementById("detailed-usage");
       const workTermInputEl = document.getElementById("work-term");
 
       const loadingEl = document.getElementById("loading");
@@ -188,11 +188,11 @@
       const handleOnChange = (event) => {
         surveying = true;
 
-        pluginUsageInputEl.removeEventListener("click", handleOnChange);
+        detailedUsageInputEl.removeEventListener("click", handleOnChange);
         workTermInputEl.removeEventListener("click", handleOnChange);
       };
 
-      pluginUsageInputEl.addEventListener("click", handleOnChange);
+      detailedUsageInputEl.addEventListener("click", handleOnChange);
       workTermInputEl.addEventListener("click", handleOnChange);
 
       const moveOn = () => {
@@ -226,11 +226,11 @@
       };
 
       moveOnButtonEl.onclick = () => {
-        const pluginUsage = pluginUsageInputEl.value;
+        const detailedUsage = detailedUsageInputEl.value;
         const workTerm = workTermInputEl.value;
 
         const userData = {
-          pluginUsage,
+          detailedUsage,
           workTerm,
         };
 

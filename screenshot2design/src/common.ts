@@ -39,7 +39,7 @@ interface Preference {
 }
 
 interface Survey {
-  pluginUsage: string;
+  detailedUsage: string;
   expectedTimeSave: string;
 }
 
