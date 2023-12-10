@@ -23,12 +23,6 @@ async function main() {
 
   figma.ui.onmessage = async (msg) => {
     switch (msg.type) {
-      /**
-       * Enrollment
-       * 1. save userData to clientStorage
-       * 2. fetch userData and get apiKey
-       * 3. send apiKey to the view
-       */
       case "enroll": {
         const { userData } = msg;
         await figma.clientStorage.setAsync("userData", userData);
@@ -51,34 +45,23 @@ async function main() {
         return;
       }
 
-      /**
-       * Send user data information to server
-       */
       case "send-user-data": {
         const { userData } = msg;
         sendUserData(userData);
         return;
       }
 
-      /**
-       * Convert the image
-       * 1. show inter-convert view
-       * 2. request server to process images
-       * 3. Draw the design on canvas
-       * 4. Move viewport
-       * 5. show after-convert view
-       */
       case "convert": {
         const { selection } = figma.currentPage;
 
         totalRun = selection.length;
 
-        if (selection.length === 0) {
+        if (totalRun === 0) {
           figma.notify(TOAST_MESSAGES.ERR_EMPTY_SCREENSHOTS);
           return;
         }
 
-        if (selection.length > IMAGE_NUM_LIMIT) {
+        if (totalRun > IMAGE_NUM_LIMIT) {
           figma.notify(TOAST_MESSAGES.ERR_TOO_MANY_SCREENSHOTS);
           return;
         }
@@ -95,6 +78,7 @@ async function main() {
             resultFrames.push(result.value);
             successRun += 1;
           } else {
+            // TODO: Show the result at the last page
             console.log(result.reason);
           }
         }
@@ -117,9 +101,6 @@ async function main() {
         return;
       }
 
-      /**
-       * Show cancel view when the user clicked Cancel button.
-       */
       case "cancel": {
         figma.showUI(__uiFiles__.cancel);
         figma.ui.resize(400, 115);
@@ -127,9 +108,6 @@ async function main() {
         return;
       }
 
-      /**
-       * Submit the reason and close plugin.
-       */
       case "submit-and-close": {
         figma.ui.hide();
         figma.notify(TOAST_MESSAGES.MSG_ClOSE);
