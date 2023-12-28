@@ -1,7 +1,6 @@
 import { IMAGE_NUM_LIMIT, SERVER, TOAST_MESSAGES } from "./common";
 import runConverting from "./run-converting";
-import sendStatData from "./send-stat-data";
-import sendUserData from "./send-user-data";
+import { sendStatData, sendUserData } from "./send-data";
 
 type userData = {
   email: string;
