@@ -7,11 +7,13 @@ handle_data_bp = Blueprint("handle_data", __name__, url_prefix="/handle_data")
 @handle_data_bp.route("/users", methods=["POST"], strict_slashes=False)
 def handle_userdata():
     email = request.json.get("email")
-    user_data = request.json.get("user_data")
+    user_data = request.json.get("userData")
+
     if not email or not user_data:
         return "User Information missing.", 400
 
     users = get_users_collection()
+
     if users is None:
         return "MongoDB connection failed.", 500
 
