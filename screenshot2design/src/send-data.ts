@@ -17,9 +17,11 @@ export const sendUserData = async (userData: Preference | Survey) => {
     },
     body: JSON.stringify(userDataBody),
   })
-    .then((fetchResponse) => {
+    .then(async (fetchResponse) => {
       console.log(
-        `Set user data status: ${fetchResponse.statusText} (${fetchResponse.status})`
+        `Set stat data status: ${await fetchResponse.text()} (${
+          fetchResponse.status
+        })`
       );
     })
     .catch((error) => {
@@ -40,9 +42,11 @@ export const sendStatData = async (statData: StatData) => {
     },
     body: JSON.stringify(statData),
   })
-    .then((fetchResponse) => {
+    .then(async (fetchResponse) => {
       console.log(
-        `Set stat data status: ${fetchResponse.statusText} (${fetchResponse.status})`
+        `Set stat data status: ${await fetchResponse.text()} (${
+          fetchResponse.status
+        })`
       );
     })
     .catch((error) => {
