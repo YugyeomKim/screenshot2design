@@ -5,6 +5,9 @@ import cv2
 import json
 from os.path import join as pjoin
 import os
+from dotenv import load_dotenv
+
+load_dotenv(verbose=True)
 
 
 def save_detection_json(file_path, texts, img_shape):
@@ -25,8 +28,10 @@ def save_detection_json(file_path, texts, img_shape):
     json.dump(output, f_out, indent=4)
 
 
-def visualize_texts(org_img, write_path=None):
+def visualize_texts(org_img, texts, write_path):
     img = org_img.copy()
+    for text in texts:
+        text.visualize_element(img, line=2)
 
     if write_path is not None:
         cv2.imwrite(write_path, img)
@@ -105,21 +110,6 @@ def text_cvt_orc_format(ocr_result):
     return texts
 
 
-def text_cvt_orc_format_paddle(paddle_result):
-    texts = []
-    for i, line in enumerate(paddle_result):
-        points = np.array(line[0])
-        location = {
-            "left": int(min(points[:, 0])),
-            "top": int(min(points[:, 1])),
-            "right": int(max(points[:, 0])),
-            "bottom": int(max(points[:, 1])),
-        }
-        content = line[1][0]
-        texts.append(Text(i, content, location))
-    return texts
-
-
 def text_filter_noise(texts):
     valid_texts = []
     for text in texts:
@@ -141,8 +131,7 @@ def text_filter_noise(texts):
     return valid_texts
 
 
-def text_detection(input_image, output_root):
-    name = input_image.split("/")[-1][:-4]
+def text_detection(input_image, output_root, image_name):
     os.makedirs(pjoin(output_root, "ocr"), exist_ok=True)
     ocr_root = pjoin(output_root, "ocr")
     img = cv2.imread(input_image)
@@ -153,5 +142,12 @@ def text_detection(input_image, output_root):
     texts = text_filter_noise(texts)
     texts = text_sentences_recognition(texts)
 
-    visualize_texts(img, write_path=pjoin(ocr_root, name + ".png"))
-    save_detection_json(pjoin(ocr_root, name + ".json"), texts, img.shape)
+    if os.getenv("FLASK_ENV") == "development":
+        visualize_texts(
+            img,
+            texts,
+            write_path=pjoin(ocr_root, image_name + ".png"),
+            shown_resize_height=800,
+        )
+
+    save_detection_json(pjoin(ocr_root, image_name + ".json"), texts, img.shape)

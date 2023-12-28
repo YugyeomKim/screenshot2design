@@ -32,12 +32,11 @@ def run_batch(image_names, input_root="./buffer/input", output_root="./buffer/ou
     compo_classifier = CNN()
 
     # set the range of target inputs' indices
-    num = 0
     for image_name in image_names:
         input_image = pjoin(input_root, image_name + ".jpg")
         resized_height = resize_height_by_longest_edge(input_image)
 
-        text.text_detection(input_image, output_root)
+        text.text_detection(input_image, output_root, image_name)
 
         ip.compo_detection(
             input_image,
@@ -58,5 +57,3 @@ def run_batch(image_names, input_root="./buffer/input", output_root="./buffer/ou
             is_remove_top=key_params["remove-top-bar"],
             show=True,
         )
-
-        num += 1
