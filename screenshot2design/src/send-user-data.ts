@@ -1,4 +1,4 @@
-import { SERVER, Preference, Survey } from "./common";
+import { Preference, SERVER, Survey } from "./common";
 
 const sendUserData = async (userData: Preference | Survey) => {
   const { email }: { email: string } = await figma.clientStorage.getAsync(
@@ -18,10 +18,12 @@ const sendUserData = async (userData: Preference | Survey) => {
     body: JSON.stringify(userDataBody),
   })
     .then((fetchResponse) => {
-      console.log(`Set user data status: ${fetchResponse.status}`);
+      console.log(
+        `Set user data status: ${fetchResponse.statusText} (${fetchResponse.status})`
+      );
     })
     .catch((error) => {
-      console.log(`Set user data Error: ${error.message}`);
+      console.log(`Set user data Error: ${error.message} (${error.status})`);
     });
 };
 
