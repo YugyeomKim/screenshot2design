@@ -5,7 +5,6 @@ import os
 
 load_dotenv(verbose=True)
 uri = MONGODB_URI = os.getenv("MONGODB_URI")
-# uri = "mongodb+srv://ygkim:QrzTn23CBLrePgQH@cluster0.hhuo5nt.mongodb.net/?retryWrites=true&w=majority"
 
 # Create a new client and connect to the server
 mongo_client = MongoClient(uri, server_api=ServerApi("1"))
