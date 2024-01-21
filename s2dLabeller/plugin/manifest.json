@@ -1,0 +1,14 @@
+{
+  "name": "s2dLabeller",
+  "id": "1285839137173576610",
+  "api": "1.0.0",
+  "main": "code.js",
+  "capabilities": [],
+  "enableProposedApi": false,
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["*"],
+    "reasoning": "just",
+    "devAllowedDomains": ["http://localhost:3000"]
+  }
+}

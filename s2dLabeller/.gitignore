@@ -1,0 +1,13 @@
+*.log
+*.log.*
+node_modules
+
+# Plugin
+out/
+dist/
+code.js
+plugin/test.ipynb
+
+# Server
+server/ds/
+server/test.js
