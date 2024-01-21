@@ -27,6 +27,8 @@ def save_detection_json(file_path, texts, img_shape):
         output["texts"].append(c)
     json.dump(output, f_out, indent=4)
 
+    return file_path
+
 
 def visualize_texts(org_img, texts, write_path):
     img = org_img.copy()
@@ -147,7 +149,6 @@ def text_detection(input_image, output_root, image_name):
             img,
             texts,
             write_path=pjoin(ocr_root, image_name + ".png"),
-            shown_resize_height=800,
         )
 
-    save_detection_json(pjoin(ocr_root, image_name + ".json"), texts, img.shape)
+    return save_detection_json(pjoin(ocr_root, image_name + ".json"), texts, img.shape)
