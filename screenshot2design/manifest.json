@@ -13,5 +13,14 @@
     "afterConvert": "views/after-convert.html",
     "cancel": "views/cancel.html"
   },
-  "menu": [{ "name": "Convert", "command": "convert" }]
+  "menu": [{ "name": "Convert", "command": "convert" }],
+  "networkAccess": {
+    "allowedDomains": [
+      "https://s2dlab.click",
+      "https://cdn.jsdelivr.net",
+      "https://www.googletagmanager.com",
+      "https://rsms.me",
+      "https://imgur.com"
+    ]
+  }
 }
