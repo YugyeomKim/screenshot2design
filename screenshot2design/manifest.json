@@ -19,7 +19,7 @@
       "https://s2dlab.click:443",
       "https://cdn.jsdelivr.net/",
       "https://rsms.me",
-      "https://postfiles.pstatic.net",
+      "https://s2d-image-hosting.s3.ap-southeast-2.amazonaws.com",
       "https://www.googletagmanager.com"
     ],
     "devAllowedDomains": ["http://localhost:3001"],
