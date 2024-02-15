@@ -1,5 +1,5 @@
-from detect_compo.lib_ip.Bbox import Bbox
-import detect_compo.lib_ip.ip_draw as draw
+from model.detect_compo.lib_ip.Bbox import Bbox
+import model.detect_compo.lib_ip.ip_draw as draw
 
 import cv2
 
@@ -39,7 +39,7 @@ class Component:
         self.image_shape = image_shape
         self.area = self.width * self.height
 
-        self.category = 'Compo'
+        self.category = "Compo"
         self.contain = []
 
         self.rect_ = None
@@ -61,12 +61,12 @@ class Component:
         self.bbox_area = self.bbox.bbox_cal_area()
 
     def compo_get_boundary(self):
-        '''
+        """
         get the bounding boundary of an object(region)
         boundary: [top, bottom, left, right]
         -> up, bottom: (column_index, min/max row border)
         -> left, right: (row_index, min/max column border) detect range of each row
-        '''
+        """
         border_up, border_bottom, border_left, border_right = {}, {}, {}, {}
         for point in self.region:
             # point: (row_index, column_index)
@@ -98,15 +98,21 @@ class Component:
                             -> top_left: (column_min, row_min)
                             -> bottom_right: (column_max, row_max)
         """
-        col_min, row_min = (int(min(self.boundary[0][0][0], self.boundary[1][-1][0])), int(min(self.boundary[2][0][0], self.boundary[3][-1][0])))
-        col_max, row_max = (int(max(self.boundary[0][0][0], self.boundary[1][-1][0])), int(max(self.boundary[2][0][0], self.boundary[3][-1][0])))
+        col_min, row_min = (
+            int(min(self.boundary[0][0][0], self.boundary[1][-1][0])),
+            int(min(self.boundary[2][0][0], self.boundary[3][-1][0])),
+        )
+        col_max, row_max = (
+            int(max(self.boundary[0][0][0], self.boundary[1][-1][0])),
+            int(max(self.boundary[2][0][0], self.boundary[3][-1][0])),
+        )
         bbox = Bbox(col_min, row_min, col_max, row_max)
         return bbox
 
     def compo_is_rectangle(self, min_rec_evenness, max_dent_ratio, test=False):
-        '''
+        """
         detect if an object is rectangle by evenness and dent of each border
-        '''
+        """
         dent_direction = [1, -1, 1, -1]  # direction for convex
 
         flat = 0
@@ -117,7 +123,9 @@ class Component:
             pit = 0  # length of pit
             depth = 0  # the degree of surface changing
             if n <= 1:
-                adj_side = max(len(self.boundary[2]), len(self.boundary[3]))  # get maximum length of adjacent side
+                adj_side = max(
+                    len(self.boundary[2]), len(self.boundary[3])
+                )  # get maximum length of adjacent side
             else:
                 adj_side = max(len(self.boundary[0]), len(self.boundary[1]))
 
@@ -130,7 +138,10 @@ class Component:
                 # the degree of surface changing
                 depth += difference
                 # ignore noise at the start of each direction
-                if i / len(border) < 0.08 and (dent_direction[n] * difference) / adj_side > 0.5:
+                if (
+                    i / len(border) < 0.08
+                    and (dent_direction[n] * difference) / adj_side > 0.5
+                ):
                     depth = 0  # reset
 
                 # print(border[i][1], i / len(border), depth, (dent_direction[n] * difference) / adj_side)
@@ -158,7 +169,7 @@ class Component:
                 if abs(depth) < 1 + adj_side * 0.015:
                     flat += 1
                 # if test:
-                    # print(depth, adj_side, flat)
+                # print(depth, adj_side, flat)
             # if the pit is too big, the shape should not be a rectangle
             if pit / len(border) > max_dent_ratio:
                 if test:
@@ -190,7 +201,10 @@ class Component:
         # horizontally
         slim = 0
         for i in range(self.width):
-            if abs(self.boundary[1][i][1] - self.boundary[0][i][1]) <= min_line_thickness:
+            if (
+                abs(self.boundary[1][i][1] - self.boundary[0][i][1])
+                <= min_line_thickness
+            ):
                 slim += 1
         if slim / len(self.boundary[0]) > 0.93:
             self.line_ = True
@@ -198,7 +212,10 @@ class Component:
         # vertically
         slim = 0
         for i in range(self.height):
-            if abs(self.boundary[2][i][1] - self.boundary[3][i][1]) <= min_line_thickness:
+            if (
+                abs(self.boundary[2][i][1] - self.boundary[3][i][1])
+                <= min_line_thickness
+            ):
                 slim += 1
         if slim / len(self.boundary[2]) > 0.93:
             self.line_ = True
@@ -216,9 +233,9 @@ class Component:
         return self.bbox.bbox_relation_nms(compo_b.bbox, bias)
 
     def compo_relative_position(self, col_min_base, row_min_base):
-        '''
+        """
         Convert to relative position based on base coordinator
-        '''
+        """
         self.bbox.bbox_cvt_relative_position(col_min_base, row_min_base)
 
     def compo_merge(self, compo_b):
@@ -233,6 +250,6 @@ class Component:
         row_max = min(row_max + pad, img.shape[0])
         clip = img[row_min:row_max, column_min:column_max]
         if show:
-            cv2.imshow('clipping', clip)
+            cv2.imshow("clipping", clip)
             cv2.waitKey()
         return clip

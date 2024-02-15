@@ -3,7 +3,7 @@ from mongo import get_users_collection
 import os
 from uuid import uuid1
 import base64
-from model import run_batch
+from model.run_batch import run_batch
 
 run_bp = Blueprint("run", __name__, url_prefix="/run")
 

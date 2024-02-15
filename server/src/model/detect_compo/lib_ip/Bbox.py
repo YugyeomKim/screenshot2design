@@ -1,5 +1,5 @@
 import numpy as np
-import detect_compo.lib_ip.ip_draw as draw
+import model.detect_compo.lib_ip.ip_draw as draw
 
 
 class Bbox:
@@ -31,26 +31,38 @@ class Bbox:
         col_min_b, row_min_b, col_max_b, row_max_b = bbox_b.put_bbox()
 
         # if a is in b
-        if col_min_a > col_min_b and row_min_a > row_min_b and col_max_a < col_max_b and row_max_a < row_max_b:
+        if (
+            col_min_a > col_min_b
+            and row_min_a > row_min_b
+            and col_max_a < col_max_b
+            and row_max_a < row_max_b
+        ):
             return -1
         # if b is in a
-        elif col_min_a < col_min_b and row_min_a < row_min_b and col_max_a > col_max_b and row_max_a > row_max_b:
+        elif (
+            col_min_a < col_min_b
+            and row_min_a < row_min_b
+            and col_max_a > col_max_b
+            and row_max_a > row_max_b
+        ):
             return 1
         # a and b are non-intersect
-        elif (col_min_a > col_max_b or row_min_a > row_max_b) or (col_min_b > col_max_a or row_min_b > row_max_a):
+        elif (col_min_a > col_max_b or row_min_a > row_max_b) or (
+            col_min_b > col_max_a or row_min_b > row_max_a
+        ):
             return 0
         # intersection
         else:
             return 2
 
     def bbox_relation_nms(self, bbox_b, bias=(0, 0)):
-        '''
-        Calculate the relation between two rectangles by nms
-       :return: -1 : a in b
-         0  : a, b are not intersected
-         1  : b in a
-         2  : a, b are intersected
-       '''
+        """
+         Calculate the relation between two rectangles by nms
+        :return: -1 : a in b
+          0  : a, b are not intersected
+          1  : b in a
+          2  : a, b are intersected
+        """
         col_min_a, row_min_a, col_max_a, row_max_a = self.put_bbox()
         col_min_b, row_min_b, col_max_b, row_max_b = bbox_b.put_bbox()
 
@@ -93,18 +105,18 @@ class Bbox:
         return 0
 
     def bbox_cvt_relative_position(self, col_min_base, row_min_base):
-        '''
+        """
         Convert to relative position based on base coordinator
-        '''
+        """
         self.col_min += col_min_base
         self.col_max += col_min_base
         self.row_min += row_min_base
         self.row_max += row_min_base
 
     def bbox_merge(self, bbox_b):
-        '''
+        """
         Merge two intersected bboxes
-        '''
+        """
         col_min_a, row_min_a, col_max_a, row_max_a = self.put_bbox()
         col_min_b, row_min_b, col_max_b, row_max_b = bbox_b.put_bbox()
         col_min = min(col_min_a, col_min_b)

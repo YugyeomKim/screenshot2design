@@ -1,21 +1,24 @@
 import cv2
 import numpy as np
 
-import detect_compo.lib_ip.ip_draw as draw
-import detect_compo.lib_ip.ip_preprocessing as pre
-from detect_compo.lib_ip.Component import Component
-import detect_compo.lib_ip.Component as Compo
-from config.CONFIG_UIED import Config
+import model.detect_compo.lib_ip.ip_draw as draw
+import model.detect_compo.lib_ip.ip_preprocessing as pre
+from model.detect_compo.lib_ip.Component import Component
+import model.detect_compo.lib_ip.Component as Compo
+from model.config.CONFIG_UIED import Config
+
 C = Config()
 
 
-def merge_intersected_corner(compos, org, is_merge_contained_ele, max_gap=(0, 0), max_ele_height=25):
-    '''
+def merge_intersected_corner(
+    compos, org, is_merge_contained_ele, max_gap=(0, 0), max_ele_height=25
+):
+    """
     :param is_merge_contained_ele: if true, merge compos nested in others
     :param max_gap: (horizontal_distance, vertical_distance) to be merge into one line/column
     :param max_ele_height: if higher than it, recognize the compo as text
     :return:
-    '''
+    """
     changed = False
     new_compos = []
     Compo.compos_update(compos, org.shape)
@@ -30,9 +33,11 @@ def merge_intersected_corner(compos, org, is_merge_contained_ele, max_gap=(0, 0)
             # 1. compo[j] contains compo[i]
             # 2. compo[j] intersects with compo[i] with certain iou
             # 3. is_merge_contained_ele and compo[j] is contained in compo[i]
-            if relation == 1 or \
-                    relation == 2 or \
-                    (is_merge_contained_ele and relation == -1):
+            if (
+                relation == 1
+                or relation == 2
+                or (is_merge_contained_ele and relation == -1)
+            ):
                 # (relation == 2 and new_compos[j].height < max_ele_height and cur_compo.height < max_ele_height) or\
 
                 new_compos[j].compo_merge(cur_compo)
@@ -47,7 +52,9 @@ def merge_intersected_corner(compos, org, is_merge_contained_ele, max_gap=(0, 0)
     if not changed:
         return compos
     else:
-        return merge_intersected_corner(new_compos, org, is_merge_contained_ele, max_gap, max_ele_height)
+        return merge_intersected_corner(
+            new_compos, org, is_merge_contained_ele, max_gap, max_ele_height
+        )
 
 
 def merge_intersected_compos(compos):
@@ -70,16 +77,16 @@ def merge_intersected_compos(compos):
 
 
 def rm_contained_compos_not_in_block(compos):
-    '''
+    """
     remove all components contained by others that are not Block
-    '''
+    """
     marked = np.full(len(compos), False)
     for i in range(len(compos) - 1):
         for j in range(i + 1, len(compos)):
             relation = compos[i].compo_relation(compos[j])
-            if relation == -1 and compos[j].category != 'Block':
+            if relation == -1 and compos[j].category != "Block":
                 marked[i] = True
-            if relation == 1 and compos[i].category != 'Block':
+            if relation == 1 and compos[i].category != "Block":
                 marked[j] = True
     new_compos = []
     for i in range(len(marked)):
@@ -102,8 +109,11 @@ def merge_text(compos, org_shape, max_word_gad=4, max_word_height=20):
         # if abs(row_min_a - row_min_b) < max_word_gad and abs(row_max_a - row_max_b) < max_word_gad:
         if row_min_s < row_max_s:
             # close distance
-            if col_min_s < col_max_s or \
-                    (0 < col_min_b - col_max_a < max_word_gad) or (0 < col_min_a - col_max_b < max_word_gad):
+            if (
+                col_min_s < col_max_s
+                or (0 < col_min_b - col_max_a < max_word_gad)
+                or (0 < col_min_a - col_max_b < max_word_gad)
+            ):
                 return True
         return False
 
@@ -136,7 +146,9 @@ def merge_text(compos, org_shape, max_word_gad=4, max_word_height=20):
         return merge_text(new_compos, org_shape)
 
 
-def rm_top_or_bottom_corners(components, org_shape, top_bottom_height=C.THRESHOLD_TOP_BOTTOM_BAR):
+def rm_top_or_bottom_corners(
+    components, org_shape, top_bottom_height=C.THRESHOLD_TOP_BOTTOM_BAR
+):
     new_compos = []
     height, width = org_shape[:2]
     for compo in components:
@@ -144,7 +156,10 @@ def rm_top_or_bottom_corners(components, org_shape, top_bottom_height=C.THRESHOL
         # remove big ones
         # if (row_max - row_min) / height > 0.65 and (column_max - column_min) / width > 0.8:
         #     continue
-        if not (row_max < height * top_bottom_height[0] or row_min > height * top_bottom_height[1]):
+        if not (
+            row_max < height * top_bottom_height[0]
+            or row_min > height * top_bottom_height[1]
+        ):
             new_compos.append(compo)
     return new_compos
 
@@ -169,10 +184,12 @@ def rm_line_v_h(binary, show=False, max_line_thickness=C.THRESHOLD_LINE_THICKNES
         else:
             return None
 
-    def extract_line_area(line, start_idx, flag='v'):
+    def extract_line_area(line, start_idx, flag="v"):
         for e, l in enumerate(line):
-            if flag == 'v':
-                map_line[start_idx + e, l[0]:l[1]] = binary[start_idx + e, l[0]:l[1]]
+            if flag == "v":
+                map_line[start_idx + e, l[0] : l[1]] = binary[
+                    start_idx + e, l[0] : l[1]
+                ]
 
     map_line = np.zeros(binary.shape[:2], dtype=np.uint8)
     # cv2.imshow('binary', binary)
@@ -212,14 +229,14 @@ def rm_line_v_h(binary, show=False, max_line_thickness=C.THRESHOLD_LINE_THICKNES
             if start_col != -1:
                 if i - start_col < max_line_thickness:
                     # binary[:, start_col: i] = 0
-                    map_line[:, start_col: i] = binary[:, start_col: i]
+                    map_line[:, start_col:i] = binary[:, start_col:i]
                 start_col = -1
 
     binary -= map_line
 
     if show:
-        cv2.imshow('no-line', binary)
-        cv2.imshow('lines', map_line)
+        cv2.imshow("no-line", binary)
+        cv2.imshow("lines", map_line)
         cv2.waitKey()
 
 
@@ -263,31 +280,30 @@ def rm_line(binary, max_line_thickness=C.THRESHOLD_LINE_THICKNESS):
                 check_line = False
         # check gap
         if check_gap and i - end_row > max_line_thickness:
-            binary[start_row: end_row] = 0
+            binary[start_row:end_row] = 0
             start_row, end_row = -1, -1
             check_line = False
             check_gap = False
 
     if (check_line and (height - start_row) < max_line_thickness) or check_gap:
-        binary[start_row: end_row] = 0
+        binary[start_row:end_row] = 0
 
 
 def rm_noise_compos(compos):
     compos_new = []
     for compo in compos:
-        if compo.category == 'Noise':
+        if compo.category == "Noise":
             continue
         compos_new.append(compo)
     return compos_new
 
 
-def rm_noise_in_large_img(compos, org,
-                      max_compo_scale=C.THRESHOLD_COMPO_MAX_SCALE):
+def rm_noise_in_large_img(compos, org, max_compo_scale=C.THRESHOLD_COMPO_MAX_SCALE):
     row, column = org.shape[:2]
     remain = np.full(len(compos), True)
     new_compos = []
     for compo in compos:
-        if compo.category == 'Image':
+        if compo.category == "Image":
             for i in compo.contain:
                 remain[i] = False
     for i in range(len(remain)):
@@ -296,21 +312,31 @@ def rm_noise_in_large_img(compos, org,
     return new_compos
 
 
-def detect_compos_in_img(compos, binary, org, max_compo_scale=C.THRESHOLD_COMPO_MAX_SCALE, show=False):
+def detect_compos_in_img(
+    compos, binary, org, max_compo_scale=C.THRESHOLD_COMPO_MAX_SCALE, show=False
+):
     compos_new = []
     row, column = binary.shape[:2]
     for compo in compos:
-        if compo.category == 'Image':
+        if compo.category == "Image":
             compo.compo_update_bbox_area()
             # org_clip = compo.compo_clipping(org)
             # bin_clip = pre.binarization(org_clip, show=show)
             bin_clip = compo.compo_clipping(binary)
             bin_clip = pre.reverse_binary(bin_clip, show=show)
 
-            compos_rec, compos_nonrec = component_detection(bin_clip, test=False, step_h=10, step_v=10, rec_detect=True)
+            compos_rec, compos_nonrec = component_detection(
+                bin_clip, test=False, step_h=10, step_v=10, rec_detect=True
+            )
             for compo_rec in compos_rec:
-                compo_rec.compo_relative_position(compo.bbox.col_min, compo.bbox.row_min)
-                if compo_rec.bbox_area / compo.bbox_area < 0.8 and compo_rec.bbox.height > 20 and compo_rec.bbox.width > 20:
+                compo_rec.compo_relative_position(
+                    compo.bbox.col_min, compo.bbox.row_min
+                )
+                if (
+                    compo_rec.bbox_area / compo.bbox_area < 0.8
+                    and compo_rec.bbox.height > 20
+                    and compo_rec.bbox.width > 20
+                ):
                     compos_new.append(compo_rec)
                     # draw.draw_bounding_box(org, [compo_rec], show=True)
 
@@ -333,31 +359,36 @@ def compo_filter(compos, min_area, img_shape):
             continue
         ratio_h = compo.width / compo.height
         ratio_w = compo.height / compo.width
-        if ratio_h > 50 or ratio_w > 40 or \
-                (min(compo.height, compo.width) < 8 and max(ratio_h, ratio_w) > 10):
+        if (
+            ratio_h > 50
+            or ratio_w > 40
+            or (min(compo.height, compo.width) < 8 and max(ratio_h, ratio_w) > 10)
+        ):
             continue
         compos_new.append(compo)
     return compos_new
 
 
 def is_block(clip, thread=0.15):
-    '''
+    """
     Block is a rectangle border enclosing a group of compos (consider it as a wireframe)
     Check if a compo is block by checking if the inner side of its border is blank
-    '''
+    """
     side = 4  # scan 4 lines inner forward each border
     # top border - scan top down
     blank_count = 0
     for i in range(1, 5):
         if sum(clip[side + i]) / 255 > thread * clip.shape[1]:
             blank_count += 1
-    if blank_count > 2: return False
+    if blank_count > 2:
+        return False
     # left border - scan left to right
     blank_count = 0
     for i in range(1, 5):
         if sum(clip[:, side + i]) / 255 > thread * clip.shape[0]:
             blank_count += 1
-    if blank_count > 2: return False
+    if blank_count > 2:
+        return False
 
     side = -4
     # bottom border - scan bottom up
@@ -365,34 +396,45 @@ def is_block(clip, thread=0.15):
     for i in range(-1, -5, -1):
         if sum(clip[side + i]) / 255 > thread * clip.shape[1]:
             blank_count += 1
-    if blank_count > 2: return False
+    if blank_count > 2:
+        return False
     # right border - scan right to left
     blank_count = 0
     for i in range(-1, -5, -1):
         if sum(clip[:, side + i]) / 255 > thread * clip.shape[0]:
             blank_count += 1
-    if blank_count > 2: return False
+    if blank_count > 2:
+        return False
     return True
 
 
 def compo_block_recognition(binary, compos, block_side_length=0.15):
     height, width = binary.shape
     for compo in compos:
-        if compo.height / height > block_side_length and compo.width / width > block_side_length:
+        if (
+            compo.height / height > block_side_length
+            and compo.width / width > block_side_length
+        ):
             clip = compo.compo_clipping(binary)
             if is_block(clip):
-                compo.category = 'Block'
+                compo.category = "Block"
 
 
 # take the binary image as input
 # calculate the connected regions -> get the bounding boundaries of them -> check if those regions are rectangles
 # return all boundaries and boundaries of rectangles
-def component_detection(binary, min_obj_area,
-                        line_thickness=C.THRESHOLD_LINE_THICKNESS,
-                        min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
-                        max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO,
-                        step_h = 5, step_v = 2,
-                        rec_detect=False, show=False, test=False):
+def component_detection(
+    binary,
+    min_obj_area,
+    line_thickness=C.THRESHOLD_LINE_THICKNESS,
+    min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
+    max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO,
+    step_h=5,
+    step_v=2,
+    rec_detect=False,
+    show=False,
+    test=False,
+):
     """
     :param binary: Binary image from pre-processing
     :param min_obj_area: If not pass then ignore the small object
@@ -414,8 +456,11 @@ def component_detection(binary, min_obj_area,
             if binary[i, j] == 255 and mask[i, j] == 0:
                 # get connected area
                 mask_copy = mask.copy()
-                ff = cv2.floodFill(binary, mask, (j, i), None, 0, 0, cv2.FLOODFILL_MASK_ONLY)
-                if ff[0] < min_obj_area: continue
+                ff = cv2.floodFill(
+                    binary, mask, (j, i), None, 0, 0, cv2.FLOODFILL_MASK_ONLY
+                )
+                if ff[0] < min_obj_area:
+                    continue
                 mask_copy = mask - mask_copy
                 region = np.reshape(cv2.findNonZero(mask_copy[1:-1, 1:-1]), (-1, 2))
                 region = [(p[1], p[0]) for p in region]
@@ -456,20 +501,26 @@ def component_detection(binary, min_obj_area,
         return compos_all
 
 
-def nested_components_detection(grey, org, grad_thresh,
-                   show=False, write_path=None,
-                   step_h=10, step_v=10,
-                   line_thickness=C.THRESHOLD_LINE_THICKNESS,
-                   min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
-                   max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO):
-    '''
+def nested_components_detection(
+    grey,
+    org,
+    grad_thresh,
+    show=False,
+    write_path=None,
+    step_h=10,
+    step_v=10,
+    line_thickness=C.THRESHOLD_LINE_THICKNESS,
+    min_rec_evenness=C.THRESHOLD_REC_MIN_EVENNESS,
+    max_dent_ratio=C.THRESHOLD_REC_MAX_DENT_RATIO,
+):
+    """
     :param grey: grey-scale of original image
     :return: corners: list of [(top_left, bottom_right)]
                         -> top_left: (column_min, row_min)
                         -> bottom_right: (column_max, row_max)
-    '''
+    """
     compos = []
-    mask = np.zeros((grey.shape[0]+2, grey.shape[1]+2), dtype=np.uint8)
+    mask = np.zeros((grey.shape[0] + 2, grey.shape[1] + 2), dtype=np.uint8)
     broad = np.zeros((grey.shape[0], grey.shape[1], 3), dtype=np.uint8)
     broad_all = broad.copy()
 
@@ -479,9 +530,18 @@ def nested_components_detection(grey, org, grad_thresh,
             if mask[x, y] == 0:
                 # flood fill algorithm to get background (layout block)
                 mask_copy = mask.copy()
-                ff = cv2.floodFill(grey, mask, (y, x), None, grad_thresh, grad_thresh, cv2.FLOODFILL_MASK_ONLY)
+                ff = cv2.floodFill(
+                    grey,
+                    mask,
+                    (y, x),
+                    None,
+                    grad_thresh,
+                    grad_thresh,
+                    cv2.FLOODFILL_MASK_ONLY,
+                )
                 # ignore small regions
-                if ff[0] < 500: continue
+                if ff[0] < 500:
+                    continue
                 mask_copy = mask - mask_copy
                 region = np.reshape(cv2.findNonZero(mask_copy[1:-1, 1:-1]), (-1, 2))
                 region = [(p[1], p[0]) for p in region]
@@ -511,8 +571,8 @@ def nested_components_detection(grey, org, grad_thresh,
                 compos.append(compo)
                 # draw.draw_region(region, broad)
     if show:
-        cv2.imshow('flood-fill all', broad_all)
-        cv2.imshow('block', broad)
+        cv2.imshow("flood-fill all", broad_all)
+        cv2.imshow("block", broad)
         cv2.waitKey()
     if write_path is not None:
         cv2.imwrite(write_path, broad)

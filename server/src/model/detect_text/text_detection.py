@@ -1,5 +1,5 @@
-import detect_text.ocr as ocr
-from detect_text.Text import Text
+import model.detect_text.ocr as ocr
+from model.detect_text.Text import Text
 import numpy as np
 import cv2
 import json
