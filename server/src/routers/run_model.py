@@ -15,7 +15,7 @@ def increase_run_count(email):
 
     update_result = users.update_one({"email": email}, {"$inc": {"runCount": 1}})
     if update_result.acknowledged:
-        return update_result, 200
+        return f"Increased run count of {update_result.matched_count} users", 200
     else:
         return "No user matches to the email.", 404
 
