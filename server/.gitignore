@@ -17,8 +17,7 @@ build/
 *.egg-info/
 
 # model
-buffer/input/*
-buffer/output/*
+buffer/
 __pycache__/
 
 # logging
