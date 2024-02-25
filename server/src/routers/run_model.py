@@ -44,6 +44,9 @@ def run_model():
         with open(input_path, "wb") as f:
             f.write(image_bytes)
 
-    result, status = run_batch(image_names)
+    try:
+        result = run_batch(image_names)
+    except Exception as e:
+        return str(e), 500
 
-    return result, status
+    return result, 200

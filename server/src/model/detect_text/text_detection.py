@@ -30,15 +30,6 @@ def save_detection_json(file_path, texts, img_shape):
     return file_path
 
 
-def visualize_texts(org_img, texts, write_path):
-    img = org_img.copy()
-    for text in texts:
-        text.visualize_element(img, line=2)
-
-    if write_path is not None:
-        cv2.imwrite(write_path, img)
-
-
 def text_sentences_recognition(texts):
     changed = True
     while changed:
@@ -143,12 +134,5 @@ def text_detection(input_image, output_root, image_name):
     texts = merge_intersected_texts(texts)
     texts = text_filter_noise(texts)
     texts = text_sentences_recognition(texts)
-
-    if os.getenv("FLASK_ENV") == "development":
-        visualize_texts(
-            img,
-            texts,
-            write_path=pjoin(ocr_root, image_name + ".png"),
-        )
 
     return save_detection_json(pjoin(ocr_root, image_name + ".json"), texts, img.shape)

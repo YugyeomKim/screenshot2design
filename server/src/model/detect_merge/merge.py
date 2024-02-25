@@ -8,23 +8,6 @@ import shutil
 from model.detect_merge.Element import Element
 
 
-def show_elements(org_img, eles, shown_resize=None, line=2):
-    color_map = {
-        "Text": (0, 0, 255),
-        "Compo": (0, 255, 0),
-        "Block": (0, 255, 0),
-        "Text Content": (255, 0, 255),
-    }
-    img = org_img.copy()
-    for ele in eles:
-        color = color_map[ele.category]
-    img_resize = img
-    if shown_resize is not None:
-        img_resize = cv2.resize(img, shown_resize)
-
-    return img_resize
-
-
 def save_elements(output_file, elements, img_shape):
     components = {"compos": [], "img_shape": img_shape}
     for i, ele in enumerate(elements):
@@ -32,7 +15,6 @@ def save_elements(output_file, elements, img_shape):
         # c['id'] = i
         components["compos"].append(c)
     json.dump(components, open(output_file, "w"), indent=4)
-    print(components)
     return components
 
 
@@ -210,7 +192,7 @@ def merge(
     text_path,
     merge_root=None,
     is_paragraph=False,
-    is_remove_bar=True,
+    is_remove_topbar=True,
 ):
     compo_json = json.load(open(compo_path, "r"))
     text_json = json.load(open(text_path, "r"))
@@ -251,25 +233,24 @@ def merge(
     img_resize = cv2.resize(
         img, (compo_json["img_shape"][1], compo_json["img_shape"][0])
     )
-    show_elements(img_resize, texts + compos)
 
     # refine elements
     texts = refine_texts(texts, compo_json["img_shape"])
     elements = refine_elements(compos, texts)
-    if is_remove_bar:
+    if is_remove_topbar:
         elements = remove_top_bar(elements, img_height=compo_json["img_shape"][0])
         elements = remove_bottom_bar(elements, img_height=compo_json["img_shape"][0])
     if is_paragraph:
         elements = merge_text_line_to_paragraph(elements, max_line_gap=7)
     reassign_ids(elements)
     check_containment(elements)
-    board = show_elements(img_resize, elements)
 
     # save all merged elements, clips and blank background
     name = img_path.replace("\\", "/").split("/")[-1][:-4]
     components = save_elements(
-        pjoin(merge_root, name + ".json"), elements, img_resize.shape
+        pjoin(merge_root, name + ".json"),
+        elements,
+        (compo_json["img_shape"][1], compo_json["img_shape"][0]),
     )
-    cv2.imwrite(pjoin(merge_root, name + ".jpg"), board)
 
-    return board, components
+    return components

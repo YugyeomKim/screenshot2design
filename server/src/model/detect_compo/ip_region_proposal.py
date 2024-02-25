@@ -84,4 +84,4 @@ def compo_detection(input_img_path, output_root, uied_params, resize_by_height=8
 
     # *** Step 7 *** save detection result
     Compo.compos_update(uicompos, org.shape)
-    file.save_corners_json(pjoin(ip_root, name + ".json"), uicompos, org.shape)
+    return file.save_corners_json(pjoin(ip_root, name + ".json"), uicompos, org.shape)
