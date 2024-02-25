@@ -7,7 +7,10 @@ import { RecognizedImage, SERVER, TOAST_MESSAGES } from "./common";
  * 3.
  */
 const getImageBytes = async (selected: SceneNode): Promise<number[]> => {
-  const imageBytes = await selected.exportAsync({ format: "JPG" });
+  const imageBytes = await selected.exportAsync({
+    format: "JPG",
+    constraint: { type: "SCALE", value: 2 },
+  });
 
   if (!imageBytes) {
     throw new Error(TOAST_MESSAGES.ERR_IMAGE_LOAD_FAIL(selected.name));
