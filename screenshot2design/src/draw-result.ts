@@ -53,10 +53,7 @@ const drawRecognizedImage = ({
       frame.appendChild(rectangle);
     } else if (compo.class === "Text") {
       const text = figma.createText();
-      let textContents = "Placeholder";
-      if (compo.text_content) {
-        textContents = compo.text_content;
-      }
+      const textContents = compo.text_content ?? "LoremIpsum";
       text.name = textContents;
       text.x = compo.position.column_min * ratio;
       text.y = compo.position.row_min * ratio;
