@@ -30,6 +30,8 @@ def run_batch(image_names, input_root="./buffer/input", output_root="./buffer/ou
 
     # compo_classifier = CNN()
 
+    result_list = []
+
     for image_name in image_names:
         input_image = pjoin(input_root, image_name + ".jpg")
         resized_height = resize_height_by_longest_edge(input_image)
@@ -51,4 +53,6 @@ def run_batch(image_names, input_root="./buffer/input", output_root="./buffer/ou
             is_remove_topbar=key_params["remove-top-bar"],
         )
 
-        return result
+        result_list.append(result)
+
+    return result_list

@@ -11,7 +11,7 @@ const drawRecognizedImage = ({
 }: DrawRecognizedImageParams) => {
   const { width, height, x, y, name } = selected;
   const {
-    img_shape: [resizedHeight, resizedWidth, _],
+    img_shape: [resizedWidth, resizedHeight, _],
     compos,
   } = recognizedImage;
   const ratio = height / resizedHeight;
