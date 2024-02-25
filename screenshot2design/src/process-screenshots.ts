@@ -44,8 +44,6 @@ const processScreenshots = async (
     throw new Error(TOAST_MESSAGES.ERR_SERVER);
   }
 
-  console.log(await runResponse.json());
-
   switch (runResponse.status) {
     case 200: {
       const recognitionDataList = await runResponse.json();
