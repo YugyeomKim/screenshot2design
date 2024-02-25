@@ -2,8 +2,8 @@ from flask import Blueprint, request
 from mongo import get_users_collection
 import os
 from uuid import uuid1
-import base64
 from model.run_batch import run_batch
+
 
 run_bp = Blueprint("run", __name__, url_prefix="/run")
 
@@ -20,44 +20,30 @@ def increase_run_count(email):
         return "No user matches to the email.", 404
 
 
-def get_model_result():
-    run_batch()
-    return {}, 200
-
-
 @run_bp.route("/", methods=["POST"], strict_slashes=False)
 def run_model():
     email = request.json.get("email")
-
     print(increase_run_count(email))
 
-    width = request.json.get("width")
-    height = request.json.get("height")
-    bytes = request.json.get("bytes")
+    image_bytes_lists = request.json.get("imageBytes")
 
-    print(width, height)
-
-    if not bytes:
+    if not image_bytes_lists:
         return "No Image.", 400
 
-    instance_id = uuid1()
-    # model_path = os.path.join(os.getcwd(), "../../model/UIED/run_single.py")
-    # input_path = os.path.join(os.getcwd(), f"../../buffer/input/{instance_id}.jpg")
-    # output_path = os.path.join(os.getcwd(), f"../../buffer/output/{instance_id}")
+    input_root = os.path.abspath("./buffer/input")
+    if not os.path.exists(input_root):
+        os.makedirs(input_root)
 
-    # image_buf = base64.b64decode(bytes)
+    image_names = []
+    for i, image_bytes_list in enumerate(image_bytes_lists):
+        image_bytes = bytes(image_bytes_list)
 
-    # try:
-    #     with open(input_path, "wb") as f:
-    #         f.write(image_buf)
-    # except Exception as e:
-    #     print(e)
-    #     return "Internal Server Error: Couldn't save the image.", 500
+        image_name = f"{uuid1()}_{i}"
+        image_names.append(image_name)
+        input_path = os.path.join(input_root, f"{image_name}.jpg")
+        with open(input_path, "wb") as f:
+            f.write(image_bytes)
 
-    # print(f"{len(image_buf)} size ({width} X {height}) file was saved.")
-
-    result, status = get_model_result()
-    if status > 299:
-        return result, status
+    result, status = run_batch(image_names)
 
     return result, status
