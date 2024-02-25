@@ -71,7 +71,7 @@ const drawRecognizedImage = ({
 };
 
 type DrawResultParams = {
-  recognizedImages: RecognizedImage[];
+  recognitionDataList: RecognizedImage[];
   selection: readonly SceneNode[];
 };
 
@@ -79,10 +79,10 @@ type DrawResultParams = {
  * Draw the converting result on the user screen
  */
 const drawResult = ({
-  recognizedImages,
+  recognitionDataList,
   selection,
 }: DrawResultParams): FrameNode[] => {
-  const resultFrames = recognizedImages.map((recognizedImage, index) =>
+  const resultFrames = recognitionDataList.map((recognizedImage, index) =>
     drawRecognizedImage({ recognizedImage, selected: selection[index] })
   );
 

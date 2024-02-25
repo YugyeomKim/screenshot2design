@@ -9,8 +9,8 @@ import processScreenshots from "./process-screenshots";
 const runConverting = async (
   selection: readonly SceneNode[]
 ): Promise<FrameNode[]> => {
-  const recognizedImages = await processScreenshots(selection);
-  const resultFrames = drawResult({ recognizedImages, selection });
+  const recognitionDataList = await processScreenshots(selection);
+  const resultFrames = drawResult({ recognitionDataList, selection });
   return resultFrames;
 };
 

@@ -44,16 +44,12 @@ const processScreenshots = async (
     throw new Error(TOAST_MESSAGES.ERR_SERVER);
   }
 
+  console.log(await runResponse.json());
+
   switch (runResponse.status) {
     case 200: {
-      const runResult = (await runResponse.json())
-        .replace(/'/g, '"')
-        .replace(/\(/g, "[")
-        .replace(/\)/g, "]");
-
-      const recognizedImages: RecognizedImage[] = JSON.parse(runResult);
-
-      return recognizedImages;
+      const recognitionDataList = await runResponse.json();
+      return recognitionDataList;
     }
 
     case 401:
