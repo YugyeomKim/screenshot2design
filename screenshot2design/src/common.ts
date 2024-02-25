@@ -21,12 +21,12 @@ const TOAST_MESSAGES = {
 
   ERR_EMPTY_SCREENSHOTS: "Please select one or more screenshots.",
   ERR_TOO_MANY_SCREENSHOTS: "We support up to 10 screenshots at once.",
-  MSG_COMPLETE_CONVERTING: (successRun: number, totalRun: number) =>
-    `Completed ${successRun} images out of ${totalRun}.`,
+  MSG_COMPLETE_CONVERTING: "Completed ${successRun} images out of ${totalRun}.",
   ERR_NOT_IMAGE: (nodeName: string) => `Not an image: ${nodeName}`,
   ERR_IMAGE_LOAD_FAIL: (nodeName: string) =>
     `Failed to load the image: ${nodeName}`,
   ERR_TOO_LARGE_IMAGE: (nodeName: string) => `File size too large: ${nodeName}`,
+  ERR_TOO_LARGE_PAYLOAD: "Payload size too large.",
 
   MSG_ClOSE: "Thank you.",
 };
@@ -43,13 +43,8 @@ interface Survey {
   expectedTimeSave: string;
 }
 
-interface ProcessResult {
-  elements: Elements;
-  imageInfo: ImageInfo;
-}
-
 /** Each elements of a screenshot */
-interface Elements {
+interface RecognizedImage {
   img_shape: [height: number, width: number, color: number];
   compos: {
     id: number;
@@ -77,12 +72,11 @@ interface ImageInfo {
 }
 
 export {
-  Elements,
   IMAGE_NUM_LIMIT,
   IMAGE_SIZE_LIMIT,
   ImageInfo,
   Preference,
-  ProcessResult,
+  RecognizedImage,
   SERVER,
   Survey,
   TOAST_MESSAGES,

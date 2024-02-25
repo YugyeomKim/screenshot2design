@@ -1,9 +1,10 @@
-import { Elements, ImageInfo, SERVER, TOAST_MESSAGES } from "./common";
+import { RecognizedImage, SERVER, TOAST_MESSAGES } from "./common";
 
-interface ProcessResult {
-  elements: Elements;
-  imageInfo: ImageInfo;
-}
+type ImageDataDto = {
+  width: number;
+  height: number;
+  imageBytes: number[];
+};
 
 /**
  * Send raw image data and get JSON result for the design elements
@@ -11,7 +12,7 @@ interface ProcessResult {
  * 2. Check the image size
  * 3.
  */
-async function processScreenshots(selected: SceneNode): Promise<ProcessResult> {
+const getImageData = async (selected: SceneNode): Promise<ImageDataDto> => {
   if (
     selected.type !== "RECTANGLE" ||
     !Array.isArray(selected.fills) ||
@@ -29,18 +30,23 @@ async function processScreenshots(selected: SceneNode): Promise<ProcessResult> {
   }
 
   const imageBytes = await image.getBytesAsync();
+  const { width, height } = selected;
 
-  // TODO: check the image size
+  return { width, height, imageBytes: Array.from(imageBytes) };
+};
 
+const processScreenshots = async (
+  selection: readonly SceneNode[]
+): Promise<RecognizedImage[]> => {
   const { email }: { email: string } = await figma.clientStorage.getAsync(
     "userData"
   );
-  const { width, height, x, y, name } = selected;
-  const imageData = {
+
+  const imagesData = await Promise.all(selection.map(getImageData));
+
+  const requestBody = {
     email,
-    width,
-    height,
-    bytes: Array.from(imageBytes),
+    images: imagesData,
   };
 
   const runResponse = await fetch(`${SERVER}/run`, {
@@ -48,7 +54,7 @@ async function processScreenshots(selected: SceneNode): Promise<ProcessResult> {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(imageData),
+    body: JSON.stringify(requestBody),
   }).catch((error) => {
     console.log(error);
   });
@@ -64,20 +70,17 @@ async function processScreenshots(selected: SceneNode): Promise<ProcessResult> {
         .replace(/\(/g, "[")
         .replace(/\)/g, "]");
 
-      const elements: Elements = JSON.parse(runResult);
+      const recognizedImages: RecognizedImage[] = JSON.parse(runResult);
 
-      return {
-        elements,
-        imageInfo: { width, height, x, y, imageHash, name },
-      };
+      return recognizedImages;
     }
 
     case 401:
-      throw new Error(TOAST_MESSAGES.ERR_TOO_LARGE_IMAGE(selected.name));
+      throw new Error(TOAST_MESSAGES.ERR_TOO_LARGE_PAYLOAD);
 
     default:
       throw new Error(TOAST_MESSAGES.ERR_SERVER);
   }
-}
+};
 
 export default processScreenshots;

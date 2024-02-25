@@ -16,9 +16,7 @@ async function main() {
   const userData: userData = await figma.clientStorage.getAsync("userData");
   figma.ui.postMessage(userData);
 
-  let successRun = 0;
-  let totalRun = 0;
-  const resultFrames: FrameNode[] = [];
+  const resultFrames = [];
 
   figma.ui.onmessage = async (msg) => {
     switch (msg.type) {
@@ -53,7 +51,7 @@ async function main() {
       case "convert": {
         const { selection } = figma.currentPage;
 
-        totalRun = selection.length;
+        const totalRun = selection.length;
 
         if (totalRun === 0) {
           figma.notify(TOAST_MESSAGES.ERR_EMPTY_SCREENSHOTS);
@@ -70,17 +68,9 @@ async function main() {
 
         await figma.loadFontAsync({ family: "Inter", style: "Regular" });
 
-        const convertingResults = await runConverting(selection);
-
-        for (const result of convertingResults) {
-          if (result.status === "fulfilled") {
-            resultFrames.push(result.value);
-            successRun += 1;
-          } else {
-            // TODO: Show the result at the last page
-            console.log(result.reason);
-          }
-        }
+        const resultFrames = await runConverting(selection);
+        figma.currentPage.selection = resultFrames;
+        figma.viewport.scrollAndZoomIntoView(resultFrames);
 
         figma.ui.postMessage("converting-finished");
 
@@ -88,12 +78,8 @@ async function main() {
       }
 
       case "complete-converting": {
-        figma.currentPage.selection = resultFrames;
-        figma.viewport.scrollAndZoomIntoView(resultFrames);
-
-        figma.notify(
-          TOAST_MESSAGES.MSG_COMPLETE_CONVERTING(successRun, totalRun)
-        );
+        // TODO: Show the result at the last page
+        figma.notify(TOAST_MESSAGES.MSG_COMPLETE_CONVERTING);
         figma.showUI(__uiFiles__.afterConvert);
         figma.ui.resize(460, 350);
 

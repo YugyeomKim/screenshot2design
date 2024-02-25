@@ -1,13 +1,19 @@
-import { Elements, ImageInfo } from "./common";
-/**
- * Draw the converting result on the user screen
- */
-function drawResult(elements: Elements, imageInfo: ImageInfo): FrameNode {
-  const { width, height, x, y, imageHash, name } = imageInfo;
+import { RecognizedImage } from "./common";
+
+type DrawRecognizedImageParams = {
+  recognizedImage: RecognizedImage;
+  selected: SceneNode;
+};
+
+const drawRecognizedImage = ({
+  recognizedImage,
+  selected,
+}: DrawRecognizedImageParams) => {
+  const { width, height, x, y, name } = selected;
   const {
     img_shape: [resizedHeight, resizedWidth, _],
     compos,
-  } = elements;
+  } = recognizedImage;
   const ratio = height / resizedHeight;
 
   const frame = figma.createFrame();
@@ -15,14 +21,6 @@ function drawResult(elements: Elements, imageInfo: ImageInfo): FrameNode {
   frame.x = x + width + 30;
   frame.y = y;
   frame.resize(width, height);
-  frame.fills = [
-    {
-      type: "IMAGE",
-      imageHash,
-      scaleMode: "FILL",
-      opacity: 0.5,
-    },
-  ];
 
   compos.map((compo) => {
     if (compo.class === "Compo") {
@@ -70,6 +68,25 @@ function drawResult(elements: Elements, imageInfo: ImageInfo): FrameNode {
   });
 
   return frame;
-}
+};
+
+type DrawResultParams = {
+  recognizedImages: RecognizedImage[];
+  selection: readonly SceneNode[];
+};
+
+/**
+ * Draw the converting result on the user screen
+ */
+const drawResult = ({
+  recognizedImages,
+  selection,
+}: DrawResultParams): FrameNode[] => {
+  const resultFrames = recognizedImages.map((recognizedImage, index) =>
+    drawRecognizedImage({ recognizedImage, selected: selection[index] })
+  );
+
+  return resultFrames;
+};
 
 export default drawResult;
