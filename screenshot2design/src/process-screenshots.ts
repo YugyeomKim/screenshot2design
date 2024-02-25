@@ -1,38 +1,19 @@
 import { RecognizedImage, SERVER, TOAST_MESSAGES } from "./common";
 
-type ImageDataDto = {
-  width: number;
-  height: number;
-  imageBytes: number[];
-};
-
 /**
  * Send raw image data and get JSON result for the design elements
  * 1. Check if the selected node is Image
  * 2. Check the image size
  * 3.
  */
-const getImageData = async (selected: SceneNode): Promise<ImageDataDto> => {
-  if (
-    selected.type !== "RECTANGLE" ||
-    !Array.isArray(selected.fills) ||
-    selected.fills[0].type !== "IMAGE"
-  ) {
-    throw new Error(TOAST_MESSAGES.ERR_NOT_IMAGE(selected.name));
-  }
+const getImageBytes = async (selected: SceneNode): Promise<number[]> => {
+  const imageBytes = await selected.exportAsync({ format: "JPG" });
 
-  const { imageHash }: { imageHash: string } = selected.fills[0];
-
-  const image = figma.getImageByHash(imageHash);
-
-  if (!image) {
+  if (!imageBytes) {
     throw new Error(TOAST_MESSAGES.ERR_IMAGE_LOAD_FAIL(selected.name));
   }
 
-  const imageBytes = await image.getBytesAsync();
-  const { width, height } = selected;
-
-  return { width, height, imageBytes: Array.from(imageBytes) };
+  return Array.from(imageBytes);
 };
 
 const processScreenshots = async (
@@ -42,11 +23,11 @@ const processScreenshots = async (
     "userData"
   );
 
-  const imagesData = await Promise.all(selection.map(getImageData));
+  const imageBytes = await Promise.all(selection.map(getImageBytes));
 
   const requestBody = {
     email,
-    images: imagesData,
+    imageBytes,
   };
 
   const runResponse = await fetch(`${SERVER}/run`, {

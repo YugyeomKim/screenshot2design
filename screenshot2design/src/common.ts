@@ -22,7 +22,6 @@ const TOAST_MESSAGES = {
   ERR_EMPTY_SCREENSHOTS: "Please select one or more screenshots.",
   ERR_TOO_MANY_SCREENSHOTS: "We support up to 10 screenshots at once.",
   MSG_COMPLETE_CONVERTING: "Completed ${successRun} images out of ${totalRun}.",
-  ERR_NOT_IMAGE: (nodeName: string) => `Not an image: ${nodeName}`,
   ERR_IMAGE_LOAD_FAIL: (nodeName: string) =>
     `Failed to load the image: ${nodeName}`,
   ERR_TOO_LARGE_IMAGE: (nodeName: string) => `File size too large: ${nodeName}`,
@@ -62,19 +61,9 @@ interface RecognizedImage {
   }[];
 }
 
-interface ImageInfo {
-  width: number;
-  height: number;
-  x: number;
-  y: number;
-  imageHash: string;
-  name: string;
-}
-
 export {
   IMAGE_NUM_LIMIT,
   IMAGE_SIZE_LIMIT,
-  ImageInfo,
   Preference,
   RecognizedImage,
   SERVER,
