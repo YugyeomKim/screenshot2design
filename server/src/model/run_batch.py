@@ -41,6 +41,7 @@ def run_batch(image_names, input_root="./buffer/input", output_root="./buffer/ou
         compo_path = ip.compo_detection(
             input_image,
             output_root,
+            image_name,
             key_params,
             resize_by_height=resized_height,
         )
@@ -50,6 +51,7 @@ def run_batch(image_names, input_root="./buffer/input", output_root="./buffer/ou
             compo_path,
             ocr_path,
             output_root,
+            image_name,
             is_remove_topbar=key_params["remove-top-bar"],
         )
 

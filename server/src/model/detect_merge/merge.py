@@ -190,10 +190,14 @@ def merge(
     img_path,
     compo_path,
     text_path,
-    merge_root=None,
-    is_paragraph=False,
+    output_root,
+    image_name,
     is_remove_topbar=True,
+    is_paragraph=False,
 ):
+    merge_root = pjoin(output_root, "merge")
+    os.makedirs(merge_root, exist_ok=True)
+
     compo_json = json.load(open(compo_path, "r"))
     text_json = json.load(open(text_path, "r"))
 
@@ -246,9 +250,8 @@ def merge(
     check_containment(elements)
 
     # save all merged elements, clips and blank background
-    name = img_path.replace("\\", "/").split("/")[-1][:-4]
     components = save_elements(
-        pjoin(merge_root, name + ".json"),
+        pjoin(merge_root, image_name + ".json"),
         elements,
         (compo_json["img_shape"][1], compo_json["img_shape"][0]),
     )

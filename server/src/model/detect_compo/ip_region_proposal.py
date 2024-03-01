@@ -1,7 +1,7 @@
 from os.path import join as pjoin
+import os
 
 import model.detect_compo.lib_ip.ip_preprocessing as pre
-import model.detect_compo.lib_ip.ip_draw as draw
 import model.detect_compo.lib_ip.ip_detection as det
 import model.detect_compo.lib_ip.file_utils as file
 import model.detect_compo.lib_ip.Component as Compo
@@ -44,13 +44,11 @@ def nesting_inspection(org, grey, compos, ffl_block):
     return nesting_compos
 
 
-def compo_detection(input_img_path, output_root, uied_params, resize_by_height=800):
-    name = (
-        input_img_path.split("/")[-1][:-4]
-        if "/" in input_img_path
-        else input_img_path.split("\\")[-1][:-4]
-    )
-    ip_root = file.build_directory(pjoin(output_root, "ip"))
+def compo_detection(
+    input_img_path, output_root, image_name, uied_params, resize_by_height
+):
+    ip_root = pjoin(output_root, "ip")
+    os.makedirs(ip_root, exist_ok=True)
 
     # *** Step 1 *** pre-processing: read img -> get binary map
     org, grey = pre.read_img(input_img_path, resize_by_height)
@@ -78,10 +76,9 @@ def compo_detection(input_img_path, output_root, uied_params, resize_by_height=8
         org, grey, uicompos, ffl_block=uied_params["ffl-block"]
     )
     Compo.compos_update(uicompos, org.shape)
-    draw.draw_bounding_box(
-        org, uicompos, name="merged compo", write_path=pjoin(ip_root, name + ".jpg")
-    )
 
     # *** Step 7 *** save detection result
     Compo.compos_update(uicompos, org.shape)
-    return file.save_corners_json(pjoin(ip_root, name + ".json"), uicompos, org.shape)
+    return file.save_corners_json(
+        pjoin(ip_root, image_name + ".json"), uicompos, org.shape
+    )
