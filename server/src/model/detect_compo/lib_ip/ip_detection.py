@@ -475,10 +475,6 @@ def component_detection(
                 # if component.compo_is_line(line_thickness):
                 #     continue
 
-                if test:
-                    # print('Area:%d' % (len(region)))
-                    draw.draw_boundary([component], binary.shape, show=True)
-
                 compos_all.append(component)
 
                 if rec_detect:
@@ -490,11 +486,6 @@ def component_detection(
                         component.rect_ = False
                         compos_nonrec.append(component)
 
-                if show:
-                    # print('Area:%d' % (len(region)))
-                    draw.draw_boundary(compos_all, binary.shape, show=True)
-
-    # draw.draw_boundary(compos_all, binary.shape, show=True)
     if rec_detect:
         return compos_rec, compos_nonrec
     else:
