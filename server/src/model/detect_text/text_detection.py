@@ -1,6 +1,5 @@
 import model.detect_text.ocr as ocr
 from model.detect_text.Text import Text
-import numpy as np
 import cv2
 import json
 from os.path import join as pjoin
@@ -125,8 +124,8 @@ def text_filter_noise(texts):
 
 
 def text_detection(input_image, output_root, image_name):
-    os.makedirs(pjoin(output_root, "ocr"), exist_ok=True)
-    ocr_root = pjoin(output_root, "ocr")
+    text_root = pjoin(output_root, "text")
+    os.makedirs(text_root, exist_ok=True)
     img = cv2.imread(input_image)
 
     ocr_result = ocr.ocr_detection_google(input_image)
@@ -135,4 +134,4 @@ def text_detection(input_image, output_root, image_name):
     texts = text_filter_noise(texts)
     texts = text_sentences_recognition(texts)
 
-    return save_detection_json(pjoin(ocr_root, image_name + ".json"), texts, img.shape)
+    return save_detection_json(pjoin(text_root, image_name + ".json"), texts, img.shape)
