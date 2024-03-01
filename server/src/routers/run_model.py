@@ -20,6 +20,28 @@ def increase_run_count(email):
         return "No user matches to the email.", 404
 
 
+def delete_files(
+    image_names,
+    imagePaths=[
+        "./buffer/input",
+    ],
+    jsonPaths=[
+        "./buffer/output/ip",
+        "./buffer/output/text",
+        "./buffer/output/merge",
+    ],
+):
+    for image_name in image_names:
+        for path in imagePaths:
+            file_path = os.path.join(path, f"{image_name}.jpg")
+            if os.path.exists(file_path):
+                os.remove(file_path)
+        for path in jsonPaths:
+            file_path = os.path.join(path, f"{image_name}.json")
+            if os.path.exists(file_path):
+                os.remove(file_path)
+
+
 @run_bp.route("/", methods=["POST"], strict_slashes=False)
 def run_model():
     email = request.json.get("email")
@@ -45,8 +67,11 @@ def run_model():
             f.write(image_bytes)
 
     try:
-        result = run_batch(image_names)
+        model_result = run_batch(image_names)
     except Exception as e:
         return str(e), 500
 
-    return result, 200
+    try:
+        return model_result, 200
+    finally:
+        delete_files(image_names)
