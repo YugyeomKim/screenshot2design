@@ -1,5 +1,18 @@
 import { RecognizedImage } from "./common";
 
+const getImageHash = (node: SceneNode) => {
+  if (
+    node.type !== "RECTANGLE" ||
+    !Array.isArray(node.fills) ||
+    node.fills[0].type !== "IMAGE"
+  ) {
+    return "";
+  }
+
+  const { imageHash }: { imageHash: string } = node.fills[0];
+  return imageHash;
+};
+
 type DrawRecognizedImageParams = {
   recognizedImage: RecognizedImage;
   selected: SceneNode;
@@ -21,6 +34,14 @@ const drawRecognizedImage = ({
   frame.x = x + width + 30;
   frame.y = y;
   frame.resize(width, height);
+  frame.fills = [
+    {
+      type: "IMAGE",
+      imageHash: getImageHash(selected),
+      scaleMode: "FILL",
+      opacity: 0.5,
+    },
+  ];
 
   compos.map((compo) => {
     if (compo.class === "Compo") {
