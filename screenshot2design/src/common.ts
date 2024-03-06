@@ -42,23 +42,32 @@ interface Survey {
   expectedTimeSave: string;
 }
 
-/** Each elements of a screenshot */
+type RecognizedComponent = {
+  id: number;
+  width: number;
+  height: number;
+  position: {
+    column_max: number;
+    row_max: number;
+    row_min: number;
+    column_min: number;
+  };
+  parent?: number;
+};
+
+type CompoComponent = RecognizedComponent & {
+  class: "Compo";
+  bytes: string;
+};
+
+type TextComponent = RecognizedComponent & {
+  class: "Text";
+  text_content: string;
+};
+
 interface RecognizedImage {
   img_shape: [height: number, width: number, color: number];
-  compos: {
-    id: number;
-    class: "Compo" | "Text";
-    width: number;
-    height: number;
-    position: {
-      column_max: number;
-      row_max: number;
-      row_min: number;
-      column_min: number;
-    };
-    parent?: number;
-    text_content?: string;
-  }[];
+  compos: (CompoComponent | TextComponent)[];
 }
 
 export {
