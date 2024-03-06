@@ -13,6 +13,10 @@ def save_corners_json(file_path, compos, img_shape):
         (c["column_min"], c["row_min"], c["column_max"], c["row_max"]) = (
             compo.put_bbox()
         )
+
+        c["column_max"] += 1
+        c["row_max"] += 1
+
         c["width"] = compo.width
         c["height"] = compo.height
         output["compos"].append(c)
