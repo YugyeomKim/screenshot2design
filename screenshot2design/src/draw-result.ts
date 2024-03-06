@@ -44,7 +44,9 @@ const drawRecognizedImage = ({
   ];
 
   compos.map((compo) => {
-    if (compo.class === "Compo") {
+    if (compo.class === "Compo" && compo.bytes) {
+      const image = figma.createImage(figma.base64Decode(compo.bytes));
+
       const rectangle = figma.createRectangle();
       rectangle.name = `${name} - ${compo.id}`;
       rectangle.x = compo.position.column_min * ratio;
@@ -52,23 +54,9 @@ const drawRecognizedImage = ({
       rectangle.resize(compo.width * ratio, compo.height * ratio);
       rectangle.fills = [
         {
-          type: "SOLID",
-          color: {
-            r: 0 / 255,
-            g: 0 / 255,
-            b: 0 / 255,
-          },
-          opacity: 0.2,
-        },
-      ];
-      rectangle.strokes = [
-        {
-          type: "SOLID",
-          color: {
-            r: 0 / 255,
-            g: 0 / 255,
-            b: 0 / 255,
-          },
+          type: "IMAGE",
+          imageHash: image.hash,
+          scaleMode: "FILL",
         },
       ];
       frame.appendChild(rectangle);
