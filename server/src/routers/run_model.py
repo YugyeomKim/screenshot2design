@@ -1,8 +1,10 @@
 from flask import Blueprint, request
-from mongo import get_users_collection
 import os
 from uuid import uuid1
+
+from mongo import get_users_collection
 from model.run_batch import run_batch
+from utils.process_image import crop_image
 
 
 run_bp = Blueprint("run", __name__, url_prefix="/run")
@@ -70,6 +72,9 @@ def run_model():
         model_result = run_batch(image_names)
     except Exception as e:
         return str(e), 500
+
+    for i, image_name in enumerate(image_names):
+        crop_image(model_result[i], image_name, input_root)
 
     try:
         return model_result, 200
