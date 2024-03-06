@@ -16,11 +16,13 @@ const getImageHash = (node: SceneNode) => {
 type DrawRecognizedImageParams = {
   recognizedImage: RecognizedImage;
   selected: SceneNode;
+  offset?: { offsetX: number; offsetY: number };
 };
 
 const drawRecognizedImage = ({
   recognizedImage,
   selected,
+  offset,
 }: DrawRecognizedImageParams) => {
   const { width, height, x, y, name } = selected;
   const {
@@ -29,10 +31,12 @@ const drawRecognizedImage = ({
   } = recognizedImage;
   const ratio = height / resizedHeight;
 
+  const { offsetX, offsetY } = offset ?? { offsetX: 0, offsetY: 0 };
+
   const frame = figma.createFrame();
   frame.name = name;
-  frame.x = x + width + 30;
-  frame.y = y;
+  frame.x = x + 30 + offsetX;
+  frame.y = y + offsetY;
   frame.resize(width, height);
   frame.fills = [
     {
@@ -81,6 +85,22 @@ type DrawResultParams = {
   selection: readonly SceneNode[];
 };
 
+const getOffset = (nodes: readonly SceneNode[]) => {
+  let minX = Infinity;
+  let maxX = -Infinity;
+
+  nodes.forEach((node) => {
+    if (node.x < minX) {
+      minX = node.x;
+    }
+    if (node.x + node.width > maxX) {
+      maxX = node.x + node.width;
+    }
+  });
+
+  return { offsetX: maxX - minX, offsetY: 0 };
+};
+
 /**
  * Draw the converting result on the user screen
  */
@@ -88,8 +108,13 @@ const drawResult = ({
   recognitionDataList,
   selection,
 }: DrawResultParams): FrameNode[] => {
+  const offset = getOffset(selection);
   const resultFrames = recognitionDataList.map((recognizedImage, index) =>
-    drawRecognizedImage({ recognizedImage, selected: selection[index] })
+    drawRecognizedImage({
+      recognizedImage,
+      selected: selection[index],
+      offset,
+    })
   );
 
   return resultFrames;
