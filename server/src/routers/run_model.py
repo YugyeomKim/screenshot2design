@@ -4,7 +4,7 @@ from uuid import uuid1
 
 from mongo import get_users_collection
 from model.run_batch import run_batch
-from utils.process_image import crop_image
+from utils.process_image import crop_and_remove_bg
 
 
 run_bp = Blueprint("run", __name__, url_prefix="/run")
@@ -74,7 +74,7 @@ def run_model():
         return str(e), 500
 
     for i, image_name in enumerate(image_names):
-        crop_image(model_result[i], image_name, input_root)
+        crop_and_remove_bg(model_result[i], image_name, input_root)
 
     try:
         return model_result, 200

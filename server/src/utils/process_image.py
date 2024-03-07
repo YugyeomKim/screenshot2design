@@ -1,11 +1,31 @@
-from PIL import Image
-from os.path import join
+from PIL import Image, ImageFilter
 import os
 from io import BytesIO
 import base64
 
 
-def crop_image(
+def remove_bg(pil_image):
+    raw_image_data = pil_image.getdata()
+
+    # Get the top-left pixel color.
+    background_color = pil_image.getpixel((0, 0))
+
+    new_image_data = []
+    for pixel in raw_image_data:
+        # Change all pixels that match the background to be transparent.
+        if pixel == background_color:
+            new_image_data.append((255, 255, 255, 0))
+        else:
+            new_image_data.append(pixel)
+
+    rgba = pil_image.convert("RGBA")
+    rgba.putdata(new_image_data)
+    rgba = rgba.filter(ImageFilter.MedianFilter(size=3))
+
+    return rgba
+
+
+def crop_and_remove_bg(
     object_info,
     image_name,
     input_root,
@@ -35,8 +55,10 @@ def crop_image(
             )
         )
 
+        bg_removed_image = remove_bg(cropped_image)
+
         byte_arr = BytesIO()
-        cropped_image.save(byte_arr, format="JPEG")
+        bg_removed_image.save(byte_arr, format="PNG")
         compo["bytes"] = base64.b64encode(byte_arr.getvalue()).decode("utf-8")
 
     return object_info
