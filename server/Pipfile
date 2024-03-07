@@ -12,6 +12,7 @@ python-dotenv = "*"
 opencv-python = "==3.4.18.65"
 requests = "*"
 pillow = "*"
+waitress = "*"
 
 [dev-packages]
 

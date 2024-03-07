@@ -1,9 +1,10 @@
 from flask import Flask, abort
 from flask_cors import CORS
 from routers import auth, run_model, handle_data
+from waitress import serve
 
 app = Flask(__name__)
-CORS(app, origins="*")
+CORS(app)
 app.register_blueprint(run_model.run_bp)
 app.register_blueprint(auth.auth_bp)
 app.register_blueprint(handle_data.handle_data_bp)
@@ -18,4 +19,4 @@ def catch_all(path):
 
 
 if __name__ == "__main__":
-    app.run(port=3001)
+    serve(app, host="0.0.0.0", port=3000)
