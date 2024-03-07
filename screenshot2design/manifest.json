@@ -16,7 +16,7 @@
   "menu": [{ "name": "Convert", "command": "convert" }],
   "networkAccess": {
     "allowedDomains": [
-      "https://s2dlab.click:443",
+      "https://s2dlab.click",
       "https://cdn.jsdelivr.net/",
       "https://rsms.me",
       "https://s2d-image-hosting.s3.ap-southeast-2.amazonaws.com",

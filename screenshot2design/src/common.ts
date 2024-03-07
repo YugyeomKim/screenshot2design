@@ -1,5 +1,5 @@
-// const SERVER = "https://s2dlab.click:443";
-const SERVER = "http://localhost:3001";
+const SERVER = "https://s2dlab.click:443";
+// const SERVER = "http://localhost:3000";
 const IMAGE_NUM_LIMIT = 10;
 const IMAGE_SIZE_LIMIT = 10;
 
