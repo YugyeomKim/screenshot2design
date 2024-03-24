@@ -13,7 +13,7 @@ app.register_blueprint(handle_data.handle_data_bp)
 @app.route("/<path:path>")
 def catch_all(path):
     if path == "health-check":
-        return "OK"
+        return "OK", 200
     else:
         return abort(404)
 
