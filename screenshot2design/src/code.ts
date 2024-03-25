@@ -1,6 +1,6 @@
 import { IMAGE_NUM_LIMIT, SERVER, TOAST_MESSAGES } from "./common";
 import runConverting from "./run-converting";
-import { sendStatData, sendUserData } from "./send-data";
+import { sendUserData } from "./send-data";
 
 type userData = {
   email: string;
@@ -18,7 +18,7 @@ async function main() {
 
   figma.ui.onmessage = async (msg) => {
     switch (msg.type) {
-      case "enroll": {
+      case "convert": {
         const { userData } = msg;
         await figma.clientStorage.setAsync("userData", userData);
 
@@ -47,19 +47,7 @@ async function main() {
           return;
         }
 
-        figma.showUI(__uiFiles__.beforeConvert, { width: 320, height: 440 });
-        return;
-      }
-
-      case "send-user-data": {
-        const { userData } = msg;
-        sendUserData(userData);
-        return;
-      }
-
-      case "convert": {
         const { selection } = figma.currentPage;
-
         const totalRun = selection.length;
 
         if (totalRun === 0) {
@@ -72,8 +60,7 @@ async function main() {
           return;
         }
 
-        figma.showUI(__uiFiles__.interConvert);
-        figma.ui.resize(500, 270);
+        figma.showUI(__uiFiles__.interConvert, { width: 300, height: 190 });
 
         await figma.loadFontAsync({ family: "Inter", style: "Regular" });
 
@@ -81,38 +68,24 @@ async function main() {
         figma.currentPage.selection = resultFrames;
         figma.viewport.scrollAndZoomIntoView(resultFrames);
 
-        figma.ui.postMessage("converting-finished");
-
-        return;
-      }
-
-      case "complete-converting": {
-        // TODO: Show the result at the last page
-        figma.notify(TOAST_MESSAGES.MSG_COMPLETE_CONVERTING);
-        figma.showUI(__uiFiles__.afterConvert);
-        figma.ui.resize(460, 350);
-
-        return;
-      }
-
-      case "cancel": {
-        figma.showUI(__uiFiles__.cancel);
-        figma.ui.resize(400, 115);
-
-        return;
-      }
-
-      case "submit-and-close": {
-        figma.ui.hide();
-        figma.notify(TOAST_MESSAGES.MSG_ClOSE);
-
-        await sendStatData(msg.statData);
-
+        figma.notify("완료되었습니다.");
         figma.closePlugin();
+
+        return;
+      }
+
+      case "send-user-data": {
+        const { userData } = msg;
+        sendUserData(userData);
+        return;
       }
 
       case "notify": {
         figma.notify(msg.message);
+        return;
+      }
+
+      default: {
         return;
       }
     }

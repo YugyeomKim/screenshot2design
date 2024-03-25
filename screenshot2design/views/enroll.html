@@ -37,7 +37,7 @@
               🗝️ 인증 키
             </div>
             <input
-              id="key"
+              id="auth_key"
               type="input"
               class="input__field"
               placeholder="인증 키를 입력해주세요."
@@ -63,7 +63,7 @@
 
     <script>
       const emailEl = document.getElementById("email");
-      const keyEl = document.getElementById("key");
+      const authKeyEl = document.getElementById("auth_key");
 
       document.getElementById("convert_button").onclick = () => {
         const validateEmail = (email) => {
@@ -84,7 +84,7 @@
           return;
         }
 
-        if (!keyEl.value) {
+        if (!authKeyEl.value) {
           parent.postMessage(
             {
               pluginMessage: {
@@ -100,10 +100,10 @@
 
         const userData = {
           email: emailEl.value,
-          authKey: keyEl.value,
+          authKey: authKeyEl.value,
         };
         parent.postMessage(
-          { pluginMessage: { type: "enroll", userData } },
+          { pluginMessage: { type: "convert", userData } },
           "*"
         );
       };
@@ -111,7 +111,7 @@
       onmessage = (event) => {
         const { pluginMessage } = event.data;
         emailEl.value = pluginMessage.email;
-        keyEl.value = pluginMessage.keyEl;
+        authKeyEl.value = pluginMessage.authKey;
       };
     </script>
   </body>
