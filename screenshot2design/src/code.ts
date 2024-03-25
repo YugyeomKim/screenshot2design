@@ -12,11 +12,9 @@ type userData = {
 };
 
 async function main() {
-  figma.showUI(__uiFiles__.enroll, { width: 525, height: 420 });
+  figma.showUI(__uiFiles__.enroll, { width: 300, height: 190 });
   const userData: userData = await figma.clientStorage.getAsync("userData");
   figma.ui.postMessage(userData);
-
-  const resultFrames = [];
 
   figma.ui.onmessage = async (msg) => {
     switch (msg.type) {
@@ -34,8 +32,19 @@ async function main() {
           console.error(error);
         });
 
-        if (!response || response.status > 299) {
+        if (!response) {
           figma.notify(TOAST_MESSAGES.ERR_SERVER);
+          return;
+        }
+
+        if (response.status === 401) {
+          figma.notify("인증 키가 올바르지 않습니다.");
+          return;
+        }
+
+        if (response.status > 299) {
+          figma.notify(TOAST_MESSAGES.ERR_SERVER);
+          return;
         }
 
         figma.showUI(__uiFiles__.beforeConvert, { width: 320, height: 440 });

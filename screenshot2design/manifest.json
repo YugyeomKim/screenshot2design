@@ -22,7 +22,7 @@
       "https://s2d-image-hosting.s3.ap-southeast-2.amazonaws.com",
       "https://www.googletagmanager.com"
     ],
-    "devAllowedDomains": ["http://localhost:3001"],
+    "devAllowedDomains": ["http://localhost:3000"],
     "reasoning": "Why should I reason about devAllowedDomains?"
   }
 }

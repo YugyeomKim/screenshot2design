@@ -5,7 +5,7 @@ const IMAGE_SIZE_LIMIT = 10;
 
 // Toast messages
 const TOAST_MESSAGES = {
-  ERR_SERVER: "Server error. Sorry for the inconvenience.",
+  ERR_SERVER: "서버에 연결할 수 없습니다.",
 
   MSG_SETTING_API_KEY: "Setting API KEY",
   ERR_EMPTY_FORM: "Please fill in the entire form.",

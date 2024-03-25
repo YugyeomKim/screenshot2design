@@ -4,205 +4,68 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/figma-plugin-ds.css"
     />
-
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-METCVR17RL"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "G-METCVR17RL");
-
-      gtag("event", "SET_API_KEY", {
-        event_category: "API Key",
-        event_label: "Unique API Key for specific users",
-      });
-    </script>
   </head>
   <body>
-    <div
-      style="
-        display: flex;
-        flex-direction: column;
-        justify-content: left;
-        height: 150;
-        margin-bottom: 10;
-      "
-    >
-      <div style="margin-left: 20; margin-bottom: 10; margin-top: 12">
-        <text style="font-family: inter; font-size: 12; color: #999999"
-          >Fill in the form to get API Key</text
-        >
-      </div>
+    <div style="padding: 10px; width: 100%; height: 100%">
       <div
         style="
           display: flex;
-          flex-direction: row;
-          justify-content: left;
-          height: 150;
-          margin-bottom: 8;
+          flex-direction: column;
+          align-items: center;
+          justify-content: right;
+          gap: 16px;
         "
       >
-        <div
+        <div style="width: 100%">
+          <div class="input">
+            <div class="label" style="margin: -4px; color: black">
+              ✉️ 이메일
+            </div>
+            <input
+              id="email"
+              type="input"
+              class="input__field"
+              placeholder="screenshot@to.design"
+            />
+          </div>
+
+          <div class="input">
+            <div
+              class="label"
+              style="margin: -4px; margin-top: 4px; color: black"
+            >
+              🗝️ 인증 키
+            </div>
+            <input
+              id="key"
+              type="input"
+              class="input__field"
+              placeholder="인증 키를 입력해주세요."
+            />
+          </div>
+        </div>
+
+        <button
+          id="convert_button"
+          class="button button--primary"
           style="
+            width: 100%;
             display: flex;
-            flex-direction: column;
-            justify-content: left;
-            margin-left: 20;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
           "
         >
-          <input
-            id="email"
-            type="input"
-            class="input__field"
-            placeholder="✉️   Email"
-            style="width: 200; margin-bottom: 8; border-color: #dfdfdf"
-          />
-          <input
-            id="company-name"
-            type="input"
-            class="input__field"
-            placeholder="🔖   Company Name"
-            style="width: 200; margin-bottom: 8; border-color: #dfdfdf"
-          />
-          <input
-            id="company-size"
-            type="input"
-            class="input__field"
-            placeholder="🏢   Company Size"
-            style="width: 200; margin-bottom: 8; border-color: #dfdfdf"
-          />
-          <input
-            id="role"
-            type="input"
-            class="input__field"
-            placeholder="👤   Role"
-            style="width: 200; margin-bottom: 8; border-color: #dfdfdf"
-          />
-        </div>
-
-        <div style="display: flex; flex-direction: column; margin-left: 10">
-          <textarea
-            id="usage"
-            type="textarea"
-            class="input__field"
-            placeholder="🔧 Usage"
-            style="
-              width: 280;
-              height: 108;
-              font-family: inter;
-              font-size: 12;
-              color: #999999;
-              border-color: #dfdfdf;
-              margin-bottom: 8;
-            "
-          ></textarea>
-          <select
-            id="career-stage"
-            class="select-menu"
-            style="width: 280; border-color: #dfdfdf"
-          >
-            <option
-              value="N/A"
-              selected
-              style="font-style: #999999; color: #999999"
-            >
-              💼 Career Stage
-            </option>
-            <option value="~1">less than a year</option>
-            <option value="1~3">1-3 year</option>
-            <option value="3~5">3-5 year</option>
-            <option value="5~10">5-10 year</option>
-            <option value="10~">10+ year</option>
-            <option value="20~">20+ year</option>
-          </select>
-        </div>
-      </div>
-      <div
-        style="margin-left: 20; margin-top: 3; font-size: 12; color: #999999"
-      >
-        📌 Privacy Policy
-      </div>
-      <div
-        style="
-          background-color: #eaeaea;
-          border-radius: 5;
-          padding: 10;
-          margin-left: 20;
-          font-size: 12;
-          color: #999999;
-          width: 486;
-        "
-      >
-        I agree to information being used for the purposes of noticing product
-        launch. <br />The information will only be accessed by necessary staff.
-        I understand my data will be held securely and not be distributed to
-        third parties. I understand that when this information is no longer
-        required for this purpose, official procedure will be followed to
-        dispose of my data.
-        <div
-          class="checkbox"
-          style="margin-left: 380; margin-top: -10; margin-bottom: -10"
-        >
-          <input id="privacy-check" type="checkbox" class="checkbox__box" />
-          <label for="privacy-check" class="checkbox__label">I agree</label>
-        </div>
-      </div>
-      <button
-        id="enroll"
-        class="button button--primary"
-        style="margin-left: 435; margin-top: 5; width: 72"
-      >
-        Convert
-      </button>
-
-      <div>
-        <hr class="solid" style="border-color: #dfdfdf; border-top: 0.5px" />
-        <div style="justify-content: right">
-          <button
-            id="cancel"
-            class="button button--primary"
-            style="background-color: #5e5e5e; margin-left: 435; margin-top: 10"
-          >
-            Cancel
-          </button>
-        </div>
+          Convert
+        </button>
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/thomas-lowry/figma-plugin-ds/dist/iife/figma-plugin-ds.js"></script>
-    <script>
-      selectMenu.init();
-    </script>
-
     <script>
       const emailEl = document.getElementById("email");
-      const companyNameEl = document.getElementById("company-name");
-      const companySizeEl = document.getElementById("company-size");
-      const roleEl = document.getElementById("role");
-      const usageEl = document.getElementById("usage");
-      const careerStageEl = document.getElementById("career-stage");
-      const privacyCheckEl = document.getElementById("privacy-check");
+      const keyEl = document.getElementById("key");
 
-      document.getElementById("enroll").onclick = () => {
-        if (!privacyCheckEl.checked) {
-          parent.postMessage(
-            {
-              pluginMessage: {
-                type: "notify",
-                message: "Please agree with the privacy policy.",
-              },
-            },
-            "*"
-          );
-
-          return;
-        }
-
+      document.getElementById("convert_button").onclick = () => {
         const validateEmail = (email) => {
           return email.match(
             /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -213,27 +76,20 @@
             {
               pluginMessage: {
                 type: "notify",
-                message: "Please enter a valid email address.",
+                message: "이메일 형식이 올바르지 않습니다.",
               },
             },
             "*"
           );
-
           return;
         }
 
-        if (
-          !companyNameEl.value ||
-          !companySizeEl.value ||
-          !roleEl.value ||
-          !usageEl.value ||
-          careerStageEl.value === "N/A"
-        ) {
+        if (!keyEl.value) {
           parent.postMessage(
             {
               pluginMessage: {
                 type: "notify",
-                message: "Please fill in the entire form.",
+                message: "키를 입력해주세요.",
               },
             },
             "*"
@@ -244,11 +100,7 @@
 
         const userData = {
           email: emailEl.value,
-          companyName: companyNameEl.value,
-          companySize: companySizeEl.value,
-          role: roleEl.value,
-          usage: usageEl.value,
-          careerStage: careerStageEl.value,
+          authKey: keyEl.value,
         };
         parent.postMessage(
           { pluginMessage: { type: "enroll", userData } },
@@ -259,16 +111,7 @@
       onmessage = (event) => {
         const { pluginMessage } = event.data;
         emailEl.value = pluginMessage.email;
-        companyNameEl.value = pluginMessage.companyName;
-        companySizeEl.value = pluginMessage.companySize;
-        roleEl.value = pluginMessage.role;
-        usageEl.value = pluginMessage.usage;
-        careerStageEl.value = pluginMessage.careerStage;
-        privacyCheckEl.checked = true;
-      };
-
-      document.getElementById("cancel").onclick = () => {
-        parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
+        keyEl.value = pluginMessage.keyEl;
       };
     </script>
   </body>
